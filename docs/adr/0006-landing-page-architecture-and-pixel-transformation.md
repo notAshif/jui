@@ -1,0 +1,3 @@
+# Landing Page Architecture and Global Pixel Transformation
+
+We decided to structure the JUI landing page with a persistent dashed-border header, a custom dual-faced SVG logo (curved modern left, 8-bit pixel right), an interactive hero with CLI installation widget, a live component showcase, and a root `[data-flavor="modern" | "pixel"]` theme toggler. Toggling to 2D Pixel mode metamorphoses the entire page—shifting typography to Geist Pixel, replacing dashed borders with stepped pixel borders, and activating 3D tactile button bevels. This delivers an immediate interactive proof-of-concept demonstrating that both aesthetics share identical semantics, markup, and accessibility.

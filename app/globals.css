@@ -1,26 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Silkscreen:wght@400;700&family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Earthy Palette (Light / Parchment) */
+  --cream: #FFF8F0;
+  --cream-light: #FFFCF9;
+  --cream-dark: #F5E8D8;
+  --caramel: #C08552;
+  --caramel-hover: #AF7644;
+  --cinnamon: #8C5A3C;
+  --espresso: #4B2E2B;
+  --espresso-deep: #321C1A;
+
+  /* Semantic Harmonies */
+  --destructive: #B84A39;
+  --destructive-foreground: #FFF8F0;
+  --success: #4F6D48;
+  --success-foreground: #FFF8F0;
+  --warning: #D48B38;
+  --warning-foreground: #321C1A;
+
+  /* Surface & Token Bindings */
+  --background: var(--cream);
+  --foreground: var(--espresso);
+  --surface: #FFFFFF;
+  --surface-muted: var(--cream-dark);
+  --surface-card: #FFFFFF;
+  --border: #E8D5C2;
+  --border-strong: var(--cinnamon);
+  --ring: var(--caramel);
+
+  /* Typography */
+  --font-modern: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-pixel: "Silkscreen", "Press Start 2P", monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Dark Mode (Campfire / Dungeon) */
+[data-mode="dark"] {
+  --background: #140D0B;
+  --foreground: #FFF8F0;
+  --surface: #1E1412;
+  --surface-muted: #281B18;
+  --surface-card: #221714;
+  --border: #3A2622;
+  --border-strong: #C08552;
+  --caramel: #D9965B;
+  --caramel-hover: #E2A670;
+  --cinnamon: #A66E4C;
+  --espresso: #FFF8F0;
+  --espresso-deep: #FFFCF9;
+  --ring: #E2A670;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Pixel Global Metamorphosis Mode */
+[data-flavor="pixel"] {
+  font-family: var(--font-pixel) !important;
+  letter-spacing: -0.02em;
+}
+
+[data-flavor="pixel"] * {
+  border-radius: 0px !important;
+}
+
+/* Instant Snap on Theme Flip (per better-ui) */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: none !important;
+}
+
+/* Stepped 3D Pixel Bevel Utilities */
+.pixel-border-bevel {
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset -2px -2px 0 0 var(--cinnamon),
+    inset 2px 2px 0 0 var(--cream);
+}
+
+.pixel-border-panel {
+  box-shadow:
+    -3px 0 0 0 var(--espresso),
+    3px 0 0 0 var(--espresso),
+    0 -3px 0 0 var(--espresso),
+    0 3px 0 0 var(--espresso),
+    inset -3px -3px 0 0 var(--cinnamon),
+    inset 3px 3px 0 0 var(--cream);
+}
+
+.pixel-btn-bevel {
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset -2px -2px 0 0 var(--cinnamon),
+    inset 2px 2px 0 0 var(--cream);
+  transition: transform 0.05s steps(1);
+}
+
+.pixel-btn-bevel:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset 2px 2px 0 0 var(--espresso),
+    inset -2px -2px 0 0 var(--cinnamon);
+}
+
+.pixel-input-bevel {
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset 2px 2px 0 0 var(--cinnamon),
+    inset -2px -2px 0 0 var(--cream);
+}
+
+/* Crisp Pixel Rendering */
+.font-pixel {
+  font-family: var(--font-pixel);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: pixelated;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-modern);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
 }
