@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Silkscreen:wght@400;700&family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
-
 :root {
-  /* Earthy Palette (Light / Parchment) */
   --cream: #FFF8F0;
   --cream-light: #FFFCF9;
   --cream-dark: #F5E8D8;
@@ -13,7 +10,6 @@
   --espresso: #4B2E2B;
   --espresso-deep: #321C1A;
 
-  /* Semantic Harmonies */
   --destructive: #B84A39;
   --destructive-foreground: #FFF8F0;
   --success: #4F6D48;
@@ -21,7 +17,6 @@
   --warning: #D48B38;
   --warning-foreground: #321C1A;
 
-  /* Surface & Token Bindings */
   --background: var(--cream);
   --foreground: var(--espresso);
   --surface: #FFFFFF;
@@ -31,12 +26,10 @@
   --border-strong: var(--cinnamon);
   --ring: var(--caramel);
 
-  /* Typography */
-  --font-modern: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-pixel: "Silkscreen", "Press Start 2P", monospace;
+  --font-modern: var(--font-google-sans-flex), "Google Sans Flex", sans-serif;
+  --font-pixel: var(--font-geist-pixel-square), monospace;
 }
 
-/* Dark Mode (Campfire / Dungeon) */
 [data-mode="dark"] {
   --background: #140D0B;
   --foreground: #FFF8F0;
@@ -53,7 +46,6 @@
   --ring: #E2A670;
 }
 
-/* Pixel Global Metamorphosis Mode */
 [data-flavor="pixel"] {
   font-family: var(--font-pixel) !important;
   letter-spacing: -0.02em;
@@ -63,7 +55,6 @@
   border-radius: 0px !important;
 }
 
-/* Instant Snap on Theme Flip (per better-ui) */
 .theme-transitioning,
 .theme-transitioning *,
 .theme-transitioning *::before,
@@ -71,7 +62,6 @@
   transition: none !important;
 }
 
-/* Stepped 3D Pixel Bevel Utilities */
 .pixel-border-bevel {
   box-shadow:
     -2px 0 0 0 var(--espresso),
@@ -124,7 +114,6 @@
     inset -2px -2px 0 0 var(--cream);
 }
 
-/* Crisp Pixel Rendering */
 .font-pixel {
   font-family: var(--font-pixel);
   -webkit-font-smoothing: none;

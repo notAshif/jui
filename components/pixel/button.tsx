@@ -3,12 +3,12 @@ import { cn } from "@/lib/utils";
 import { ButtonProps } from "@/components/ui/button";
 
 const pixelVariantStyles = {
-  primary: "bg-[var(--caramel)] text-[var(--cream)] hover:brightness-105",
-  secondary: "bg-[var(--cream-dark)] text-[var(--espresso)] hover:brightness-95",
-  outline: "bg-transparent text-[var(--espresso)] hover:bg-[var(--cream-dark)]",
-  ghost: "bg-transparent text-[var(--espresso)] shadow-none hover:bg-[var(--cream-dark)] hover:pixel-btn-bevel",
-  destructive: "bg-[var(--destructive)] text-[var(--destructive-foreground)] hover:brightness-110",
-  link: "bg-transparent text-[var(--caramel)] underline shadow-none p-0 h-auto",
+  primary: "bg-(--caramel) text-(--cream) hover:brightness-105",
+  secondary: "bg-(--cream-dark) text-(--espresso) hover:brightness-95",
+  outline: "bg-transparent text-(--espresso) hover:bg-(--cream-dark)",
+  ghost: "bg-transparent text-(--espresso) shadow-none hover:bg-(--cream-dark) hover:pixel-btn-bevel",
+  destructive: "bg-(--destructive) text-(--destructive-foreground) hover:brightness-110",
+  link: "bg-transparent text-(--caramel) underline shadow-none p-0 h-auto",
 };
 
 const pixelSizeStyles = {

@@ -3,12 +3,12 @@ import { cn } from "@/lib/utils";
 import { BadgeProps } from "@/components/ui/badge";
 
 const pixelBadgeVariants = {
-  default: "bg-[var(--caramel)] text-[var(--cream)]",
-  secondary: "bg-[var(--cream-dark)] text-[var(--espresso)]",
-  success: "bg-[var(--success)] text-[var(--success-foreground)]",
-  warning: "bg-[var(--warning)] text-[var(--warning-foreground)]",
-  destructive: "bg-[var(--destructive)] text-[var(--destructive-foreground)]",
-  outline: "bg-transparent text-[var(--espresso)]",
+  default: "bg-(--caramel) text-(--cream)",
+  secondary: "bg-(--cream-dark) text-(--espresso)",
+  success: "bg-(--success) text-(--success-foreground)",
+  warning: "bg-(--warning) text-(--warning-foreground)",
+  destructive: "bg-(--destructive) text-(--destructive-foreground)",
+  outline: "bg-transparent text-(--espresso)",
 };
 
 export function PixelBadge({ className, variant = "default", ...props }: BadgeProps) {

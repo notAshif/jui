@@ -9,12 +9,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const variantStyles = {
-  primary: "bg-[var(--caramel)] text-[var(--cream)] hover:bg-[var(--caramel-hover)] shadow-sm active:scale-[0.98]",
-  secondary: "bg-[var(--surface-muted)] text-[var(--espresso)] hover:bg-[#EBD8C4] border border-[var(--border)] active:scale-[0.98]",
-  outline: "border border-[var(--border-strong)] text-[var(--espresso)] hover:bg-[var(--surface-muted)] active:scale-[0.98]",
-  ghost: "text-[var(--espresso)] hover:bg-[var(--surface-muted)] active:scale-[0.98]",
-  destructive: "bg-[var(--destructive)] text-[var(--destructive-foreground)] hover:brightness-95 active:scale-[0.98]",
-  link: "text-[var(--caramel)] underline-offset-4 hover:underline p-0 h-auto",
+  primary: "bg-(--caramel) text-(--cream) hover:bg-(--caramel-hover) shadow-sm active:scale-[0.98]",
+  secondary: "bg-(--surface-muted) text-(--espresso) hover:bg-[#EBD8C4] border border-(--border) active:scale-[0.98]",
+  outline: "border border-(--border-strong) text-(--espresso) hover:bg-(--surface-muted) active:scale-[0.98]",
+  ghost: "text-(--espresso) hover:bg-(--surface-muted) active:scale-[0.98]",
+  destructive: "bg-(--destructive) text-(--destructive-foreground) hover:brightness-95 active:scale-[0.98]",
+  link: "text-(--caramel) underline-offset-4 hover:underline p-0 h-auto",
 };
 
 const sizeStyles = {

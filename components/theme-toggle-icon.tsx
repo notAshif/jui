@@ -7,7 +7,6 @@ interface ThemeToggleIconProps extends React.SVGProps<SVGSVGElement> {
 
 export function ThemeToggleIcon({ flavor, size = 20, className = "", ...props }: ThemeToggleIconProps) {
   if (flavor === "pixel") {
-    // 8-bit Pixel Star / Arcade Gem
     return (
       <svg
         width={size}
@@ -19,7 +18,6 @@ export function ThemeToggleIcon({ flavor, size = 20, className = "", ...props }:
         aria-hidden="true"
         {...props}
       >
-        {/* Pixel cross / star pattern */}
         <rect x="10" y="2" width="4" height="4" />
         <rect x="8" y="6" width="8" height="4" />
         <rect x="2" y="10" width="20" height="4" />
@@ -31,7 +29,6 @@ export function ThemeToggleIcon({ flavor, size = 20, className = "", ...props }:
     );
   }
 
-  // Modern Sleek Sparkle / Vector Diamond
   return (
     <svg
       width={size}

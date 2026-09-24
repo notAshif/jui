@@ -15,7 +15,7 @@ export function PixelAvatar({ src, alt, fallback, size = "md", className, ...pro
     <div
       className={cn(
         "relative inline-flex shrink-0 items-center justify-center rounded-none font-pixel select-none",
-        "bg-[var(--cream-dark)] text-[var(--espresso)] pixel-border-bevel",
+        "bg-(--cream-dark) text-(--espresso) pixel-border-bevel",
         pixelSizeClasses[size],
         className
       )}
