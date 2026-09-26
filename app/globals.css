@@ -57,8 +57,19 @@ html {
 }
 
 :focus-visible {
-  outline: 2px solid var(--warning) !important;
-  outline-offset: 2px !important;
+  outline: 2px solid var(--warning);
+  outline-offset: 2px;
+}
+
+/* Explicitly suppress outlines/borders for clean inputs and command palette search */
+.outline-none:focus,
+.outline-none:focus-visible,
+input.outline-none:focus,
+input.outline-none:focus-visible,
+[data-no-focus-outline]:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
 }
 
 .theme-transitioning,

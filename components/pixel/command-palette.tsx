@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { CommandItem, CommandPaletteProps } from "@/components/ui/command-palette";
-import { Search } from "lucide-react";
+import { PixelSearchIcon } from "@/components/pixel/icons";
 
 export const PixelCommandPalette = ({ 
   items, 
@@ -105,19 +105,20 @@ export const PixelCommandPalette = ({
           className
         )}
       >
-        <div className="flex items-center border-b-2 border-(--border-strong) p-3">
-          <Search className="w-4 h-4 text-(--foreground/40) mr-3" />
+        <div className="flex items-center px-4 py-3.5 gap-3 bg-(--surface-card)">
+          <PixelSearchIcon className="w-5 h-5 text-(--caramel) shrink-0 select-none" />
           <input
             ref={inputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={placeholder}
-            className="flex-1 bg-transparent outline-none text-xs placeholder-(--foreground/40) tracking-wide"
+            className="flex-1 bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 shadow-none text-xs text-(--foreground) placeholder-(--foreground/40) tracking-wider py-0.5 leading-normal"
             onKeyDown={handleKeyDown}
             aria-label="Search commands"
+            data-no-focus-outline
           />
-          <kbd className="px-2 py-1 text-xs bg-(--surface-muted) pixel-btn-bevel text-(--foreground/60)">
+          <kbd className="px-2 py-1 text-[10px] bg-(--surface-muted) pixel-btn-bevel text-(--foreground/70) select-none shrink-0 leading-none">
             ⌘K
           </kbd>
         </div>
