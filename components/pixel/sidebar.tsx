@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarSection, SidebarProps } from "@/components/ui/sidebar";
-import { ChevronRight, X } from "lucide-react";
+import { PixelChevronRightIcon, PixelCloseIcon } from "@/components/pixel/icons";
 
 const pixelWidthStyles = {
   sm: "w-64",
@@ -55,7 +55,7 @@ export const PixelSidebar = ({ sections, open = true, onClose, title, className,
             )}
             aria-label="Close sidebar"
           >
-            <X className="w-4 h-4" />
+            <PixelCloseIcon className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -81,9 +81,9 @@ export const PixelSidebar = ({ sections, open = true, onClose, title, className,
                 aria-expanded={!isCollapsed}
               >
                 <span className="font-medium">{section.title}</span>
-                <ChevronRight 
+                <PixelChevronRightIcon 
                   className={cn(
-                    "w-3 h-3 transition-transform duration-200",
+                    "w-3.5 h-3.5 transition-transform duration-200",
                     !isCollapsed && "rotate-90"
                   )}
                   aria-hidden="true"

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { DropdownMenuProps, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Check } from "lucide-react";
+import { PixelCheckIcon } from "@/components/pixel/icons";
 
 export const PixelDropdownMenu = ({ trigger, items, align = "start", side = "bottom" }: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -86,7 +86,7 @@ export const PixelDropdownMenu = ({ trigger, items, align = "start", side = "bot
               )}
               role="menuitem"
             >
-              {item.checked && <Check className="w-3 h-3 flex-shrink-0" />}
+              {item.checked && <PixelCheckIcon className="w-3.5 h-3.5 flex-shrink-0" />}
               {item.icon && <span className="flex-shrink-0">{item.icon}</span>}
               <span className="flex-1">{item.label}</span>
             </button>

@@ -42,12 +42,9 @@ import {
   Heart,
   Zap,
   Sparkles,
-  Volume2,
-  VolumeX,
   Check,
   Copy,
   Terminal,
-  Search,
   ChevronRight,
   ChevronDown,
   Layers,
@@ -65,6 +62,12 @@ import {
   X,
   Coins
 } from "lucide-react";
+import {
+  PixelSearchIcon,
+  PixelCloseIcon,
+  PixelVolume2Icon,
+  PixelVolumeXIcon
+} from "@/components/pixel/icons";
 
 interface GameToast {
   id: number;
@@ -298,7 +301,7 @@ export default function ComponentDocsPage() {
             onClick={toggleSfx}
             className="p-1.5 bg-(--surface-card) pixel-btn-bevel text-xs flex items-center gap-1 cursor-pointer"
           >
-            {sfxEnabled ? <Volume2 className="w-3.5 h-3.5 text-(--success)" /> : <VolumeX className="w-3.5 h-3.5 text-(--destructive)" />}
+            {sfxEnabled ? <PixelVolume2Icon className="w-3.5 h-3.5 text-(--success)" /> : <PixelVolumeXIcon className="w-3.5 h-3.5 text-(--destructive)" />}
           </button>
         </div>
 
@@ -313,14 +316,24 @@ export default function ComponentDocsPage() {
             <label className="text-[10px] font-bold text-(--espresso) uppercase tracking-wider block">
               FILTER PRIMITIVES
             </label>
-            <div className="relative">
+            <div className="relative flex items-center">
+              <PixelSearchIcon className="w-3.5 h-3.5 text-(--espresso) opacity-60 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none select-none z-10" />
               <PixelInput
                 placeholder="Search 28 components..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="text-xs py-1.5 pr-7"
+                className="text-xs pl-8 pr-7 py-1.5 h-9"
               />
-              <Search className="w-3 h-3 text-(--espresso) opacity-60 absolute right-2.5 top-2.5 pointer-events-none" />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-(--espresso) opacity-60 hover:opacity-100 p-0.5 cursor-pointer z-10"
+                  aria-label="Clear filter"
+                >
+                  <PixelCloseIcon className="w-3 h-3" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -398,7 +411,7 @@ export default function ComponentDocsPage() {
             >
               <span className="text-[10px] font-bold uppercase">SFX AUDIO</span>
               <span className="flex items-center gap-1 font-bold text-(--caramel)">
-                {sfxEnabled ? <Volume2 className="w-3.5 h-3.5 text-(--success)" /> : <VolumeX className="w-3.5 h-3.5 text-(--destructive)" />}
+                {sfxEnabled ? <PixelVolume2Icon className="w-3.5 h-3.5 text-(--success)" /> : <PixelVolumeXIcon className="w-3.5 h-3.5 text-(--destructive)" />}
                 {sfxEnabled ? "ON" : "MUTED"}
               </span>
             </button>
@@ -431,7 +444,7 @@ export default function ComponentDocsPage() {
                   }}
                   className="flex items-center gap-2 px-3 py-1.5 text-xs bg-(--surface-muted) text-(--espresso) pixel-border-bevel cursor-pointer"
                 >
-                  <Search className="w-3 h-3 text-(--caramel)" />
+                  <PixelSearchIcon className="w-3.5 h-3.5 text-(--caramel)" />
                   <span>COMMAND PALETTE</span>
                   <kbd className="px-1 text-[10px] bg-(--cream) text-(--espresso) border border-(--border-strong)">⌘K</kbd>
                 </button>

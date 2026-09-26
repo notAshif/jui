@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { AccordionProps } from "@/components/ui/accordion";
-import { ChevronDown } from "lucide-react";
+import { PixelChevronDownIcon } from "@/components/pixel/icons";
 
 export const PixelAccordion = ({ items, allowMultiple = false, defaultOpen = [], className }: AccordionProps) => {
   const [openItems, setOpenItems] = useState<Set<string>>(new Set(defaultOpen));
@@ -48,7 +48,7 @@ export const PixelAccordion = ({ items, allowMultiple = false, defaultOpen = [],
               aria-controls={`panel-${item.id}`}
             >
               <span className="font-medium">{item.title}</span>
-              <ChevronDown 
+              <PixelChevronDownIcon 
                 className={cn(
                   "w-4 h-4 transition-transform duration-200",
                   isOpen && "rotate-180"

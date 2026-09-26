@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { PixelDialog, PixelDialogFooter } from "@/components/pixel/dialog";
 import { PixelButton } from "@/components/pixel/button";
-import { AlertTriangle, Info, AlertCircle } from "lucide-react";
+import { PixelInfoIcon, PixelAlertIcon, PixelWarningIcon } from "@/components/pixel/icons";
 
 export interface AlertDialogProps {
   open?: boolean;
@@ -24,9 +24,9 @@ const pixelVariantStyles = {
 };
 
 const pixelVariantIcons = {
-  default: Info,
-  destructive: AlertCircle,
-  warning: AlertTriangle,
+  default: PixelInfoIcon,
+  destructive: PixelAlertIcon,
+  warning: PixelWarningIcon,
 };
 
 const pixelVariantIconColors = {

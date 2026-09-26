@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { DrawerProps } from "@/components/ui/drawer";
-import { X } from "lucide-react";
+import { PixelCloseIcon } from "@/components/pixel/icons";
 
 const pixelSideStyles = {
   left: "left-0 top-0 bottom-0 h-full",
@@ -133,7 +133,7 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
                   className="w-8 h-8 flex items-center justify-center p-1 text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer shrink-0 ml-3"
                   aria-label="Close drawer"
                 >
-                  <X className="w-4 h-4" />
+                  <PixelCloseIcon className="w-4 h-4" />
                 </button>
               )}
             </div>

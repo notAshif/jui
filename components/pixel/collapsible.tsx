@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CollapsibleProps } from "@/components/ui/collapsible";
-import { ChevronDown } from "lucide-react";
+import { PixelChevronDownIcon } from "@/components/pixel/icons";
 
 export const PixelCollapsible = ({ trigger, children, content, open, onOpenChange, className }: CollapsibleProps) => {
   const [isOpen, setIsOpen] = useState(open || false);
@@ -35,7 +35,7 @@ export const PixelCollapsible = ({ trigger, children, content, open, onOpenChang
         aria-expanded={currentOpen}
       >
         <span className="font-medium">{trigger}</span>
-        <ChevronDown 
+        <PixelChevronDownIcon 
           className={cn(
             "w-4 h-4 transition-transform duration-200",
             currentOpen && "rotate-180"

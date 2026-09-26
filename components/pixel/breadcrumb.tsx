@@ -1,7 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { BreadcrumbItem, BreadcrumbProps } from "@/components/ui/breadcrumb";
-import { ChevronRight, Home } from "lucide-react";
+import { PixelChevronRightIcon } from "@/components/pixel/icons";
+import { Home } from "lucide-react";
 
 export const PixelBreadcrumb = ({ items, homeIcon = true, className }: BreadcrumbProps) => {
   return (
@@ -16,7 +17,7 @@ export const PixelBreadcrumb = ({ items, homeIcon = true, className }: Breadcrum
           return (
             <li key={index} className="flex items-center">
               {index > 0 && (
-                <ChevronRight 
+                <PixelChevronRightIcon 
                   className="w-3 h-3 text-(--foreground/40)" 
                   aria-hidden="true"
                 />

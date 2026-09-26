@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { TableColumn, TableProps } from "@/components/ui/table";
-import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { PixelChevronUpIcon, PixelChevronDownIcon } from "@/components/pixel/icons";
+import { ChevronsUpDown } from "lucide-react";
 
 type SortDirection = "asc" | "desc" | null;
 
@@ -47,11 +48,11 @@ export const PixelTable = ({ columns, data, sortable = true, className }: TableP
     }
 
     if (sortDirection === "asc") {
-      return <ChevronUp className="w-3 h-3" />;
+      return <PixelChevronUpIcon className="w-3.5 h-3.5" />;
     }
 
     if (sortDirection === "desc") {
-      return <ChevronDown className="w-3 h-3" />;
+      return <PixelChevronDownIcon className="w-3.5 h-3.5" />;
     }
 
     return null;

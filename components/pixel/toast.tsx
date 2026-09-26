@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ToastProps, ToastContainer as BaseToastContainer } from "@/components/ui/toast";
-import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
+import {
+  PixelCloseIcon,
+  PixelCheckIcon,
+  PixelAlertIcon,
+  PixelInfoIcon,
+  PixelWarningIcon
+} from "@/components/pixel/icons";
 
 const pixelVariantStyles = {
   default: "bg-(--surface-card) border-(--border-strong)",
@@ -11,10 +17,10 @@ const pixelVariantStyles = {
 };
 
 const pixelVariantIcons = {
-  default: Info,
-  destructive: AlertCircle,
-  success: CheckCircle,
-  warning: AlertTriangle,
+  default: PixelInfoIcon,
+  destructive: PixelAlertIcon,
+  success: PixelCheckIcon,
+  warning: PixelWarningIcon,
 };
 
 export const PixelToast = ({ 
@@ -80,11 +86,11 @@ export const PixelToast = ({
             "p-1 opacity-70 hover:opacity-100",
             "transition-opacity",
             // Touch target: minimum 32x32px
-            "min-w-[32px] min-h-[32px]"
+            "min-w-[32px] min-h-[32px] flex items-center justify-center cursor-pointer"
           )}
           aria-label="Close notification"
         >
-          <X className="w-3 h-3" />
+          <PixelCloseIcon className="w-3.5 h-3.5" />
         </button>
       )}
     </div>

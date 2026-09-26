@@ -1,7 +1,13 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { AlertProps } from "@/components/ui/alert";
-import { CheckCircle, AlertCircle, Info, AlertTriangle, X } from "lucide-react";
+import {
+  PixelInfoIcon,
+  PixelWarningIcon,
+  PixelAlertIcon,
+  PixelCheckIcon,
+  PixelCloseIcon
+} from "@/components/pixel/icons";
 
 const pixelVariantStyles = {
   info: "bg-(--surface-muted) border-(--border-strong) text-(--foreground)",
@@ -11,10 +17,10 @@ const pixelVariantStyles = {
 };
 
 const pixelVariantIcons = {
-  info: Info,
-  warning: AlertTriangle,
-  error: AlertCircle,
-  success: CheckCircle,
+  info: PixelInfoIcon,
+  warning: PixelWarningIcon,
+  error: PixelAlertIcon,
+  success: PixelCheckIcon,
 };
 
 export const PixelAlert = ({ 
@@ -64,11 +70,11 @@ export const PixelAlert = ({
             "p-1 opacity-70 hover:opacity-100",
             "transition-opacity",
             // Touch target: minimum 32x32px
-            "min-w-[32px] min-h-[32px]"
+            "min-w-[32px] min-h-[32px] flex items-center justify-center cursor-pointer"
           )}
           aria-label="Close alert"
         >
-          <X className="w-4 h-4" />
+          <PixelCloseIcon className="w-4 h-4" />
         </button>
       )}
     </div>

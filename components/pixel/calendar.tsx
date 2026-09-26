@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CalendarProps } from "@/components/ui/calendar";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { PixelChevronLeftIcon, PixelChevronRightIcon } from "@/components/pixel/icons";
 
 export const PixelCalendar = ({ selected, onSelect, minDate, maxDate, className }: CalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(selected || new Date());
@@ -105,7 +105,7 @@ export const PixelCalendar = ({ selected, onSelect, minDate, maxDate, className 
           )}
           aria-label="Previous month"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <PixelChevronLeftIcon className="w-4 h-4" />
         </button>
 
         <div className="flex items-center gap-2">
@@ -130,7 +130,7 @@ export const PixelCalendar = ({ selected, onSelect, minDate, maxDate, className 
           )}
           aria-label="Next month"
         >
-          <ChevronRight className="w-4 h-4" />
+          <PixelChevronRightIcon className="w-4 h-4" />
         </button>
       </div>
 

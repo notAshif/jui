@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { DialogProps } from "@/components/ui/dialog";
-import { X } from "lucide-react";
+import { PixelCloseIcon } from "@/components/pixel/icons";
 
 const pixelSizeStyles = {
   sm: "max-w-md",
@@ -112,7 +112,7 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
                   className="w-8 h-8 flex items-center justify-center p-1 text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer shrink-0 ml-3"
                   aria-label="Close dialog"
                 >
-                  <X className="w-4 h-4" />
+                  <PixelCloseIcon className="w-4 h-4" />
                 </button>
               )}
             </div>

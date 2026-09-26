@@ -1,7 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { PaginationProps } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { PixelChevronLeftIcon, PixelChevronRightIcon } from "@/components/pixel/icons";
+import { MoreHorizontal } from "lucide-react";
 
 export const PixelPagination = ({ 
   currentPage, 
@@ -64,7 +65,7 @@ export const PixelPagination = ({
         )}
         aria-label="Previous page"
       >
-        <ChevronLeft className="w-3 h-3" />
+        <PixelChevronLeftIcon className="w-3.5 h-3.5" />
       </button>
 
       {pages.map((page, index) => {
@@ -117,7 +118,7 @@ export const PixelPagination = ({
         )}
         aria-label="Next page"
       >
-        <ChevronRight className="w-3 h-3" />
+        <PixelChevronRightIcon className="w-3.5 h-3.5" />
       </button>
     </nav>
   );
