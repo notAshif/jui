@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { CollapsibleProps } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 
-export const PixelCollapsible = ({ trigger, children, open, onOpenChange, className }: CollapsibleProps) => {
+export const PixelCollapsible = ({ trigger, children, content, open, onOpenChange, className }: CollapsibleProps) => {
   const [isOpen, setIsOpen] = useState(open || false);
 
   const controlledOpen = open !== undefined;
@@ -20,6 +20,7 @@ export const PixelCollapsible = ({ trigger, children, open, onOpenChange, classN
   return (
     <div className={cn("w-full font-pixel", className)}>
       <button
+        type="button"
         onClick={toggle}
         className={cn(
           "w-full flex items-center justify-between p-3 text-left",
@@ -45,7 +46,7 @@ export const PixelCollapsible = ({ trigger, children, open, onOpenChange, classN
       
       {currentOpen && (
         <div className="p-3 border-t-2 border-(--border-strong)">
-          {children}
+          {content || children}
         </div>
       )}
     </div>

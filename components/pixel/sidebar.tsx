@@ -9,7 +9,7 @@ const pixelWidthStyles = {
   lg: "w-96",
 };
 
-export const PixelSidebar = ({ sections, open = true, onClose, title, className, width = "md" }: SidebarProps) => {
+export const PixelSidebar = ({ sections, open = true, onClose, title, className, width = "md", variant = "fixed" }: SidebarProps) => {
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
   const toggleSection = (sectionTitle: string) => {
@@ -27,10 +27,12 @@ export const PixelSidebar = ({ sections, open = true, onClose, title, className,
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 h-full bg-(--surface-card) border-r-2 border-(--border-strong)",
+        variant === "fixed"
+          ? cn("fixed left-0 top-0 h-full border-r-2 z-40", pixelWidthStyles[width])
+          : "relative h-full w-full",
+        "bg-(--surface-card) border-(--border-strong)",
         "pixel-border-panel",
-        "z-40 font-pixel",
-        pixelWidthStyles[width],
+        "font-pixel",
         className
       )}
       role="navigation"

@@ -8,9 +8,18 @@ export interface PopoverProps {
   content: React.ReactNode;
   align?: "start" | "center" | "end";
   side?: "top" | "right" | "bottom" | "left";
+  className?: string;
 }
 
-export const Popover = ({ open, onOpenChange, children, content, align = "center", side = "bottom" }: PopoverProps) => {
+export const Popover = ({ 
+  open, 
+  onOpenChange, 
+  children, 
+  content, 
+  align = "center", 
+  side = "bottom",
+  className
+}: PopoverProps) => {
   const [isOpen, setIsOpen] = useState(open || false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -62,11 +71,11 @@ export const Popover = ({ open, onOpenChange, children, content, align = "center
   };
 
   return (
-    <div className="relative inline-block">
+    <div className={cn("relative inline-block", className)}>
       <div 
         ref={triggerRef}
         onClick={handleToggle}
-        className="inline-block"
+        className="inline-block cursor-pointer"
       >
         {children}
       </div>
@@ -78,16 +87,10 @@ export const Popover = ({ open, onOpenChange, children, content, align = "center
             "absolute z-50 w-64 p-4",
             "bg-(--surface-card) border border-(--border-strong)",
             "shadow-lg rounded-lg",
-            "animate-in fade-in zoom-in-95 duration-200",
+            "animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none",
             alignStyles[align],
             sideStyles[side]
           )}
-          style={{
-            // Motion-safe: respects reduced motion preference
-            animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-              ? 'none' 
-              : undefined
-          }}
           role="dialog"
           aria-modal="false"
         >

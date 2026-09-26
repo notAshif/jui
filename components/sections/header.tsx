@@ -12,9 +12,9 @@ export interface HeaderProps {
 }
 
 const MENU_ITEMS = [
-  { label: "HOME", href: "#home" },
-  { label: "DOCS", href: "#docs" },
-  { label: "COMPONENTS", href: "#components" },
+  { label: "HOME", href: "/" },
+  { label: "DOCS", href: "/docs/component" },
+  { label: "COMPONENTS", href: "/docs/component" },
 ];
 
 export function Header({

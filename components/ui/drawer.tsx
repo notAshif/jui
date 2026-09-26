@@ -11,6 +11,7 @@ export interface DrawerProps {
   side?: "left" | "right" | "top" | "bottom";
   size?: "sm" | "md" | "lg" | "xl";
   showCloseButton?: boolean;
+  className?: string;
 }
 
 const sideStyles = {
@@ -103,7 +104,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
           className={cn(
             "absolute bg-(--surface-card) border border-(--border-strong)",
             "shadow-xl focus:outline-none",
-            "animate-in duration-300 ease-out",
+            "animate-in duration-300 ease-out motion-reduce:animate-none",
             side === "left" && "slide-in-from-left",
             side === "right" && "slide-in-from-right",
             side === "top" && "slide-in-from-top",
@@ -112,12 +113,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
             currentSizeStyles,
             className
           )}
-          style={{
-            // Motion-safe: respects reduced motion preference
-            animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-              ? 'none'
-              : undefined
-          }}
+          {...props}
         >
           {/* Header */}
           {(title || showCloseButton) && (

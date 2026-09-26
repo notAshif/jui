@@ -5,8 +5,9 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
   return (
     <div
       className={cn(
-        "rounded-none bg-(--surface-muted) text-(--foreground) p-1",
-        "pixel-border-panel relative select-none font-pixel",
+        "rounded-xl bg-(--surface-card) text-(--foreground)",
+        "border border-(--border) shadow-sm hover:shadow-md",
+        "transition-shadow duration-200 overflow-hidden",
         className
       )}
       {...props}
@@ -17,7 +18,7 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("flex flex-col space-y-2 p-5 border-b-2 border-dashed border-(--border-strong)", className)}
+      className={cn("flex flex-col space-y-1.5 p-6 border-b border-(--border)/60", className)}
       {...props}
     />
   );
@@ -26,20 +27,20 @@ export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDiv
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("font-pixel text-sm uppercase tracking-widest text-(--espresso)", className)}
+      className={cn("text-base font-semibold leading-none tracking-tight text-(--foreground)", className)}
       {...props}
     />
   );
 }
 
 export function CardDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cn("font-pixel text-[10px] tracking-wider text-[#7B5B49]", className)} {...props} />;
+  return <p className={cn("text-xs text-(--foreground/70) leading-relaxed mt-1", className)} {...props} />;
 }
 
 export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-5 pt-4", className)} {...props} />;
+  return <div className={cn("p-6", className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("flex items-center p-5 pt-0", className)} {...props} />;
+  return <div className={cn("flex items-center p-6 pt-0 border-t border-(--border)/40 mt-4", className)} {...props} />;
 }

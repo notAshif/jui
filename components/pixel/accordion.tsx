@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
-import { AccordionItemProps, AccordionProps } from "@/components/ui/accordion";
+import { AccordionProps } from "@/components/ui/accordion";
 import { ChevronDown } from "lucide-react";
 
 export const PixelAccordion = ({ items, allowMultiple = false, defaultOpen = [], className }: AccordionProps) => {

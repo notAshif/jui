@@ -4,13 +4,14 @@ import { ChevronDown } from "lucide-react";
 
 export interface CollapsibleProps {
   trigger: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  content?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   className?: string;
 }
 
-export const Collapsible = ({ trigger, children, open, onOpenChange, className }: CollapsibleProps) => {
+export const Collapsible = ({ trigger, children, content, open, onOpenChange, className }: CollapsibleProps) => {
   const [isOpen, setIsOpen] = useState(open || false);
 
   const controlledOpen = open !== undefined;
@@ -27,6 +28,7 @@ export const Collapsible = ({ trigger, children, open, onOpenChange, className }
   return (
     <div className={cn("w-full", className)}>
       <button
+        type="button"
         onClick={toggle}
         className={cn(
           "w-full flex items-center justify-between p-4 text-left",
@@ -51,7 +53,7 @@ export const Collapsible = ({ trigger, children, open, onOpenChange, className }
       
       {currentOpen && (
         <div className="p-4 border-t border-(--border)">
-          {children}
+          {content || children}
         </div>
       )}
     </div>

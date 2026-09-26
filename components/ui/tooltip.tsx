@@ -1,24 +1,34 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 export interface TooltipProps {
   content: React.ReactNode;
   children: React.ReactNode;
-  side?: "top" | "right" | "bottom" | "left";
+  side?: "top" | "bottom" | "left" | "right";
   align?: "start" | "center" | "end";
+  delayDuration?: number;
   delay?: number;
+  className?: string;
 }
 
-export const Tooltip = ({ content, children, side = "top", align = "center", delay = 300 }: TooltipProps) => {
+export const Tooltip = ({
+  content,
+  children,
+  side = "top",
+  align = "center",
+  delayDuration = 200,
+  delay,
+  className
+}: TooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  const triggerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const effectiveDelay = delay ?? delayDuration;
 
   const handleMouseEnter = () => {
-    // Game UI pattern: 300-500ms delay before showing tooltips
     timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
-    }, delay);
+    }, effectiveDelay);
   };
 
   const handleMouseLeave = () => {
@@ -28,18 +38,12 @@ export const Tooltip = ({ content, children, side = "top", align = "center", del
     setIsVisible(false);
   };
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
   const alignStyles = {
-    start: "left-0",
-    center: "left-1/2 -translate-x-1/2",
-    end: "right-0",
+    start: side === "top" || side === "bottom" ? "left-0" : "top-0",
+    center: side === "top" || side === "bottom" 
+      ? "left-1/2 -translate-x-1/2" 
+      : "top-1/2 -translate-y-1/2",
+    end: side === "top" || side === "bottom" ? "right-0" : "bottom-0",
   };
 
   const sideStyles = {
@@ -52,30 +56,27 @@ export const Tooltip = ({ content, children, side = "top", align = "center", del
   return (
     <div 
       ref={triggerRef}
-      className="relative inline-block"
+      className={cn("relative inline-block", className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onFocus={() => setIsVisible(true)}
+      onBlur={() => setIsVisible(false)}
     >
       {children}
 
       {isVisible && (
         <div
           className={cn(
-            "absolute z-50 px-3 py-2 text-sm",
+            "absolute z-50 px-3 py-2 text-xs",
             "bg-(--espresso) text-(--cream)",
-            "rounded shadow-lg",
-            "animate-in fade-in zoom-in-95 duration-150",
-            "max-w-xs",
+            "rounded-md shadow-lg pointer-events-none",
+            "animate-in fade-in zoom-in-95 duration-150 motion-reduce:animate-none",
+            "max-w-xs whitespace-nowrap",
             alignStyles[align],
             sideStyles[side]
           )}
           style={{
-            // Game UI: text outline for readability
             textShadow: "0 1px 2px rgba(0,0,0,0.3)",
-            // Motion-safe: respects reduced motion preference
-            animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-              ? 'none' 
-              : undefined
           }}
           role="tooltip"
         >

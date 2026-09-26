@@ -5,9 +5,11 @@ import { CheckCircle, AlertCircle, Info, AlertTriangle, X } from "lucide-react";
 export interface AlertProps {
   variant?: "info" | "warning" | "error" | "success";
   title?: string;
+  description?: React.ReactNode;
   children?: React.ReactNode;
   showCloseButton?: boolean;
   onClose?: () => void;
+  className?: string;
 }
 
 const variantStyles = {
@@ -27,9 +29,11 @@ const variantIcons = {
 export const Alert = ({ 
   variant = "info", 
   title, 
+  description,
   children, 
-  showCloseButton = false,
-  onClose 
+  showCloseButton = false, 
+  onClose,
+  className
 }: AlertProps) => {
   const Icon = variantIcons[variant];
 
@@ -37,7 +41,8 @@ export const Alert = ({
     <div
       className={cn(
         "relative flex items-start gap-3 p-4 rounded-lg border",
-        variantStyles[variant]
+        variantStyles[variant],
+        className
       )}
       role="alert"
       aria-live="polite"
@@ -52,9 +57,9 @@ export const Alert = ({
             {title}
           </h4>
         )}
-        {children && (
+        {(description || children) && (
           <div className="text-sm">
-            {children}
+            {description || children}
           </div>
         )}
       </div>

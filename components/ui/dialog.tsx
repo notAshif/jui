@@ -10,6 +10,7 @@ export interface DialogProps {
   children?: React.ReactNode;
   size?: "sm" | "md" | "lg" | "xl" | "full";
   showCloseButton?: boolean;
+  className?: string;
 }
 
 const sizeStyles = {
@@ -29,6 +30,7 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
     children,
     size = "md",
     showCloseButton = true,
+    className,
     ...props
   }, ref) => {
     const dialogRef = useRef<HTMLDivElement>(null);
@@ -88,16 +90,11 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
           className={cn(
             "relative w-full bg-(--surface-card) border border-(--border-strong)",
             "shadow-xl focus:outline-none",
-            "animate-in fade-in zoom-in-95 duration-200",
+            "animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none",
             sizeStyles[size],
-            props.className
+            className
           )}
-          style={{
-            // Motion-safe: respects reduced motion preference
-            animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-              ? 'none'
-              : undefined
-          }}
+          {...props}
         >
           {/* Header */}
           {(title || showCloseButton) && (

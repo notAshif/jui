@@ -20,9 +20,11 @@ const pixelVariantIcons = {
 export const PixelAlert = ({ 
   variant = "info", 
   title, 
+  description,
   children, 
-  showCloseButton = false,
-  onClose 
+  showCloseButton = false, 
+  onClose,
+  className
 }: AlertProps) => {
   const Icon = pixelVariantIcons[variant];
 
@@ -32,7 +34,8 @@ export const PixelAlert = ({
         "relative flex items-start gap-3 p-3 border",
         "pixel-border-panel",
         "font-pixel",
-        pixelVariantStyles[variant]
+        pixelVariantStyles[variant],
+        className
       )}
       role="alert"
       aria-live="polite"
@@ -47,9 +50,9 @@ export const PixelAlert = ({
             {title}
           </h4>
         )}
-        {children && (
+        {(description || children) && (
           <div className="text-xs tracking-wide">
-            {children}
+            {description || children}
           </div>
         )}
       </div>
@@ -65,7 +68,7 @@ export const PixelAlert = ({
           )}
           aria-label="Close alert"
         >
-          <X className="w-3 h-3" />
+          <X className="w-4 h-4" />
         </button>
       )}
     </div>

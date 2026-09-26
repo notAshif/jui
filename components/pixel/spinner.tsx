@@ -9,13 +9,11 @@ const pixelSizeStyles = {
 };
 
 export const PixelSpinner = ({ size = "md", className }: SpinnerProps) => {
-  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
   return (
     <div
       className={cn(
         "inline-block border-(--border) border-t-(--caramel)",
-        !prefersReducedMotion && "animate-spin",
+        "animate-spin motion-reduce:animate-none",
         pixelSizeStyles[size],
         className
       )}

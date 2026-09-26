@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
-export interface AccordionItemProps {
+interface AccordionItemProps {
   id: string;
   title: string;
   content: React.ReactNode;

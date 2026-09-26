@@ -70,9 +70,9 @@ export function Hero() {
           </div>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-            <Link href="#components">
+            <Link href="/docs/component">
               <PixelButton size="lg" className="text-xs uppercase tracking-widest px-6 py-3">
-                [A] EXPLORE PRIMITIVES
+                [A] EXPLORE ALL 28 PRIMITIVES
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5 inline" />
               </PixelButton>
             </Link>

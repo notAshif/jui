@@ -10,10 +10,11 @@ export interface ToastProps {
   duration?: number;
   onClose?: () => void;
   showCloseButton?: boolean;
+  className?: string;
 }
 
 const variantStyles = {
-  default: "bg-(--surface-card) border-(--border-strong)",
+  default: "bg-(--surface-card) border-(--border-strong) text-(--foreground)",
   destructive: "bg-(--destructive) text-(--destructive-foreground) border-(--destructive)",
   success: "bg-(--success) text-(--success-foreground) border-(--success)",
   warning: "bg-(--warning) text-(--warning-foreground) border-(--warning)",
@@ -32,7 +33,8 @@ export const Toast = ({
   variant = "default", 
   duration = 5000,
   onClose,
-  showCloseButton = true 
+  showCloseButton = true,
+  className
 }: ToastProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const Icon = variantIcons[variant];
@@ -58,16 +60,10 @@ export const Toast = ({
     <div
       className={cn(
         "relative flex items-start gap-3 p-4 rounded-lg border shadow-lg",
-        "animate-in slide-in-from-right-full duration-300",
-        "transition-all duration-300",
-        variantStyles[variant]
+        "animate-in slide-in-from-right-full duration-300 motion-reduce:animate-none",
+        variantStyles[variant],
+        className
       )}
-      style={{
-        // Game UI: respects reduced motion preference
-        animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-          ? 'none' 
-          : undefined
-      }}
       role="alert"
       aria-live="polite"
     >
@@ -93,9 +89,9 @@ export const Toast = ({
           onClick={handleClose}
           className={cn(
             "p-1 rounded opacity-70 hover:opacity-100",
-            "transition-opacity",
+            "transition-opacity duration-150",
             // Touch target: minimum 32x32px
-            "min-w-[32px] min-h-[32px]"
+            "min-w-[32px] min-h-[32px] flex items-center justify-center cursor-pointer"
           )}
           aria-label="Close notification"
         >
@@ -109,17 +105,19 @@ export const Toast = ({
 Toast.displayName = "Toast";
 
 // Toast container for managing multiple toasts
-export const ToastContainer = ({ children }: { children: React.ReactNode }) => {
+export const ToastContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
     <div 
-      className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full"
+      className={cn("fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none", className)}
       style={{ 
         // Safe zone: 5% margin for TV overscan
         right: "5%",
         top: "5%"
       }}
     >
-      {children}
+      <div className="flex flex-col gap-2 pointer-events-auto">
+        {children}
+      </div>
     </div>
   );
 };

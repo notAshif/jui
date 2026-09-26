@@ -20,6 +20,7 @@ export interface SidebarProps {
   title?: string;
   className?: string;
   width?: "sm" | "md" | "lg";
+  variant?: "fixed" | "inline";
 }
 
 const widthStyles = {
@@ -28,7 +29,7 @@ const widthStyles = {
   lg: "w-96",
 };
 
-export const Sidebar = ({ sections, open = true, onClose, title, className, width = "md" }: SidebarProps) => {
+export const Sidebar = ({ sections, open = true, onClose, title, className, width = "md", variant = "fixed" }: SidebarProps) => {
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
   const toggleSection = (sectionTitle: string) => {
@@ -46,9 +47,10 @@ export const Sidebar = ({ sections, open = true, onClose, title, className, widt
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 h-full bg-(--surface-card) border-r border-(--border)",
-        "shadow-lg z-40",
-        widthStyles[width],
+        variant === "fixed"
+          ? cn("fixed left-0 top-0 h-full shadow-lg z-40 border-r", widthStyles[width])
+          : "relative h-full w-full",
+        "bg-(--surface-card) border-(--border)",
         className
       )}
       role="navigation"

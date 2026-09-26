@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 export interface DropdownMenuItem {
   label: string;
@@ -17,9 +17,10 @@ export interface DropdownMenuProps {
   items: DropdownMenuItem[];
   align?: "start" | "center" | "end";
   side?: "top" | "bottom";
+  className?: string;
 }
 
-export const DropdownMenu = ({ trigger, items, align = "start", side = "bottom" }: DropdownMenuProps) => {
+export const DropdownMenu = ({ trigger, items, align = "start", side = "bottom", className }: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -61,11 +62,13 @@ export const DropdownMenu = ({ trigger, items, align = "start", side = "bottom" 
   };
 
   return (
-    <div className="relative inline-block">
+    <div className={cn("relative inline-block", className)}>
       <div 
         ref={triggerRef}
         onClick={() => setIsOpen(!isOpen)}
         className="inline-block cursor-pointer"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
       >
         {trigger}
       </div>
@@ -77,16 +80,10 @@ export const DropdownMenu = ({ trigger, items, align = "start", side = "bottom" 
             "absolute z-50 min-w-[180px] py-2",
             "bg-(--surface-card) border border-(--border-strong)",
             "shadow-lg rounded-lg",
-            "animate-in fade-in zoom-in-95 duration-200",
+            "animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none",
             alignStyles[align],
             sideStyles[side]
           )}
-          style={{
-            // Motion-safe: respects reduced motion preference
-            animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-              ? 'none' 
-              : undefined
-          }}
           role="menu"
         >
           {items.map((item, index) => (
@@ -98,8 +95,8 @@ export const DropdownMenu = ({ trigger, items, align = "start", side = "bottom" 
                 "w-full px-4 py-2 text-left flex items-center gap-3",
                 "transition-colors duration-150",
                 "focus:outline-none focus:bg-(--surface-muted)",
-                // Touch target: minimum 44px height
-                "min-h-[44px]",
+                // Touch target: minimum 40px height
+                "min-h-[40px]",
                 item.disabled && "opacity-50 cursor-not-allowed",
                 item.destructive && "text-(--destructive) hover:bg-(--destructive)/10",
                 !item.destructive && !item.disabled && "hover:bg-(--surface-muted)",
@@ -108,8 +105,8 @@ export const DropdownMenu = ({ trigger, items, align = "start", side = "bottom" 
               role="menuitem"
             >
               {item.checked && <Check className="w-4 h-4 flex-shrink-0" />}
-              {item.icon && <span className="flex-shrink-0">{item.icon}</span>}
-              <span className="flex-1">{item.label}</span>
+              {item.icon && <span className="w-4 h-4 flex-shrink-0">{item.icon}</span>}
+              <span className="flex-1 text-sm">{item.label}</span>
             </button>
           ))}
         </div>
