@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { GithubIcon } from "@/components/github-icon";
-import { Star, Sun, Moon } from "lucide-react";
+import { Star } from "lucide-react";
+import { PixelSunIcon, PixelMoonIcon } from "@/components/theme-toggle-icon";
 
 export interface HeaderProps {
   darkMode: boolean;
@@ -42,19 +43,16 @@ export function Header({
       <div className="w-full px-4 sm:px-6 lg:px-8 h-16 relative flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Link
-            href="#home"
+            href="/"
             className="flex items-center gap-2.5 group focus-visible:outline-none p-1"
           >
             <Logo
               size={36}
               className="active:translate-x-0.5 active:translate-y-0.5"
             />
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline">
               <span className="font-bold text-xl tracking-wider text-(--espresso)">
                 JUI
-              </span>
-              <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 bg-(--espresso) text-(--cream) pixel-border-bevel">
-                GAME UI
               </span>
             </div>
           </Link>
@@ -75,17 +73,13 @@ export function Header({
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <span className="hidden sm:inline-flex items-center text-[10px] px-2 py-1 bg-(--surface-muted) text-(--espresso) pixel-border-bevel uppercase">
-            1P READY
-          </span>
-
+        <div className="flex items-center gap-3 sm:gap-4">
           <Link
             href="https://github.com/notAshif/jui"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View source code on GitHub"
-            className="p-2 text-(--espresso) pixel-btn-bevel hover:text-(--caramel)"
+            className="inline-flex items-center justify-center p-1.5 text-(--espresso) hover:text-(--caramel) transition-colors cursor-pointer"
           >
             <GithubIcon className="w-4 h-4" />
           </Link>
@@ -95,25 +89,26 @@ export function Header({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Star this repository on GitHub"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold bg-(--surface-card) text-(--espresso) pixel-btn-bevel"
+            className="inline-flex items-center gap-1.5 p-1.5 text-xs font-bold text-(--espresso) hover:text-(--caramel) transition-colors cursor-pointer"
           >
             <Star className="w-3.5 h-3.5 text-[#D48B38] fill-[#D48B38]" />
-            <span>{stars !== null ? stars.toLocaleString() : "0"}</span>
+            <span className="tabular-nums">{stars !== null ? stars.toLocaleString() : "0"}</span>
           </Link>
 
           <button
+            type="button"
             onClick={onToggleDarkMode}
             aria-label={
               darkMode
                 ? "Switch to Parchment Light Mode"
                 : "Switch to Campfire Dark Mode"
             }
-            className="p-2 text-(--espresso) pixel-btn-bevel cursor-pointer"
+            className="inline-flex items-center justify-center p-1.5 text-(--espresso) hover:text-(--caramel) transition-colors cursor-pointer"
           >
             {darkMode ? (
-              <Sun className="w-4 h-4 text-[#D9965B]" />
+              <PixelSunIcon size={18} className="text-[#D9965B]" />
             ) : (
-              <Moon className="w-4 h-4 text-(--cinnamon)" />
+              <PixelMoonIcon size={18} className="text-(--cinnamon)" />
             )}
           </button>
         </div>

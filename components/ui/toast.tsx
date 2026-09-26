@@ -108,14 +108,9 @@ Toast.displayName = "Toast";
 export const ToastContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
     <div 
-      className={cn("fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none", className)}
-      style={{ 
-        // Safe zone: 5% margin for TV overscan
-        right: "5%",
-        top: "5%"
-      }}
+      className={cn("fixed bottom-4 right-4 z-50 flex flex-col-reverse gap-2 max-w-sm w-full pointer-events-none p-4", className)}
     >
-      <div className="flex flex-col gap-2 pointer-events-auto">
+      <div className="flex flex-col-reverse gap-2 pointer-events-auto">
         {children}
       </div>
     </div>

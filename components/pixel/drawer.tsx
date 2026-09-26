@@ -43,11 +43,11 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
     useEffect(() => {
       if (open) {
         previousActiveElement.current = document.activeElement as HTMLElement;
-        drawerRef.current?.focus();
+        drawerRef.current?.focus({ preventScroll: true });
         document.body.style.overflow = "hidden";
       } else {
         document.body.style.overflow = "";
-        previousActiveElement.current?.focus();
+        previousActiveElement.current?.focus({ preventScroll: true });
       }
 
       return () => {

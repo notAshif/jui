@@ -33,12 +33,6 @@ export function Footer() {
             [GITHUB REPOSITORY]
           </Link>
         </div>
-
-        <div className="flex items-center gap-2 text-[10px] text-(--cinnamon)">
-          <span>INSERT COIN [1P]</span>
-          <span>•</span>
-          <span>(C) 2026 JUI ARCHIVE</span>
-        </div>
       </div>
     </footer>
   );

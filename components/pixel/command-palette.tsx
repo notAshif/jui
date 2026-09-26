@@ -32,11 +32,11 @@ export const PixelCommandPalette = ({
   useEffect(() => {
     if (open) {
       previousActiveElement.current = document.activeElement as HTMLElement;
-      inputRef.current?.focus();
+      inputRef.current?.focus({ preventScroll: true });
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
-      previousActiveElement.current?.focus();
+      previousActiveElement.current?.focus({ preventScroll: true });
     }
 
     return () => {
@@ -87,8 +87,7 @@ export const PixelCommandPalette = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] font-pixel"
-      style={{ padding: "5%" }}
+      className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4 font-pixel"
       role="dialog"
       aria-modal="true"
       aria-label="Command palette"

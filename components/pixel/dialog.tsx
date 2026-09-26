@@ -29,11 +29,11 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
     useEffect(() => {
       if (open) {
         previousActiveElement.current = document.activeElement as HTMLElement;
-        dialogRef.current?.focus();
+        dialogRef.current?.focus({ preventScroll: true });
         document.body.style.overflow = "hidden";
       } else {
         document.body.style.overflow = "";
-        previousActiveElement.current?.focus();
+        previousActiveElement.current?.focus({ preventScroll: true });
       }
 
       return () => {
@@ -51,11 +51,7 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
 
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
-        style={{
-          // Safe zone: 5% margin for TV overscan
-          padding: "5%"
-        }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "dialog-title" : undefined}

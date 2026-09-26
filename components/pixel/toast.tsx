@@ -94,17 +94,17 @@ export const PixelToast = ({
 PixelToast.displayName = "PixelToast";
 
 // Pixel Toast container
-export const PixelToastContainer = ({ children }: { children: React.ReactNode }) => {
+export const PixelToastContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
     <div 
-      className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full font-pixel"
-      style={{ 
-        // Safe zone: 5% margin for TV overscan
-        right: "5%",
-        top: "5%"
-      }}
+      className={cn(
+        "fixed bottom-4 right-4 z-50 flex flex-col-reverse gap-2 max-w-sm w-full font-pixel pointer-events-none p-4",
+        className
+      )}
     >
-      {children}
+      <div className="flex flex-col-reverse gap-2 pointer-events-auto">
+        {children}
+      </div>
     </div>
   );
 };
