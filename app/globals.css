@@ -46,14 +46,8 @@
   --ring: #E2A670;
 }
 
-[data-flavor="pixel"] {
-  font-family: var(--font-pixel) !important;
-  letter-spacing: -0.02em;
-}
+/* Component-level pixel styles are scoped to individual pixel components to prevent Cumulative Layout Shift (CLS) */
 
-[data-flavor="pixel"] * {
-  border-radius: 0px !important;
-}
 
 .theme-transitioning,
 .theme-transitioning *,
