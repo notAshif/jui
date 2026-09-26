@@ -22,17 +22,17 @@ const sideStyles = {
 };
 
 const sizeStyles = {
-  sm: "w-80 h-auto",
-  md: "w-96 h-auto",
-  lg: "w-[32rem] h-auto",
-  xl: "w-[40rem] h-auto",
+  sm: "w-80",
+  md: "w-96",
+  lg: "w-[32rem]",
+  xl: "w-[40rem]",
 };
 
 const horizontalSizeStyles = {
-  sm: "h-80 w-full",
-  md: "h-96 w-full",
-  lg: "h-[32rem] w-full",
-  xl: "h-[40rem] w-full",
+  sm: "h-80",
+  md: "h-96",
+  lg: "h-[32rem]",
+  xl: "h-[40rem]",
 };
 
 export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
@@ -54,11 +54,11 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
     useEffect(() => {
       if (open) {
         previousActiveElement.current = document.activeElement as HTMLElement;
-        drawerRef.current?.focus();
+        drawerRef.current?.focus({ preventScroll: true });
         document.body.style.overflow = "hidden";
       } else {
         document.body.style.overflow = "";
-        previousActiveElement.current?.focus();
+        previousActiveElement.current?.focus({ preventScroll: true });
       }
 
       return () => {

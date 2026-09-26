@@ -1,7 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { PixelDialog, PixelDialogFooter } from "@/components/pixel/dialog";
-import { AlertTriangle, Info, CheckCircle, AlertCircle } from "lucide-react";
+import { PixelButton } from "@/components/pixel/button";
+import { AlertTriangle, Info, AlertCircle } from "lucide-react";
 
 export interface AlertDialogProps {
   open?: boolean;
@@ -63,62 +64,41 @@ export const PixelAlertDialog = ({
       open={open}
       onClose={onClose}
       title={title}
-      description={description}
-      size="md"
+      size="sm"
       showCloseButton={false}
       className={cn(pixelVariantStyles[variant])}
     >
-      <div className="flex flex-col items-center text-center">
+      <div className="flex flex-col items-center text-center space-y-3 py-1">
         {showIcon && Icon && (
-          <div className={cn("mb-4", pixelVariantIconColors[variant])}>
-            <Icon className="w-10 h-10" />
+          <div className={cn("p-2 bg-(--surface-muted) pixel-border-bevel", pixelVariantIconColors[variant])}>
+            <Icon className="w-8 h-8" />
           </div>
         )}
-        
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold tracking-wider">
-            {title}
-          </h3>
-          {description && (
-            <p className="text-xs text-(--foreground/70) tracking-wide">
-              {description}
-            </p>
-          )}
-        </div>
+
+        {description && (
+          <p className="text-xs text-[#7B5B49] leading-relaxed tracking-wide max-w-sm">
+            {description}
+          </p>
+        )}
       </div>
 
-      <PixelDialogFooter>
-        <button
+      <PixelDialogFooter className="mt-4">
+        <PixelButton
+          variant="outline"
+          size="sm"
           onClick={handleCancel}
-          className={cn(
-            "px-4 py-2",
-            "bg-(--surface-muted) text-(--foreground)",
-            "hover:bg-(--border)",
-            "pixel-btn-bevel",
-            "font-pixel text-xs tracking-wider",
-            // Touch target: minimum 44px height
-            "min-h-[44px]"
-          )}
+          className="text-xs"
         >
           {cancelText}
-        </button>
-        <button
+        </PixelButton>
+        <PixelButton
+          variant={variant === "destructive" ? "destructive" : "primary"}
+          size="sm"
           onClick={handleConfirm}
-          className={cn(
-            "px-4 py-2",
-            variant === "destructive" 
-              ? "bg-(--destructive) text-(--destructive-foreground) hover:brightness-95"
-              : variant === "warning"
-              ? "bg-(--warning) text-(--warning-foreground) hover:brightness-95"
-              : "bg-(--caramel) text-(--cream) hover:brightness-105",
-            "pixel-btn-bevel",
-            "font-pixel text-xs tracking-wider",
-            // Touch target: minimum 44px height
-            "min-h-[44px]"
-          )}
+          className="text-xs"
         >
           {confirmText}
-        </button>
+        </PixelButton>
       </PixelDialogFooter>
     </PixelDialog>
   );

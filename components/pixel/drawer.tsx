@@ -1,27 +1,27 @@
 import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { DrawerProps, DrawerFooter as BaseDrawerFooter } from "@/components/ui/drawer";
+import { DrawerProps } from "@/components/ui/drawer";
 import { X } from "lucide-react";
 
 const pixelSideStyles = {
-  left: "left-0 h-full",
-  right: "right-0 h-full",
-  top: "top-0 w-full",
-  bottom: "bottom-0 w-full",
+  left: "left-0 top-0 bottom-0 h-full",
+  right: "right-0 top-0 bottom-0 h-full",
+  top: "top-0 left-0 right-0 w-full",
+  bottom: "bottom-0 left-0 right-0 w-full",
 };
 
-const pixelSizeStyles = {
-  sm: "w-80 h-auto",
-  md: "w-96 h-auto",
-  lg: "w-[32rem] h-auto",
-  xl: "w-[40rem] h-auto",
+const pixelVerticalWidthStyles = {
+  sm: "w-72 sm:w-80",
+  md: "w-80 sm:w-96",
+  lg: "w-96 sm:w-[32rem]",
+  xl: "w-full sm:w-[40rem]",
 };
 
-const pixelHorizontalSizeStyles = {
-  sm: "h-80 w-full",
-  md: "h-96 w-full",
-  lg: "h-[32rem] w-full",
-  xl: "h-[40rem] w-full",
+const pixelHorizontalHeightStyles = {
+  sm: "h-72 sm:h-80",
+  md: "h-80 sm:h-96",
+  lg: "h-96 sm:h-[32rem]",
+  xl: "h-full sm:h-[40rem]",
 };
 
 export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
@@ -64,11 +64,13 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
     if (!open) return null;
 
     const isHorizontal = side === "top" || side === "bottom";
-    const currentSizeStyles = isHorizontal ? pixelHorizontalSizeStyles[size] : pixelSizeStyles[size];
+    const dimensionStyles = isHorizontal
+      ? pixelHorizontalHeightStyles[size]
+      : pixelVerticalWidthStyles[size];
 
     return (
       <div
-        className="fixed inset-0 z-50"
+        className="fixed inset-0 z-50 overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "drawer-title" : undefined}
@@ -76,7 +78,7 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       >
         {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-black/60"
+          className="fixed inset-0 bg-black/60 transition-opacity"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -91,32 +93,26 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
           tabIndex={-1}
           onKeyDown={handleKeyDown}
           className={cn(
-            "absolute bg-(--surface-card)",
+            "fixed bg-(--surface-card)",
             "pixel-border-panel",
             "focus:outline-none",
-            // Game UI: instant appearance for drawers
             "font-pixel",
+            "flex flex-col",
+            "shadow-2xl max-w-full",
             pixelSideStyles[side],
-            currentSizeStyles,
+            dimensionStyles,
             className
           )}
+          {...props}
         >
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-4 border-b-2 border-(--border-strong)">
-              <div className="flex-1">
+            <div className="flex items-center justify-between p-4 border-b-2 border-(--border-strong) shrink-0 bg-(--surface-card)">
+              <div className="flex-1 min-w-0">
                 {title && (
                   <h2
                     id="drawer-title"
-                    className="text-sm font-semibold text-(--foreground) tracking-wider"
-                    style={{
-                      textShadow: `
-                        -1px -1px 0 var(--espresso-deep),
-                        1px -1px 0 var(--espresso-deep),
-                        -1px 1px 0 var(--espresso-deep),
-                        1px 1px 0 var(--espresso-deep)
-                      `
-                    }}
+                    className="text-sm sm:text-base font-bold text-(--espresso) uppercase tracking-wider truncate"
                   >
                     {title}
                   </h2>
@@ -124,7 +120,7 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
                 {description && (
                   <p
                     id="drawer-description"
-                    className="mt-1 text-xs text-(--foreground/80) tracking-wide"
+                    className="mt-0.5 text-xs text-[#7B5B49] tracking-wide"
                   >
                     {description}
                   </p>
@@ -132,16 +128,9 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
               </div>
               {showCloseButton && (
                 <button
+                  type="button"
                   onClick={onClose}
-                  className={cn(
-                    "ml-4 p-2 font-pixel",
-                    "text-(--foreground/70) hover:text-(--foreground)",
-                    "hover:bg-(--surface-muted)",
-                    "focus:outline-none focus:ring-2 focus:ring-(--ring)",
-                    // Touch target: minimum 44x44px
-                    "min-w-[44px] min-h-[44px]",
-                    "pixel-btn-bevel"
-                  )}
+                  className="w-8 h-8 flex items-center justify-center p-1 text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer shrink-0 ml-3"
                   aria-label="Close drawer"
                 >
                   <X className="w-4 h-4" />
@@ -151,7 +140,7 @@ export const PixelDrawer = React.forwardRef<HTMLDivElement, DrawerProps>(
           )}
 
           {/* Body */}
-          <div className="p-4 overflow-y-auto" style={{ maxHeight: "calc(100vh - 200px)" }}>
+          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3">
             {children}
           </div>
         </div>
@@ -165,7 +154,7 @@ PixelDrawer.displayName = "PixelDrawer";
 // Pixel Drawer Footer
 export const PixelDrawerFooter = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
-    <div className={cn("flex items-center justify-end gap-3 mt-4 font-pixel", className)}>
+    <div className={cn("p-4 border-t-2 border-(--border-strong) bg-(--surface-card) shrink-0 flex items-center justify-end gap-3 font-pixel", className)}>
       {children}
     </div>
   );

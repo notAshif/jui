@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { DialogProps, DialogFooter as BaseDialogFooter } from "@/components/ui/dialog";
+import { DialogProps } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 
 const pixelSizeStyles = {
@@ -8,7 +8,7 @@ const pixelSizeStyles = {
   md: "max-w-lg",
   lg: "max-w-2xl",
   xl: "max-w-4xl",
-  full: "max-w-7xl",
+  full: "max-w-6xl",
 };
 
 export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
@@ -51,7 +51,7 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
 
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "dialog-title" : undefined}
@@ -59,7 +59,7 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
       >
         {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-black/60"
+          className="fixed inset-0 bg-black/60 transition-opacity"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -77,29 +77,21 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
             "relative w-full bg-(--surface-card)",
             "pixel-border-panel",
             "focus:outline-none",
-            // Game UI: instant appearance for critical dialogs
             "font-pixel",
+            "flex flex-col max-h-[85vh] shadow-2xl overflow-hidden",
             pixelSizeStyles[size],
             className
           )}
+          {...props}
         >
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-4 border-b-2 border-(--border-strong)">
-              <div className="flex-1">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b-2 border-(--border-strong) shrink-0 bg-(--surface-card)">
+              <div className="flex-1 min-w-0">
                 {title && (
                   <h2
                     id="dialog-title"
-                    className="text-sm font-semibold text-(--foreground) tracking-wider"
-                    // Game UI: text outline for readability on any background
-                    style={{
-                      textShadow: `
-                        -1px -1px 0 var(--espresso-deep),
-                        1px -1px 0 var(--espresso-deep),
-                        -1px 1px 0 var(--espresso-deep),
-                        1px 1px 0 var(--espresso-deep)
-                      `
-                    }}
+                    className="text-sm sm:text-base font-bold text-(--espresso) uppercase tracking-wider truncate"
                   >
                     {title}
                   </h2>
@@ -107,7 +99,7 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
                 {description && (
                   <p
                     id="dialog-description"
-                    className="mt-1 text-xs text-(--foreground/80) tracking-wide"
+                    className="mt-0.5 text-xs text-[#7B5B49] tracking-wide"
                   >
                     {description}
                   </p>
@@ -115,16 +107,9 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
               </div>
               {showCloseButton && (
                 <button
+                  type="button"
                   onClick={onClose}
-                  className={cn(
-                    "ml-4 p-2 font-pixel",
-                    "text-(--foreground/70) hover:text-(--foreground)",
-                    "hover:bg-(--surface-muted)",
-                    "focus:outline-none focus:ring-2 focus:ring-(--ring)",
-                    // Touch target: minimum 44x44px
-                    "min-w-[44px] min-h-[44px]",
-                    "pixel-btn-bevel"
-                  )}
+                  className="w-8 h-8 flex items-center justify-center p-1 text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer shrink-0 ml-3"
                   aria-label="Close dialog"
                 >
                   <X className="w-4 h-4" />
@@ -134,7 +119,7 @@ export const PixelDialog = React.forwardRef<HTMLDivElement, DialogProps>(
           )}
 
           {/* Body */}
-          <div className="p-4">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
             {children}
           </div>
         </div>
@@ -148,7 +133,7 @@ PixelDialog.displayName = "PixelDialog";
 // Pixel Dialog Footer
 export const PixelDialogFooter = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
-    <div className={cn("flex items-center justify-end gap-3 mt-4 font-pixel", className)}>
+    <div className={cn("p-4 border-t-2 border-(--border-strong) bg-(--surface-card) shrink-0 flex items-center justify-end gap-3 font-pixel", className)}>
       {children}
     </div>
   );
