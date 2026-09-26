@@ -1,7 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-// Base interfaces following Interface Segregation Principle
 export interface BaseBadgeProps {
   variant?: "default" | "secondary" | "success" | "warning" | "destructive" | "outline";
   className?: string;
@@ -11,7 +10,6 @@ export interface BadgeStyles {
   variant: Record<NonNullable<BaseBadgeProps["variant"]>, string>;
 }
 
-// Abstract base component following Dependency Inversion Principle
 export function createBadgeComponent(
   styles: BadgeStyles,
   baseClasses: string,

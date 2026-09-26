@@ -13,25 +13,19 @@ export function Logo({ size = 32, className = "", ...props }: LogoProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      aria-label="JUI Logo"
+      aria-label="JUI Game UI Logo"
       role="img"
       {...props}
     >
-      <rect width="36" height="36" rx="8" fill="var(--caramel)" fillOpacity="0.15" />
-      <path
-        d="M 10 9 C 10 9, 10 22, 16 26 C 20 28.5, 23 26, 23 22"
-        stroke="var(--caramel)"
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
-      <rect x="20" y="8" width="4" height="4" fill="var(--espresso)" />
-      <rect x="24" y="8" width="4" height="4" fill="var(--caramel)" />
-      <rect x="24" y="12" width="4" height="4" fill="var(--espresso)" />
-      <rect x="24" y="16" width="4" height="4" fill="var(--caramel)" />
-      <rect x="20" y="20" width="4" height="4" fill="var(--espresso)" />
-      <rect x="16" y="24" width="4" height="4" fill="var(--caramel)" />
-      <rect x="12" y="24" width="4" height="4" fill="var(--espresso)" />
-      <rect x="12" y="8" width="3" height="3" fill="var(--cream)" />
+      <rect width="36" height="36" fill="var(--caramel)" fillOpacity="0.2" />
+      <rect x="2" y="2" width="32" height="32" stroke="var(--espresso)" strokeWidth="2" />
+      <rect x="10" y="8" width="16" height="4" fill="var(--espresso)" />
+      <rect x="18" y="12" width="8" height="12" fill="var(--caramel)" />
+      <rect x="10" y="20" width="8" height="8" fill="var(--caramel)" />
+      <rect x="14" y="24" width="8" height="4" fill="var(--espresso)" />
+      <rect x="8" y="20" width="4" height="4" fill="var(--espresso)" />
+      <rect x="18" y="12" width="4" height="8" fill="var(--espresso)" />
+      <rect x="24" y="8" width="4" height="4" fill="var(--cream)" />
     </svg>
   );
 }

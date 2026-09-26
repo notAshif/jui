@@ -9,9 +9,9 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const sizeClasses = {
-  sm: "w-8 h-8 text-xs",
-  md: "w-10 h-10 text-sm",
-  lg: "w-14 h-14 text-base",
+  sm: "w-8 h-8 text-[10px]",
+  md: "w-10 h-10 text-xs",
+  lg: "w-14 h-14 text-sm",
 };
 
 export function Avatar({ src, alt, fallback, size = "md", className, ...props }: AvatarProps) {
@@ -20,8 +20,8 @@ export function Avatar({ src, alt, fallback, size = "md", className, ...props }:
   return (
     <div
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full",
-        "bg-(--cream-dark) text-(--espresso) font-semibold border border-(--border)",
+        "relative inline-flex shrink-0 items-center justify-center rounded-none font-pixel select-none",
+        "bg-(--cream-dark) text-(--espresso) pixel-border-bevel",
         sizeClasses[size],
         className
       )}
@@ -32,7 +32,7 @@ export function Avatar({ src, alt, fallback, size = "md", className, ...props }:
           src={src}
           alt={alt || "Avatar"}
           onError={() => setHasError(true)}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover [image-rendering:pixelated]"
         />
       ) : (
         <span aria-hidden="true">{fallback}</span>

@@ -26,7 +26,6 @@
   --border-strong: var(--cinnamon);
   --ring: var(--caramel);
 
-  --font-modern: var(--font-google-sans-flex), "Google Sans Flex", sans-serif;
   --font-pixel: var(--font-geist-pixel-square), monospace;
 }
 
@@ -46,8 +45,17 @@
   --ring: #E2A670;
 }
 
-/* Component-level pixel styles are scoped to individual pixel components to prevent Cumulative Layout Shift (CLS) */
+*,
+*::before,
+*::after {
+  border-radius: 0px !important;
+  font-family: var(--font-pixel), monospace !important;
+}
 
+:focus-visible {
+  outline: 2px solid var(--warning) !important;
+  outline-offset: 2px !important;
+}
 
 .theme-transitioning,
 .theme-transitioning *,
@@ -108,19 +116,53 @@
     inset -2px -2px 0 0 var(--cream);
 }
 
+.pixel-slot {
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset 2px 2px 0 0 var(--espresso),
+    inset -2px -2px 0 0 var(--cinnamon);
+}
+
 .font-pixel {
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel), monospace !important;
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: pixelated;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-muted);
+  box-shadow: inset 0 0 0 1px var(--espresso);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--caramel);
+  box-shadow:
+    inset -2px -2px 0 0 var(--cinnamon),
+    inset 2px 2px 0 0 var(--cream);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--caramel-hover);
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-modern);
+  font-family: var(--font-pixel), monospace !important;
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: pixelated;
+  letter-spacing: -0.01em;
 }

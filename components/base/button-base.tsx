@@ -1,7 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-// Base interfaces following Interface Segregation Principle
 export interface BaseButtonProps {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive" | "link";
   size?: "sm" | "md" | "lg";
@@ -15,7 +14,6 @@ export interface ButtonStyles {
   size: Record<NonNullable<BaseButtonProps["size"]>, string>;
 }
 
-// Abstract base component following Dependency Inversion Principle
 export function createButtonComponent(
   styles: ButtonStyles,
   displayName: string

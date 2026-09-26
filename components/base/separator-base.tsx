@@ -1,14 +1,12 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-// Base interfaces following Interface Segregation Principle
 export interface BaseSeparatorProps {
   orientation?: "horizontal" | "vertical";
   decorative?: boolean;
   className?: string;
 }
 
-// Abstract base component following Dependency Inversion Principle
 export function createSeparatorComponent(
   styleClasses: (orientation: "horizontal" | "vertical") => string,
   displayName: string

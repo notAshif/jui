@@ -9,7 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", error, helperText, disabled, id, ...props }, ref) => {
     return (
-      <div className="w-full space-y-1.5">
+      <div className="w-full space-y-2">
         <input
           id={id}
           type={type}
@@ -18,11 +18,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error ? "true" : undefined}
           aria-describedby={helperText && id ? `${id}-helper` : undefined}
           className={cn(
-            "flex h-10 w-full rounded-lg border bg-(--surface) px-3 py-2 text-sm transition-all duration-150",
-            "border-(--border) text-(--foreground)",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring) focus-visible:border-transparent",
+            "flex h-10 w-full px-3 py-2 font-pixel text-xs tracking-wider select-none",
+            "bg-(--surface-muted) text-(--foreground) rounded-none",
+            "pixel-input-bevel focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring)",
             "disabled:cursor-not-allowed disabled:opacity-50",
-            error && "border-(--destructive) focus-visible:ring-(--destructive) text-(--destructive)",
+            error && "text-(--destructive)",
             className
           )}
           {...props}
@@ -30,9 +30,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {helperText && (
           <p
             id={id ? `${id}-helper` : undefined}
-            className={cn("text-xs", error ? "text-(--destructive) font-medium" : "text-[#7B5B49]")}
+            className={cn("font-pixel text-[10px] tracking-wider", error ? "text-(--destructive)" : "text-[#7B5B49]")}
           >
-            {helperText}
+            {error ? `[!] ${helperText}` : helperText}
           </p>
         )}
       </div>

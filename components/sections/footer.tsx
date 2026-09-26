@@ -3,27 +3,42 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="w-full border-t border-dashed border-(--border-strong) py-6 sm:py-8 mt-auto">
-      <div className="w-full px-4 sm:px-6 lg:px-8 text-center text-sm text-[#7B5B49]">
-        Built by{" "}
-        <Link
-          href="https://github.com/notAshif"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold text-(--espresso) hover:text-(--caramel) underline underline-offset-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring) rounded px-1"
-        >
-          Asif
-        </Link>{" "}
-        and the source code is available on{" "}
-        <Link
-          href="https://github.com/notAshif/jui"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold text-(--espresso) hover:text-(--caramel) underline underline-offset-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring) rounded px-1"
-        >
-          GitHub
-        </Link>
-        .
+    <footer className="w-full border-t-4 border-(--espresso) bg-(--surface-card) py-6 sm:py-8 mt-auto font-pixel select-none">
+      <div className="w-full px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#7B5B49]">
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 bg-(--espresso) text-(--cream) pixel-border-bevel text-[10px] font-bold uppercase tracking-wider">
+            CREDITS
+          </span>
+          <span className="tracking-wider">
+            BUILT BY{" "}
+            <Link
+              href="https://github.com/notAshif"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-(--espresso) hover:text-(--caramel) uppercase font-bold underline underline-offset-2 decoration-dashed focus-visible:outline-none"
+            >
+              [ASIF]
+            </Link>
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4 text-[11px] tracking-wider">
+          <span>SOURCE CODE:</span>
+          <Link
+            href="https://github.com/notAshif/jui"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2 py-1 bg-(--surface-muted) text-(--espresso) pixel-border-bevel hover:bg-(--caramel) hover:text-(--cream) uppercase font-bold focus-visible:outline-none"
+          >
+            [GITHUB REPOSITORY]
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-2 text-[10px] text-(--cinnamon)">
+          <span>INSERT COIN [1P]</span>
+          <span>•</span>
+          <span>(C) 2026 JUI ARCHIVE</span>
+        </div>
       </div>
     </footer>
   );

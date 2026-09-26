@@ -4,21 +4,7 @@ import React, { useState, useCallback } from "react";
 import { Header, Hero, Showcase, Footer } from "@/components/sections";
 
 export default function LandingPage() {
-  const [flavor, setFlavor] = useState<"modern" | "pixel">("modern");
   const [darkMode, setDarkMode] = useState(false);
-
-  const toggleGlobalFlavor = useCallback(() => {
-    const nextFlavor = flavor === "modern" ? "pixel" : "modern";
-    document.documentElement.classList.add("theme-transitioning");
-    document.documentElement.setAttribute("data-flavor", nextFlavor);
-    setFlavor(nextFlavor);
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document.documentElement.classList.remove("theme-transitioning");
-      });
-    });
-  }, [flavor]);
 
   const toggleDarkMode = useCallback(() => {
     const nextDark = !darkMode;
@@ -40,16 +26,14 @@ export default function LandingPage() {
   return (
     <div
       id="home"
-      className="min-h-screen w-full flex flex-col bg-(--background) text-(--foreground) selection:bg-(--caramel) selection:text-(--cream)"
+      className="min-h-screen w-full flex flex-col bg-(--background) text-(--foreground) selection:bg-(--caramel) selection:text-(--cream) font-pixel"
     >
       <Header
-        flavor={flavor}
         darkMode={darkMode}
-        onToggleFlavor={toggleGlobalFlavor}
         onToggleDarkMode={toggleDarkMode}
       />
-      <Hero flavor={flavor} />
-      <Showcase globalFlavor={flavor} />
+      <Hero />
+      <Showcase />
       <Footer />
     </div>
   );

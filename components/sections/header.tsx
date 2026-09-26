@@ -3,27 +3,22 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
-import { ThemeToggleIcon } from "@/components/theme-toggle-icon";
 import { GithubIcon } from "@/components/github-icon";
 import { Star, Sun, Moon } from "lucide-react";
 
 export interface HeaderProps {
-  flavor: "modern" | "pixel";
   darkMode: boolean;
-  onToggleFlavor: () => void;
   onToggleDarkMode: () => void;
 }
 
 const MENU_ITEMS = [
-  { label: "Home", href: "#home" },
-  { label: "Docs", href: "#docs" },
-  { label: "Components", href: "#components" },
+  { label: "HOME", href: "#home" },
+  { label: "DOCS", href: "#docs" },
+  { label: "COMPONENTS", href: "#components" },
 ];
 
 export function Header({
-  flavor,
   darkMode,
-  onToggleFlavor,
   onToggleDarkMode,
 }: HeaderProps) {
   const [stars, setStars] = useState<number | null>(null);
@@ -39,33 +34,32 @@ export function Header({
           setStars(data.stargazers_count);
         }
       })
-      .catch(() => {
-        // Fallback gracefully if rate-limited or offline
-      });
+      .catch(() => {});
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-(--background)/90 border-b border-dashed border-(--border-strong) transition-colors">
+    <header className="sticky top-0 z-50 w-full bg-(--surface-card) border-b-4 border-(--espresso) font-pixel select-none shadow-none">
       <div className="w-full px-4 sm:px-6 lg:px-8 h-16 relative flex items-center justify-between gap-4">
-        {/* Left: Brand Logo */}
         <div className="flex items-center gap-3">
           <Link
             href="#home"
-            className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring) rounded-lg p-1"
+            className="flex items-center gap-2.5 group focus-visible:outline-none p-1"
           >
             <Logo
               size={36}
-              className="transition-transform duration-200 group-hover:scale-105"
+              className="active:translate-x-0.5 active:translate-y-0.5"
             />
-            <div className="flex items-baseline gap-1.5">
-              <span className="font-bold text-xl tracking-tight text-(--espresso)">
+            <div className="flex items-baseline gap-2">
+              <span className="font-bold text-xl tracking-wider text-(--espresso)">
                 JUI
+              </span>
+              <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 bg-(--espresso) text-(--cream) pixel-border-bevel">
+                GAME UI
               </span>
             </div>
           </Link>
         </div>
 
-        {/* Center: Main Navigation Menu (Precisely centered) */}
         <nav
           className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2"
           aria-label="Main Navigation"
@@ -74,23 +68,26 @@ export function Header({
             <Link
               key={item.label}
               href={item.href}
-              className="px-2 py-1 text-sm font-medium text-(--foreground) hover:text-(--caramel) transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring) rounded"
+              className="px-2.5 py-1 text-xs tracking-wider text-(--foreground) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 focus-visible:outline-none uppercase"
             >
-              {item.label}
+              [{item.label}]
             </Link>
           ))}
         </nav>
 
-        {/* Right: Actions (GitHub, Star count, Theme & Dark Mode toggles) */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="hidden sm:inline-flex items-center text-[10px] px-2 py-1 bg-(--surface-muted) text-(--espresso) pixel-border-bevel uppercase">
+            1P READY
+          </span>
+
           <Link
             href="https://github.com/notAshif/jui"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View source code on GitHub"
-            className="p-2 text-(--espresso)"
+            className="p-2 text-(--espresso) pixel-btn-bevel hover:text-(--caramel)"
           >
-            <GithubIcon className="w-5 h-5" />
+            <GithubIcon className="w-4 h-4" />
           </Link>
 
           <Link
@@ -98,7 +95,7 @@ export function Header({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Star this repository on GitHub"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold bg-(--surface-card) text-(--espresso) pixel-btn-bevel"
           >
             <Star className="w-3.5 h-3.5 text-[#D48B38] fill-[#D48B38]" />
             <span>{stars !== null ? stars.toLocaleString() : "0"}</span>
@@ -111,31 +108,13 @@ export function Header({
                 ? "Switch to Parchment Light Mode"
                 : "Switch to Campfire Dark Mode"
             }
-            className="p-2 text-(--espresso) cursor-pointer"
+            className="p-2 text-(--espresso) pixel-btn-bevel cursor-pointer"
           >
             {darkMode ? (
               <Sun className="w-4 h-4 text-[#D9965B]" />
             ) : (
               <Moon className="w-4 h-4 text-(--cinnamon)" />
             )}
-          </button>
-
-          <button
-            onClick={onToggleFlavor}
-            aria-label={`Current mode: ${flavor}. Click to convert into ${
-              flavor === "modern" ? "2D Pixel Game UI" : "Modern Product UI"
-            }`}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold cursor-pointer select-none transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring) ${
-              flavor === "pixel"
-                ? "bg-(--espresso) text-(--cream) pixel-border-bevel uppercase font-pixel tracking-wider"
-                : "bg-(--caramel) text-(--cream) rounded-lg shadow-sm hover:bg-(--caramel-hover)"
-            }`}
-          >
-            <ThemeToggleIcon flavor={flavor} size={16} />
-            <span className="hidden sm:inline">
-              {flavor === "modern" ? "Go 2D Pixel" : "Go Modern"}
-            </span>
-            <span className="sm:hidden">{flavor === "modern" ? "2D" : "UI"}</span>
           </button>
         </div>
       </div>
