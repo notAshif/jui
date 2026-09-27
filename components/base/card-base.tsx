@@ -6,11 +6,11 @@ export interface BaseCardProps {
   children: React.ReactNode;
 }
 
-export interface BaseCardHeaderProps extends BaseCardProps {}
-export interface BaseCardTitleProps extends BaseCardProps {}
-export interface BaseCardDescriptionProps extends BaseCardProps {}
-export interface BaseCardContentProps extends BaseCardProps {}
-export interface BaseCardFooterProps extends BaseCardProps {}
+export type BaseCardHeaderProps = BaseCardProps;
+export type BaseCardTitleProps = BaseCardProps;
+export type BaseCardDescriptionProps = BaseCardProps;
+export type BaseCardContentProps = BaseCardProps;
+export type BaseCardFooterProps = BaseCardProps;
 
 export function createCardComponent(
   baseStyles: string,

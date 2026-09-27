@@ -88,6 +88,56 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the landing showcase.
 
+## CLI Usage
+
+JUI includes a standalone CLI allowing you to copy-paste component primitives directly into your repository:
+
+```bash
+# Add a component (installs both Modern and Pixel flavors by default)
+npx jui add button
+
+# Add multiple components with a specific flavor (modern or pixel)
+npx jui add button input card --flavor modern
+npx jui add dialog drawer toast -f pixel -y
+
+# Add all 28 available components
+npx jui add --all
+
+# List all available components in the registry
+npx jui list
+
+# Initialize project configuration & helpers (lib/utils.ts)
+npx jui init
+```
+
+### Local Testing Without Publishing
+
+```bash
+# In the jui directory:
+npx . add button
+# Or directly:
+node ./bin/jui.mjs add button
+```
+
+### Publishing to npm
+
+To publish JUI to the npm registry:
+1. Choose a scoped package name in `package.json` (e.g. `"@your-username/jui"`).
+2. Remove `"private": true` from `package.json`.
+3. Publish:
+   ```bash
+   # Public (free, standard for open-source UI registries)
+   npm publish --access public
+
+   # Private (requires npm Pro / Team subscription)
+   npm publish --access restricted
+   ```
+4. Consumers can then add components using:
+   ```bash
+   npx @your-username/jui add button
+   ```
+
+
 ## Project Structure
 
 ```

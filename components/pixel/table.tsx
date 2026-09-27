@@ -36,8 +36,10 @@ export const PixelTable = ({ columns, data, sortable = true, className }: TableP
       const bValue = b[sortColumn];
 
       if (aValue === bValue) return 0;
+      if (aValue == null) return 1;
+      if (bValue == null) return -1;
 
-      const comparison = aValue < bValue ? -1 : 1;
+      const comparison = String(aValue) < String(bValue) ? -1 : 1;
       return sortDirection === "asc" ? comparison : -comparison;
     });
   }, [data, sortColumn, sortDirection]);
@@ -101,7 +103,7 @@ export const PixelTable = ({ columns, data, sortable = true, className }: TableP
                   key={column.key}
                   className="px-4 py-3 text-xs tracking-wide"
                 >
-                  {column.render ? column.render(row[column.key], row) : row[column.key]}
+                  {column.render ? column.render(row[column.key], row) : (row[column.key] as React.ReactNode)}
                 </td>
               ))}
             </tr>

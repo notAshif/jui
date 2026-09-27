@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
 
-export interface TableColumn {
+export type TableRowData = Record<string, unknown>;
+
+export interface TableColumn<T extends TableRowData = TableRowData> {
   key: string;
   header: string;
   sortable?: boolean;
-  render?: (value: any, row: any) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
 }
 
-export interface TableProps {
-  columns: TableColumn[];
-  data: any[];
+export interface TableProps<T extends TableRowData = TableRowData> {
+  columns: TableColumn<T>[];
+  data: T[];
   sortable?: boolean;
   className?: string;
 }
 
 type SortDirection = "asc" | "desc" | null;
 
-export const Table = ({ columns, data, sortable = true, className }: TableProps) => {
+export const Table = <T extends TableRowData = TableRowData>({
+  columns,
+  data,
+  sortable = true,
+  className,
+}: TableProps<T>) => {
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
@@ -48,8 +55,10 @@ export const Table = ({ columns, data, sortable = true, className }: TableProps)
       const bValue = b[sortColumn];
 
       if (aValue === bValue) return 0;
+      if (aValue == null) return 1;
+      if (bValue == null) return -1;
 
-      const comparison = aValue < bValue ? -1 : 1;
+      const comparison = String(aValue) < String(bValue) ? -1 : 1;
       return sortDirection === "asc" ? comparison : -comparison;
     });
   }, [data, sortColumn, sortDirection]);
@@ -83,7 +92,7 @@ export const Table = ({ columns, data, sortable = true, className }: TableProps)
                   "transition-colors duration-150",
                   column.sortable && sortable && "cursor-pointer hover:bg-(--surface-muted)",
                   // Touch target: minimum 44px height
-                  "min-h-[44px]"
+                  "min-h-11"
                 )}
                 onClick={() => column.sortable && handleSort(column.key)}
                 aria-sort={
@@ -113,7 +122,7 @@ export const Table = ({ columns, data, sortable = true, className }: TableProps)
                   key={column.key}
                   className="px-4 py-3 text-sm"
                 >
-                  {column.render ? column.render(row[column.key], row) : row[column.key]}
+                  {column.render ? column.render(row[column.key], row) : (row[column.key] as React.ReactNode)}
                 </td>
               ))}
             </tr>

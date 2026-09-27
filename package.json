@@ -2,11 +2,22 @@
   "name": "jui",
   "version": "0.1.0",
   "private": true,
+  "bin": {
+    "jui": "./bin/jui.mjs"
+  },
+  "files": [
+    "bin",
+    "lib/registry.json",
+    "components",
+    "lib"
+  ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/build-registry.mjs && next build",
+    "build:registry": "node scripts/build-registry.mjs",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "bun test"
   },
   "dependencies": {
     "clsx": "^2.1.1",
