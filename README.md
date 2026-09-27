@@ -134,7 +134,7 @@ To publish JUI to the npm registry:
    ```
 4. Consumers can then add components using:
    ```bash
-   npx @your-username/jui add button
+   npx @1zuku/jui add button
    ```
 
 
