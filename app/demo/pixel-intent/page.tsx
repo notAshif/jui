@@ -17,14 +17,17 @@ import {
 
 interface TelemetryData {
   source: "live" | "mock";
+  model: string;
   latencyMs: number;
   lastEvent: GameEvent | null;
+  error: string | null;
   history: Array<{
     timestamp: string;
     choice: FeedbackChoice;
     confidence: number;
     status: string;
     source: string;
+    model?: string;
     title: string;
   }>;
 }
@@ -40,9 +43,11 @@ export default function PixelIntentDemoPage() {
   const [activeEvent, setActiveEvent] = useState<GameEvent | null>(null);
   const [loading, setLoading] = useState(false);
   const [telemetry, setTelemetry] = useState<TelemetryData>({
-    source: "mock",
+    source: "live",
+    model: "typesafe/jev-1.13",
     latencyMs: 0,
     lastEvent: null,
+    error: null,
     history: [],
   });
 
@@ -57,17 +62,19 @@ export default function PixelIntentDemoPage() {
       setLoading(true);
       setActiveEvent(event);
       try {
+        setTelemetry((prev) => ({ ...prev, error: null }));
         const res = await fetch("/api/pixel-intent", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             event,
-            decisionType: "feedback",
+            pickerType: "feedback",
           }),
         });
 
         if (!res.ok) {
-          throw new Error(`API error: ${res.statusText}`);
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `API error (${res.status}): ${res.statusText}`);
         }
 
         const data = await res.json();
@@ -75,8 +82,10 @@ export default function PixelIntentDemoPage() {
 
         setTelemetry((prev) => ({
           source: data.source,
+          model: data.model || "typesafe/jev-1.13",
           latencyMs: data.latencyMs,
           lastEvent: event,
+          error: null,
           history: [
             {
               timestamp: new Date().toLocaleTimeString(),
@@ -84,13 +93,19 @@ export default function PixelIntentDemoPage() {
               confidence: data.decision.confidence,
               status: nextState.status,
               source: data.source,
+              model: data.model,
               title: event.title,
             },
             ...prev.history.slice(0, 9),
           ],
         }));
       } catch (err) {
-        console.error("Failed to query Jev decision layer:", err);
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        console.error("Failed to query Jev decision layer:", errorMsg);
+        setTelemetry((prev) => ({
+          ...prev,
+          error: errorMsg,
+        }));
       } finally {
         setLoading(false);
       }
@@ -377,6 +392,13 @@ export default function PixelIntentDemoPage() {
                 </PixelCardDescription>
               </PixelCardHeader>
               <PixelCardContent className="space-y-4">
+                {telemetry.error && (
+                  <div className="p-3 bg-(--destructive)/10 border-2 border-(--destructive) text-(--destructive) text-xs">
+                    <span className="font-bold block uppercase mb-1">Jev API Error:</span>
+                    <p className="leading-snug">{telemetry.error}</p>
+                  </div>
+                )}
+
                 {/* Active Choice */}
                 <div className="p-3 bg-(--surface) border border-(--border-strong)">
                   <span className="text-[10px] uppercase text-(--foreground/70) block">
@@ -431,10 +453,10 @@ export default function PixelIntentDemoPage() {
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2 bg-(--surface) border border-(--border-strong)">
                     <span className="text-[10px] text-(--foreground/60) block uppercase">
-                      Inference Engine
+                      Jev Model
                     </span>
-                    <span className="font-bold text-(--espresso) uppercase">
-                      {telemetry.source === "live" ? "Live Jev API" : "Offline Mock"}
+                    <span className="font-bold text-(--espresso) text-[11px] block truncate" title={telemetry.model}>
+                      {telemetry.model}
                     </span>
                   </div>
                   <div className="p-2 bg-(--surface) border border-(--border-strong)">
@@ -455,14 +477,10 @@ export default function PixelIntentDemoPage() {
                   </div>
                   <div className="p-2 bg-(--surface) border border-(--border-strong)">
                     <span className="text-[10px] text-(--foreground/60) block uppercase">
-                      Safe Fallback
+                      Decision Source
                     </span>
-                    <span
-                      className={`font-bold ${
-                        decisionState.isFallback ? "text-(--destructive)" : "text-(--success)"
-                      }`}
-                    >
-                      {decisionState.isFallback ? "ACTIVE" : "NONE"}
+                    <span className="font-bold text-(--success) uppercase">
+                      {telemetry.source === "live" ? "Live OpenRouter" : "Mock"}
                     </span>
                   </div>
                 </div>
