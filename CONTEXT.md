@@ -47,3 +47,23 @@ _Avoid_: Marketing page, splash page
 **Theme Toggler**:
 The interactive header control that metamorphoses the entire website between Modern SaaS aesthetic and 16-bit 2D Pixel aesthetic.
 _Avoid_: Dark mode toggle, style switcher
+
+**Jev Decision Layer**:
+The TypeSafe AI System One decision engine that evaluates game event context to select appropriate pixel UI components from fixed choice schemas without free-text generation.
+_Avoid_: AI component generator, LLM classifier, bot
+
+**Feedback Picker**:
+The decision boundary evaluating game event urgency, disruption, and acknowledgment requirements to pick between `PixelToast`, `PixelDialog`, and `PixelAlert`.
+_Avoid_: Notification switcher, modal condition
+
+**Confidence Smoothing**:
+The client-side state machine in `decide.ts` that prevents visual component flickering by requiring either >0.85 single-call confidence or two identical consecutive decisions within a sliding window before committing a component swap.
+_Avoid_: Debouncer, rate limiter
+
+**Safe Default Component**:
+The predetermined non-intrusive component rendered when a decision boundary's model confidence falls below 0.60 (`PixelToast` for feedback).
+_Avoid_: Error component, fallback UI
+
+**Offline Mock Classifier**:
+The deterministic, keyword-based classifier providing the identical TypeScript input/output shape as TypeSafe AI's Jev model for zero-latency local development and automated testing.
+_Avoid_: Fake API, stub
