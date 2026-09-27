@@ -67,10 +67,10 @@ export const PixelPopover = ({ open, onOpenChange, children, content, align = "c
         <div
           ref={contentRef}
           className={cn(
-            "absolute z-50 w-64 p-4",
+            "absolute z-50 w-64 max-w-[calc(100vw-3rem)] p-3.5",
             "bg-(--surface-card)",
             "pixel-border-panel",
-            "font-pixel",
+            "font-pixel shadow-lg",
             alignStyles[align],
             sideStyles[side]
           )}

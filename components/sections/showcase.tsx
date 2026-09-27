@@ -21,6 +21,7 @@ import { PixelPagination } from "@/components/pixel/pagination";
 import { PixelBreadcrumb } from "@/components/pixel/breadcrumb";
 import { PixelSkeleton } from "@/components/pixel/skeleton";
 import { PixelSpinner } from "@/components/pixel/spinner";
+import { PixelJevFeedback } from "@/components/pixel/jev-feedback";
 import {
   Sword,
   Shield,
@@ -431,17 +432,25 @@ export function Showcase() {
                   content: (
                     <div className="space-y-2 text-xs text-[#7B5B49]">
                       <p>Slumbering in the volcanic depths of Mount Cinder.</p>
-                      <div className="flex items-center gap-2">
-                        <PixelBadge variant="warning" className="text-[9px]">REWARD: 1,500 GP</PixelBadge>
+                      <div className="flex items-center gap-2 pt-0.5">
+                        <PixelBadge variant="warning" className="text-[9px] py-1 px-2 select-none">
+                          REWARD: 1,500 GP
+                        </PixelBadge>
                         <PixelPopover
+                          side="top"
+                          align="start"
                           content={
-                            <div className="space-y-2 text-xs">
-                              <span className="font-bold text-(--espresso) block">WYRM WEAKNESS</span>
-                              <p className="text-[11px] text-[#7B5B49]">Vulnerable to Frost spells (+50% DMG). Resists Fire.</p>
+                            <div className="space-y-1.5 text-xs">
+                              <span className="font-bold text-(--espresso) block tracking-wider text-[11px] uppercase">
+                                WYRM WEAKNESS
+                              </span>
+                              <p className="text-[11px] text-[#7B5B49] leading-relaxed">
+                                Vulnerable to Frost spells (+50% DMG). Resists Fire.
+                              </p>
                             </div>
                           }
                         >
-                          <PixelButton variant="outline" size="sm" className="text-[9px] py-0.5 px-2">
+                          <PixelButton variant="outline" size="sm" className="text-[9px] py-1 px-2.5 h-auto">
                             LORE INTEL
                           </PixelButton>
                         </PixelPopover>
@@ -518,6 +527,35 @@ export function Showcase() {
             <span>Used In: Guild Ranking, High Scores</span>
             <Link href="/docs/component#component-table" className="text-(--caramel) hover:underline">
               View API &gt;
+            </Link>
+          </div>
+        </div>
+
+        {/* Module 7: Jev System One AI Decision Primitive */}
+        <div className={`${cardClass} md:col-span-2 lg:col-span-3 min-h-[380px]`}>
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-dashed border-(--border-strong) pb-2.5">
+              <span className="text-xs font-bold text-(--espresso) uppercase tracking-wider flex items-center gap-1.5">
+                <Flame className="w-4 h-4 text-(--caramel)" />
+                AI DECISION PRIMITIVE (JEV SYSTEM ONE ENGINE)
+              </span>
+              <div className="flex items-center gap-1">
+                <PixelBadge variant="default" className="text-[9px]">PixelJevFeedback</PixelBadge>
+                <PixelBadge variant="secondary" className="text-[9px]">typesafe/jev-1.13</PixelBadge>
+              </div>
+            </div>
+
+            <p className="text-xs text-[#7B5B49] leading-relaxed max-w-3xl">
+              TypeSafe AI&apos;s System One model dynamically picks whether to render a <code className="bg-(--cream-dark) px-1 py-0.5 border border-(--border-strong)">PixelToast</code>, <code className="bg-(--cream-dark) px-1 py-0.5 border border-(--border-strong)">PixelAlert</code>, or <code className="bg-(--cream-dark) px-1 py-0.5 border border-(--border-strong)">PixelDialog</code> based on real-time event signals. Test live triggers below to inspect calibrated confidence scores and probabilities.
+            </p>
+
+            <PixelJevFeedback />
+          </div>
+
+          <div className="pt-3 border-t border-dashed border-(--border-strong) flex items-center justify-between text-[10px] text-[#7B5B49]">
+            <span>Used In: Dynamic Game Feedback, Adaptive UI, Loot &amp; Combat Events</span>
+            <Link href="/demo/pixel-intent" className="text-(--caramel) hover:underline font-bold">
+              Open Full Workbench Playground &gt;
             </Link>
           </div>
         </div>

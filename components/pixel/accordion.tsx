@@ -29,7 +29,7 @@ export const PixelAccordion = ({ items, allowMultiple = false, defaultOpen = [],
         const isOpen = openItems.has(item.id);
         
         return (
-          <div key={item.id} className="border-2 border-(--border-strong) overflow-hidden">
+          <div key={item.id} className="border-2 border-(--border-strong) relative">
             <button
               onClick={() => !item.disabled && toggleItem(item.id)}
               disabled={item.disabled}

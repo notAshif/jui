@@ -35,6 +35,7 @@ import { PixelEmptyState } from "@/components/pixel/empty-state";
 import { PixelCalendar } from "@/components/pixel/calendar";
 import { PixelSkeleton } from "@/components/pixel/skeleton";
 import { PixelSpinner } from "@/components/pixel/spinner";
+import { PixelJevFeedback } from "@/components/pixel/jev-feedback";
 
 import {
   Sword,
@@ -84,6 +85,9 @@ interface ComponentItem {
 }
 
 const ALL_COMPONENTS: ComponentItem[] = [
+  // AI Decision Primitives
+  { id: "jev-decision-layer", name: "Jev Feedback", category: "AI Decision Primitives", cli: "jev-feedback" },
+
   // Vitality & HUD
   { id: "component-button", name: "Button", category: "Vitality & HUD", cli: "button" },
   { id: "component-badge", name: "Badge", category: "Vitality & HUD", cli: "badge" },
@@ -518,6 +522,11 @@ export default function ComponentDocsPage() {
                   Urgent blocking modal dialogues. Triggered for boss defeats, level completions, and climactic story beats.
                 </p>
               </div>
+            </div>
+
+            {/* Live Interactive Drop-in Primitive */}
+            <div className="pt-2">
+              <PixelJevFeedback />
             </div>
 
             <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-dashed border-(--border-strong)">

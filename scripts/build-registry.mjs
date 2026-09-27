@@ -32,13 +32,24 @@ function buildRegistry() {
   const uiFiles = fs.existsSync(UI_DIR)
     ? fs.readdirSync(UI_DIR).filter((f) => f.endsWith(".tsx"))
     : [];
+  const pixelFiles = fs.existsSync(PIXEL_DIR)
+    ? fs
+        .readdirSync(PIXEL_DIR)
+        .filter((f) => f.endsWith(".tsx") && f !== "icons.tsx" && f !== "registry.tsx")
+    : [];
+
+  const allSlugs = Array.from(
+    new Set([
+      ...uiFiles.map((f) => path.basename(f, ".tsx")),
+      ...pixelFiles.map((f) => path.basename(f, ".tsx")),
+    ])
+  ).sort();
 
   const components = {};
 
-  for (const file of uiFiles) {
-    const slug = path.basename(file, ".tsx");
-    const uiFilePath = path.join(UI_DIR, file);
-    const pixelFilePath = path.join(PIXEL_DIR, file);
+  for (const slug of allSlugs) {
+    const uiFilePath = path.join(UI_DIR, `${slug}.tsx`);
+    const pixelFilePath = path.join(PIXEL_DIR, `${slug}.tsx`);
 
     const modernContent = fs.existsSync(uiFilePath)
       ? fs.readFileSync(uiFilePath, "utf-8")
