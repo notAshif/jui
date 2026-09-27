@@ -42,6 +42,8 @@ JUI delivers a unique dual-flavor component system designed for both modern web 
 ## Key Features
 
 - **Dual Flavor System**: Seamless switching between modern and pixel aesthetics
+- **Jev Decision Layer**: TypeSafe AI System One decision engine (`typesafe/jev-1.13`) that dynamically selects pixel UI components based on game event signals
+- **Confidence Smoothing**: Client-side state machine eliminating component flicker with calibrated probability thresholds
 - **Theme Toggler**: Interactive control to metamorphose the entire website between styles
 - **Earthy Palette**: Warm color scheme with cream background, caramel accents, cinnamon shadows, and espresso text
 - **Component Registry**: Direct source code distribution via copy-paste or CLI
@@ -71,6 +73,22 @@ Clean, minimal components for modern applications:
 ### Pixel Components
 Retro-styled components for game and retro applications:
 - Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Calendar, Card, Collapsible, Command Palette, Dialog, Drawer, Dropdown Menu, Empty State, Input, Navbar, Pagination, Popover, Progress Bar, Separator, Sidebar, Skeleton, Spinner, Table, Tabs, Toast, Tooltip
+
+## Jev Decision Layer (System One AI)
+
+JUI features a native **System One decision pipeline** powered by TypeSafe AI's **Jev** model (`typesafe/jev-1.13` via OpenRouter Decisions API). Instead of hardcoding UI logic with `if/else` checks, Jev evaluates gameplay event signals to dynamically pick and render the ideal pixel component in under 350ms.
+
+### Integrated Feedback Components
+
+| Decision Key | Component | Role | Use Cases |
+| :--- | :--- | :--- | :--- |
+| `toast` | **`PixelToast`** | Ambient, non-blocking auto-dismissing toast | Minor loot drop, XP gains, small stat ticks |
+| `alert` | **`PixelAlert`** | Persistent inline tactical banner | Poison damage ticks, hazard warnings, broken gear |
+| `dialog` | **`PixelDialog`** | Modal blocking dialogue requiring confirmation | Boss defeats, level completions, story milestones |
+
+- **Confidence Smoothing**: Managed by `useDecisionSmoothing` (`lib/decide.ts`). Commits immediately on $\ge 85\%$ confidence, verifies moderate confidence over a sliding window, and safely falls back on low confidence (< 60%) to prevent screen flicker or accidental focus trapping.
+- **Interactive Playground**: Explore live event classification and telemetry at [`/demo/pixel-intent`](http://localhost:3000/demo/pixel-intent).
+- **Full Architecture & API Reference**: See [`docs/jev-decision-layer.md`](./docs/jev-decision-layer.md).
 
 ## Getting Started
 

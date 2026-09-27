@@ -49,7 +49,7 @@ The interactive header control that metamorphoses the entire website between Mod
 _Avoid_: Dark mode toggle, style switcher
 
 **Jev Decision Layer**:
-The TypeSafe AI System One decision engine that evaluates game event context to select appropriate pixel UI components from fixed choice schemas without free-text generation.
+The TypeSafe AI System One decision engine (`typesafe/jev-1.13` via OpenRouter Decisions API) that evaluates game event context to select appropriate pixel UI components from fixed choice schemas without free-text generation.
 _Avoid_: AI component generator, LLM classifier, bot
 
 **Feedback Picker**:

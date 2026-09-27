@@ -354,6 +354,16 @@ export default function ComponentDocsPage() {
               </li>
               <li>
                 <a
+                  href="#jev-decision-layer"
+                  onClick={() => setSidebarOpen(false)}
+                  className="block px-2.5 py-1.5 text-(--espresso) bg-(--caramel)/10 font-bold hover:bg-(--caramel) hover:text-(--cream) pixel-border-bevel flex items-center justify-between"
+                >
+                  <span>Jev AI Decision Layer</span>
+                  <span className="text-[9px] px-1 bg-(--espresso) text-(--cream)">NEW</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="#cli-install"
                   onClick={() => setSidebarOpen(false)}
                   className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
@@ -455,6 +465,71 @@ export default function ComponentDocsPage() {
               Every primitive is built using physical pixel bevel compression, zero layout shifts, full keyboard navigation,
               and procedural 8-bit sound effects. Use these components for retro indie games, cyberpunk interfaces, or nostalgic web applications.
             </p>
+          </section>
+
+          {/* Jev System One Decision Layer Section */}
+          <section id="jev-decision-layer" className="p-6 bg-(--surface-card) pixel-border-bevel space-y-4 scroll-mt-20">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-dashed border-(--border-strong) pb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-(--espresso) uppercase tracking-wider flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-(--caramel)" />
+                  JEV SYSTEM ONE DECISION LAYER
+                </span>
+                <PixelBadge variant="default">AI PICKER</PixelBadge>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase font-bold text-(--caramel)">
+                  MODEL: typesafe/jev-1.13
+                </span>
+              </div>
+            </div>
+
+            <p className="text-xs text-[#7B5B49] leading-relaxed">
+              Instead of writing complex <code className="bg-(--cream-dark) px-1 py-0.5 border border-(--border-strong)">if/switch</code> conditions for game feedback, JUI features native integration with TypeSafe AI&apos;s <strong>Jev System One</strong> model. It evaluates game event signals and picks the ideal pixel primitive in under 350ms.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div className="p-3 bg-(--background) pixel-border-bevel space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase text-(--espresso)">PixelToast</span>
+                  <span className="text-[9px] px-1 bg-(--cream-dark) border border-(--border-strong)">toast</span>
+                </div>
+                <p className="text-[11px] text-[#7B5B49]">
+                  Ambient non-blocking notifications. Triggered for minor loot, item pickups, XP ticks, and passive stat gains.
+                </p>
+              </div>
+
+              <div className="p-3 bg-(--background) pixel-border-bevel space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase text-(--espresso)">PixelAlert</span>
+                  <span className="text-[9px] px-1 bg-(--warning)/20 text-(--warning-foreground) border border-(--border-strong)">alert</span>
+                </div>
+                <p className="text-[11px] text-[#7B5B49]">
+                  Persistent inline tactical warnings. Triggered for poison ticks, environmental traps, and broken equipment.
+                </p>
+              </div>
+
+              <div className="p-3 bg-(--background) pixel-border-bevel space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase text-(--espresso)">PixelDialog</span>
+                  <span className="text-[9px] px-1 bg-(--destructive)/20 text-(--destructive-foreground) border border-(--border-strong)">dialog</span>
+                </div>
+                <p className="text-[11px] text-[#7B5B49]">
+                  Urgent blocking modal dialogues. Triggered for boss defeats, level completions, and climactic story beats.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-dashed border-(--border-strong)">
+              <div className="text-[11px] text-(--foreground/70)">
+                Includes client confidence-smoothing state machine to eliminate UI flicker.
+              </div>
+              <Link href="/demo/pixel-intent">
+                <PixelButton variant="primary" size="sm" className="text-xs">
+                  ▶ Launch Interactive Playground
+                </PixelButton>
+              </Link>
+            </div>
           </section>
 
           {/* CLI Installation Section */}
