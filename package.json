@@ -1,9 +1,12 @@
 {
-  "name": "jui",
+  "name": "@notashif/jui",
   "version": "0.1.0",
-  "private": true,
+  "description": "Dual-aesthetic React UI component library and CLI for Modern SaaS and 2D Pixel game UI",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
-    "jui": "./bin/jui.mjs"
+    "jui": "bin/jui.mjs"
   },
   "files": [
     "bin",
@@ -11,6 +14,25 @@
     "components",
     "lib"
   ],
+  "keywords": [
+    "react",
+    "components",
+    "pixel",
+    "retro",
+    "saas",
+    "ui",
+    "tailwind",
+    "shadcn",
+    "design-system",
+    "cli"
+  ],
+  "author": "Asif Shah",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notAshif/jui.git"
+  },
+  "homepage": "https://github.com/notAshif/jui#readme",
   "scripts": {
     "dev": "next dev",
     "build": "node scripts/build-registry.mjs && next build",

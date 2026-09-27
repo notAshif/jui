@@ -36,6 +36,7 @@ JUI CLI - Dual-Aesthetic Component Registry (Modern & 2D Pixel)
 v${VERSION}
 
 Usage:
+  $ npx @notashif/jui <command> [options]
   $ npx jui <command> [options]
 
 Commands:
@@ -54,11 +55,11 @@ General Options:
   -h, --help            Show help documentation
 
 Examples:
-  $ npx jui add button
-  $ npx jui add button input card --flavor modern
-  $ npx jui add dialog drawer toast -f pixel -y
-  $ npx jui add --all
-  $ npx jui list
+  $ npx @notashif/jui add button
+  $ npx @notashif/jui add button input card --flavor modern
+  $ npx @notashif/jui add dialog drawer toast -f pixel -y
+  $ npx @notashif/jui add --all
+  $ npx @notashif/jui list
 `;
 
 function parseArgs(args) {
