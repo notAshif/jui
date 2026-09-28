@@ -29,9 +29,9 @@ describe("JUI CLI", () => {
     assert.ok(output.includes("add <component...>"));
   });
 
-  it("should list all 28 available components with list command", () => {
+  it("should list all available components with list command", () => {
     const output = execSync(`node "${CLI_PATH}" list`, { encoding: "utf-8" });
-    assert.ok(output.includes("Available JUI Components (28 Total):"));
+    assert.ok(output.includes("JUI COMPONENT REGISTRY"));
     assert.ok(output.includes("button"));
     assert.ok(output.includes("dialog"));
     assert.ok(output.includes("badge"));
@@ -41,7 +41,7 @@ describe("JUI CLI", () => {
   it("should initialize utils.ts with init command and show framework availability", () => {
     const output = execSync(`node "${CLI_PATH}" init -y`, { cwd: TEMP_DIR, encoding: "utf-8" });
     assert.ok(output.includes("Initializing JUI in your project"));
-    assert.ok(output.includes("Available for Next.js, Vite"));
+    assert.ok(output.includes("Supported: Next.js, Vite"));
     assert.ok(output.includes("Created lib\\utils.ts") || output.includes("Created lib/utils.ts"));
 
     const utilsPath = path.join(TEMP_DIR, "lib", "utils.ts");
@@ -52,37 +52,37 @@ describe("JUI CLI", () => {
 
   it("should display Next.js framework guide with init -f next", () => {
     const output = execSync(`node "${CLI_PATH}" init -f next -y`, { cwd: TEMP_DIR, encoding: "utf-8" });
-    assert.ok(output.includes("Target framework: Next.js"));
+    assert.ok(output.includes("[>>] Target framework : Next.js"));
     assert.ok(output.includes("HOW TO USE JUI IN NEXT.JS"));
     assert.ok(output.includes("app/layout.tsx"));
   });
 
   it("should display Vite framework guide with init -f vite", () => {
     const output = execSync(`node "${CLI_PATH}" init -f vite -y`, { cwd: TEMP_DIR, encoding: "utf-8" });
-    assert.ok(output.includes("Target framework: Vite"));
+    assert.ok(output.includes("[>>] Target framework : Vite"));
     assert.ok(output.includes("HOW TO USE JUI IN VITE"));
     assert.ok(output.includes("vite.config.ts"));
   });
 
   it("should ask for permission and cancel when user answers 'n'", () => {
     const output = execSync(`node "${CLI_PATH}" init`, { cwd: TEMP_DIR, input: "n\n", encoding: "utf-8" });
-    assert.ok(output.includes("Do you want to initialize JUI in this project? (Y/n):"));
+    assert.ok(output.includes("Initialize JUI in this existing project?"));
     assert.ok(output.includes("Initialization cancelled"));
     assert.strictEqual(fs.existsSync(path.join(TEMP_DIR, "lib", "utils.ts")), false);
   });
 
   it("should ask for permission and proceed when user answers 'y'", () => {
     const output = execSync(`node "${CLI_PATH}" init`, { cwd: TEMP_DIR, input: "y\n", encoding: "utf-8" });
-    assert.ok(output.includes("Do you want to initialize JUI in this project? (Y/n):"));
+    assert.ok(output.includes("Initialize JUI in this existing project?"));
     assert.ok(output.includes("JUI initialized successfully"));
     assert.strictEqual(fs.existsSync(path.join(TEMP_DIR, "lib", "utils.ts")), true);
   });
 
   it("should add both modern and pixel flavors by default", () => {
     const output = execSync(`node "${CLI_PATH}" add button`, { cwd: TEMP_DIR, encoding: "utf-8" });
-    assert.ok(output.includes("Adding 1 component(s) [Flavor: both]"));
-    assert.ok(output.includes("Created components/ui/button.tsx"));
-    assert.ok(output.includes("Created components/pixel/button.tsx"));
+    assert.ok(output.includes("Adding 1 component(s)  [flavor: both]"));
+    assert.ok(output.includes("[OK] Created  components/ui/button.tsx"));
+    assert.ok(output.includes("[OK] Created  components/pixel/button.tsx"));
 
     assert.strictEqual(fs.existsSync(path.join(TEMP_DIR, "components", "ui", "button.tsx")), true);
     assert.strictEqual(fs.existsSync(path.join(TEMP_DIR, "components", "pixel", "button.tsx")), true);
@@ -114,7 +114,7 @@ describe("JUI CLI", () => {
     assert.strictEqual(fs.readFileSync(buttonFile, "utf-8"), "// custom modified button");
 
     const overwriteRun = execSync(`node "${CLI_PATH}" add button -y`, { cwd: TEMP_DIR, encoding: "utf-8" });
-    assert.ok(overwriteRun.includes("Created components/ui/button.tsx"));
+    assert.ok(overwriteRun.includes("[OK] Created  components/ui/button.tsx"));
     assert.notStrictEqual(fs.readFileSync(buttonFile, "utf-8"), "// custom modified button");
   });
 });
