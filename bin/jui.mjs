@@ -17,58 +17,66 @@ try {
   if (fs.existsSync(registryPath)) {
     registry = JSON.parse(fs.readFileSync(registryPath, "utf-8"));
   } else {
-    console.error("Registry not found. Please run 'npm run build:registry' first.");
+    console.error("[!!] Registry not found. Please run 'npm run build:registry' first.");
     process.exit(1);
   }
 } catch (err) {
-  console.error("Failed to load registry:", err.message);
+  console.error("[!!] Failed to load registry:", err.message);
   process.exit(1);
 }
 
 const VERSION = registry.version || "0.1.0";
 
 const HELP_TEXT = `
-       _ _   _ ___ 
-      | | | | |_ _|
-   _  | | | | || | 
-  | |_| | |_| || | 
-   \\___/ \\___/|___|
++------------------------------------------------------------------------+
+|        _ _   _ ___                                                     |
+|       | | | | |_ _|                                                    |
+|    _  | | | | || |                                                     |
+|   | |_| | |_| || |                                                     |
+|    \\___/ \\___/|___|   JUI CLI  v${VERSION.padEnd(36)}|
+|                                                                        |
+|  2D Pixel Game UI Component Registry                                   |
+|  Supported frameworks: Next.js, Vite                                   |
++------------------------------------------------------------------------+
 
-JUI CLI - 2D Pixel Game UI Component Registry (Available for Next.js, Vite)
-v${VERSION}
+  USAGE
+  -----
+    $ npx @1zuku/jui <command> [options]
+    $ npx jui        <command> [options]
 
-Usage:
-  $ npx @1zuku/jui <command> [options]
-  $ npx jui <command> [options]
+  COMMANDS
+  --------
+    add  <component...>    Add one or more components to your project
+    list                   List all available components in the registry
+    init                   Initialize JUI configuration and utility helpers
 
-Commands:
-  add <component...>    Add one or more components to your project
-  list                  List all available components in the registry
-  init                  Initialize JUI configuration and utility helpers
+  OPTIONS FOR  init
+  -----------------
+    -f, --framework <n>    Target framework: next  or  vite
+    -y, --yes              Skip confirmation prompt
 
-Options for 'init':
-  -f, --framework <name> Target framework: 'next' (or 'nextjs') or 'vite'
-  -y, --yes             Skip confirmation prompt and initialize automatically
+  OPTIONS FOR  add
+  ----------------
+    -f, --flavor <type>    Flavor: pixel | modern | both  (default: both)
+    -y, --overwrite        Overwrite existing component files
+    -p, --path <dir>       Custom base components directory
+    --all                  Add all available components
 
-Options for 'add':
-  -f, --flavor <type>   Component flavor: 'pixel', 'modern', or 'both' (default: 'both')
-  -y, --overwrite       Overwrite existing component files without asking
-  -p, --path <dir>      Custom base components directory (default: './components')
-  --all                 Add all available components to the project
+  GENERAL
+  -------
+    -v, --version          Show CLI version
+    -h, --help             Show this help text
 
-General Options:
-  -v, --version         Show CLI version
-  -h, --help            Show help documentation
-
-Examples:
-  $ npx @1zuku/jui init
-  $ npx @1zuku/jui init -f next
-  $ npx @1zuku/jui init -f vite -y
-  $ npx @1zuku/jui add button
-  $ npx @1zuku/jui add button input card
-  $ npx @1zuku/jui add dialog drawer toast -y
-  $ npx @1zuku/jui add --all
-  $ npx @1zuku/jui list
+  EXAMPLES
+  --------
+    $ npx @1zuku/jui init
+    $ npx @1zuku/jui init -f next
+    $ npx @1zuku/jui init -f vite -y
+    $ npx @1zuku/jui add button
+    $ npx @1zuku/jui add button input card
+    $ npx @1zuku/jui add dialog drawer toast -y
+    $ npx @1zuku/jui add --all
+    $ npx @1zuku/jui list
 `;
 
 function parseArgs(args) {
@@ -185,110 +193,102 @@ function getPackageManager() {
 function displayFrameworkUsage(framework) {
   if (framework === "Next.js") {
     console.log(`
-========================================================================
-HOW TO USE JUI IN NEXT.JS (App Router / Pages):
-========================================================================
-1. Setup Tailwind CSS in app/layout.tsx:
-   import "@/app/globals.css";
-
-2. Import and use 2D Pixel primitives in any Client or Server component:
-   import { PixelButton } from "@/components/pixel/button";
-   import { PixelAvatar } from "@/components/pixel/avatar";
-   import { PixelCard, PixelCardHeader, PixelCardTitle, PixelCardContent } from "@/components/pixel/card";
-
-   export default function GamePage() {
-     return (
-       <PixelCard className="max-w-md m-6">
-         <PixelCardHeader>
-           <PixelCardTitle>HERO ROSTER</PixelCardTitle>
-         </PixelCardHeader>
-         <PixelCardContent className="space-y-4">
-           <PixelAvatar name="ShadowKnight" size="lg" />
-           <PixelButton variant="default">ENTER DUNGEON</PixelButton>
-         </PixelCardContent>
-       </PixelCard>
-     );
-   }
-
-3. Add more components to your project anytime:
-   $ npx @1zuku/jui add button card avatar dialog toast progress-bar
-========================================================================
++------------------------------------------------------------------------+
+|  HOW TO USE JUI IN NEXT.JS  (App Router / Pages)                      |
++------------------------------------------------------------------------+
+|                                                                        |
+|  1. Import global CSS in app/layout.tsx:                               |
+|       import "@/app/globals.css";                                      |
+|                                                                        |
+|  2. Import pixel primitives in any component:                          |
+|       import { PixelButton } from "@/components/pixel/button";         |
+|       import { PixelAvatar } from "@/components/pixel/avatar";         |
+|       import { PixelCard, PixelCardHeader,                             |
+|                PixelCardTitle, PixelCardContent }                      |
+|           from "@/components/pixel/card";                              |
+|                                                                        |
+|     export default function GamePage() {                               |
+|       return (                                                         |
+|         <PixelCard className="max-w-md m-6">                          |
+|           <PixelCardHeader>                                            |
+|             <PixelCardTitle>HERO ROSTER</PixelCardTitle>               |
+|           </PixelCardHeader>                                           |
+|           <PixelCardContent className="space-y-4">                    |
+|             <PixelAvatar name="ShadowKnight" size="lg" />             |
+|             <PixelButton>ENTER DUNGEON</PixelButton>                  |
+|           </PixelCardContent>                                          |
+|         </PixelCard>                                                   |
+|       );                                                               |
+|     }                                                                  |
+|                                                                        |
+|  3. Add more components at any time:                                   |
+|       $ npx @1zuku/jui add button card avatar dialog toast             |
+|                                                                        |
++------------------------------------------------------------------------+
 `);
   } else if (framework === "Vite") {
     console.log(`
-========================================================================
-HOW TO USE JUI IN VITE (React):
-========================================================================
-1. Configure path alias '@' in vite.config.ts:
-   import { defineConfig } from "vite";
-   import react from "@vitejs/plugin-react";
-   import path from "node:path";
-
-   export default defineConfig({
-     plugins: [react()],
-     resolve: {
-       alias: {
-         "@": path.resolve(__dirname, "./src"),
-       },
-     },
-   });
-
-2. Ensure path alias in tsconfig.json:
-   "compilerOptions": {
-     "baseUrl": ".",
-     "paths": {
-       "@/*": ["./src/*"]
-     }
-   }
-
-3. Import and use 2D Pixel primitives in src/App.tsx:
-   import { PixelButton } from "@/components/pixel/button";
-   import { PixelAvatar } from "@/components/pixel/avatar";
-   import { PixelCard, PixelCardHeader, PixelCardTitle, PixelCardContent } from "@/components/pixel/card";
-
-   export function App() {
-     return (
-       <div className="p-6">
-         <PixelCard className="max-w-md">
-           <PixelCardHeader>
-             <PixelCardTitle>HERO ROSTER</PixelCardTitle>
-           </PixelCardHeader>
-           <PixelCardContent className="space-y-4">
-             <PixelAvatar name="ShadowKnight" size="lg" />
-             <PixelButton variant="default">ENTER DUNGEON</PixelButton>
-           </PixelCardContent>
-         </PixelCard>
-       </div>
-     );
-   }
-
-4. Add more components to your project anytime:
-   $ npx @1zuku/jui add button card avatar dialog toast progress-bar
-========================================================================
++------------------------------------------------------------------------+
+|  HOW TO USE JUI IN VITE  (React + TypeScript)                         |
++------------------------------------------------------------------------+
+|                                                                        |
+|  1. Path alias '@' is configured in vite.config.ts:                   |
+|       import { defineConfig } from "vite";                             |
+|       import react from "@vitejs/plugin-react";                        |
+|       import path from "node:path";                                    |
+|                                                                        |
+|       export default defineConfig({                                    |
+|         plugins: [react()],                                            |
+|         resolve: {                                                     |
+|           alias: { "@": path.resolve(__dirname, "./src") }             |
+|         },                                                             |
+|       });                                                              |
+|                                                                        |
+|  2. tsconfig.json paths alias is also set:                             |
+|       "compilerOptions": {                                             |
+|         "baseUrl": ".",                                                |
+|         "paths": { "@/*": ["./src/*"] }                               |
+|       }                                                                |
+|                                                                        |
+|  3. Import pixel primitives in src/App.tsx:                            |
+|       import { PixelButton } from "@/components/pixel/button";         |
+|       import { PixelCard, PixelCardHeader,                             |
+|                PixelCardTitle, PixelCardContent }                      |
+|           from "@/components/pixel/card";                              |
+|                                                                        |
+|  4. Add more components at any time:                                   |
+|       $ npx @1zuku/jui add button card avatar dialog toast             |
+|                                                                        |
++------------------------------------------------------------------------+
 `);
   } else {
     console.log(`
-========================================================================
-HOW TO USE JUI (Available for Next.js, Vite):
-========================================================================
-Next.js:
-  $ npx @1zuku/jui init -f next
-  Import primitives from "@/components/pixel/*"
-
-Vite:
-  $ npx @1zuku/jui init -f vite
-  Configure '@' alias in vite.config.ts, then import from "@/components/pixel/*"
-
-Add components:
-  $ npx @1zuku/jui add button card avatar dialog toast
-========================================================================
++------------------------------------------------------------------------+
+|  HOW TO USE JUI  (Next.js or Vite)                                    |
++------------------------------------------------------------------------+
+|                                                                        |
+|  Next.js:                                                              |
+|    $ npx @1zuku/jui init -f next                                       |
+|    Import primitives from "@/components/pixel/*"                       |
+|                                                                        |
+|  Vite:                                                                 |
+|    $ npx @1zuku/jui init -f vite                                       |
+|    Configure '@' alias in vite.config.ts                               |
+|    Then import from "@/components/pixel/*"                             |
+|                                                                        |
+|  Add components:                                                       |
+|    $ npx @1zuku/jui add button card avatar dialog toast                |
+|                                                                        |
++------------------------------------------------------------------------+
 `);
   }
 }
 
 async function initCommand(cwd, options = {}) {
-  console.log("\nInitializing JUI in your project...");
-  console.log("Available for Next.js, Vite\n");
+  console.log("\n+--[ JUI INIT ]" + "-".repeat(58) + "+");
+  console.log("|  Initializing JUI in your project...                                  |");
+  console.log("|  Supported: Next.js, Vite                                             |");
+  console.log("+" + "-".repeat(72) + "+\n");
 
   const pkgPath = path.join(cwd, "package.json");
   const hasExistingProject = fs.existsSync(pkgPath);
@@ -298,45 +298,49 @@ async function initCommand(cwd, options = {}) {
     const norm = normalizeFramework(options.framework);
     if (norm === "Next.js" || norm === "Vite") {
       framework = norm;
-      console.log(`  [INFO] Target framework: ${framework}`);
+      console.log(`  [>>] Target framework : ${framework}`);
     } else {
-      console.log(`  [WARN] Unknown framework '${options.framework}'. Defaulting to Next.js.`);
+      console.log(`  [!!] Unknown framework '${options.framework}'. Defaulting to Next.js.`);
       framework = "Next.js";
     }
   } else if (hasExistingProject) {
     framework = detectFramework(cwd);
     if (framework) {
-      console.log(`  [INFO] Detected project framework: ${framework}`);
+      console.log(`  [>>] Detected framework : ${framework}`);
     }
   }
 
-  // If no project exists in cwd, scaffold the project!
+  // If no project exists in cwd, scaffold the project
   if (!hasExistingProject) {
-    console.log("  [INFO] No existing package.json found in this directory.");
+    console.log("  [--] No existing package.json found in this directory.");
 
     if (!framework) {
       if (options.yes) {
         framework = "Next.js";
       } else {
-        const choice = await askInput("? Select framework to create:\n  1) Next.js (App Router, Tailwind CSS, TypeScript)\n  2) Vite (React, TypeScript)\nEnter 1 or 2 [default: 1]: ", "1");
+        const choice = await askInput(
+          "\n  Select framework to create:\n    1) Next.js (App Router, Tailwind CSS, TypeScript)\n    2) Vite    (React, TypeScript)\n  Enter 1 or 2 [default: 1]: ",
+          "1"
+        );
         framework = choice === "2" ? "Vite" : "Next.js";
       }
-      console.log(`  [INFO] Selected framework: ${framework}`);
+      console.log(`  [>>] Selected framework : ${framework}`);
     }
 
-    // Ask permission to create project unless bypassed
     if (!options.overwrite && !options.yes) {
-      const proceed = await askConfirm(`? Create a new ${framework} project with JUI in this directory? (Y/n): `);
+      const proceed = await askConfirm(
+        `\n  Create a new ${framework} project with JUI in this directory? [Y/n]: `
+      );
       if (!proceed) {
-        console.log("\n[INFO] Project creation cancelled.\n");
+        console.log("\n  [--] Project creation cancelled.\n");
         return;
       }
     }
 
     const pm = getPackageManager();
-    console.log(`\n[INFO] Scaffolding new ${framework} project using ${pm}...`);
+    console.log(`\n  [>>] Scaffolding ${framework} project using ${pm}...`);
 
-    // Temporarily clean any leftover empty lib/utils.ts created earlier so create-app won't conflict
+    // Remove any leftover empty lib/ created earlier so create-app won't conflict
     const existingLib = path.join(cwd, "lib");
     if (fs.existsSync(existingLib)) {
       try {
@@ -354,20 +358,21 @@ async function initCommand(cwd, options = {}) {
         } else {
           scaffoldCmd = "npx -y create-next-app@latest . --typescript --tailwind --eslint --app --import-alias \"@/*\" --use-npm --yes";
         }
-        console.log(`$ ${scaffoldCmd}\n`);
+        console.log(`\n  $ ${scaffoldCmd}\n`);
         execSync(scaffoldCmd, { cwd, stdio: "inherit" });
 
-        console.log(`\n[INFO] Installing JUI packages and peer dependencies...`);
-        const addDepCmd = pm === "bun" ? "bun add clsx tailwind-merge lucide-react pixelarticons && bun add -d @1zuku/jui"
-          : pm === "pnpm" ? "pnpm add clsx tailwind-merge lucide-react pixelarticons && pnpm add -D @1zuku/jui"
+        console.log(`\n  [>>] Installing JUI packages and peer dependencies...`);
+        const addDepCmd = pm === "bun"
+          ? "bun add clsx tailwind-merge lucide-react pixelarticons && bun add -d @1zuku/jui"
+          : pm === "pnpm"
+          ? "pnpm add clsx tailwind-merge lucide-react pixelarticons && pnpm add -D @1zuku/jui"
           : "npm install clsx tailwind-merge lucide-react pixelarticons && npm install -D @1zuku/jui";
-        console.log(`$ ${addDepCmd}\n`);
+        console.log(`  $ ${addDepCmd}\n`);
         execSync(addDepCmd, { cwd, stdio: "inherit" });
 
-        // Add starter pixel components
         addCommand(["button", "card", "avatar"], { flavor: "pixel", overwrite: true }, cwd);
       } catch (err) {
-        console.error(`\n[ERROR] Failed to scaffold Next.js project: ${err.message}`);
+        console.error(`\n  [!!] Failed to scaffold Next.js project: ${err.message}`);
         return;
       }
     } else if (framework === "Vite") {
@@ -380,14 +385,16 @@ async function initCommand(cwd, options = {}) {
         } else {
           scaffoldCmd = "npm create vite@latest . -- --template react-ts --no-immediate";
         }
-        console.log(`$ ${scaffoldCmd}\n`);
+        console.log(`\n  $ ${scaffoldCmd}\n`);
         execSync(scaffoldCmd, { cwd, stdio: "inherit" });
 
-        console.log(`\n[INFO] Installing dependencies, Tailwind CSS, and JUI packages...`);
-        const addDepCmd = pm === "bun" ? "bun install && bun add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && bun add -d @1zuku/jui"
-          : pm === "pnpm" ? "pnpm install && pnpm add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && pnpm add -D @1zuku/jui"
+        console.log(`\n  [>>] Installing dependencies, Tailwind CSS, and JUI packages...`);
+        const addDepCmd = pm === "bun"
+          ? "bun install && bun add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && bun add -d @1zuku/jui"
+          : pm === "pnpm"
+          ? "pnpm install && pnpm add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && pnpm add -D @1zuku/jui"
           : "npm install && npm install clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && npm install -D @1zuku/jui";
-        console.log(`$ ${addDepCmd}\n`);
+        console.log(`  $ ${addDepCmd}\n`);
         execSync(addDepCmd, { cwd, stdio: "inherit" });
 
         // Configure vite.config.ts with path alias and tailwindcss plugin
@@ -474,7 +481,11 @@ export default defineConfig({
         // Configure tsconfig.app.json or tsconfig.json for @/* path alias
         const tsconfigAppPath = path.join(cwd, "tsconfig.app.json");
         const tsconfigPath = path.join(cwd, "tsconfig.json");
-        const targetTsconfig = fs.existsSync(tsconfigAppPath) ? tsconfigAppPath : (fs.existsSync(tsconfigPath) ? tsconfigPath : null);
+        const targetTsconfig = fs.existsSync(tsconfigAppPath)
+          ? tsconfigAppPath
+          : fs.existsSync(tsconfigPath)
+          ? tsconfigPath
+          : null;
         if (targetTsconfig) {
           try {
             const rawTs = fs.readFileSync(targetTsconfig, "utf-8");
@@ -487,7 +498,6 @@ export default defineConfig({
           } catch {}
         }
 
-        // Add starter pixel components
         addCommand(["button", "card", "avatar"], { flavor: "pixel", overwrite: true }, cwd);
 
         // Replace src/App.tsx with JUI starter showcase
@@ -522,16 +532,16 @@ export default App;
 `;
         fs.writeFileSync(appTsxPath, starterAppTsx, "utf-8");
       } catch (err) {
-        console.error(`\n[ERROR] Failed to scaffold Vite project: ${err.message}`);
+        console.error(`\n  [!!] Failed to scaffold Vite project: ${err.message}`);
         return;
       }
     }
   } else {
     // Existing project
     if (!options.overwrite && !options.yes) {
-      const proceed = await askConfirm("? Do you want to initialize JUI in this project? (Y/n): ");
+      const proceed = await askConfirm("  Initialize JUI in this existing project? [Y/n]: ");
       if (!proceed) {
-        console.log("\n[INFO] Initialization cancelled.\n");
+        console.log("\n  [--] Initialization cancelled.\n");
         return;
       }
     }
@@ -542,9 +552,9 @@ export default App;
   if (!fs.existsSync(utilsPath) || options.overwrite) {
     ensureDirSync(path.dirname(utilsPath));
     fs.writeFileSync(utilsPath, registry.shared.utils.content, "utf-8");
-    console.log(`  [SUCCESS] Created ${path.relative(cwd, utilsPath)} (cn helper utility)`);
+    console.log(`  [OK] Created ${path.relative(cwd, utilsPath)}  (cn helper utility)`);
   } else {
-    console.log(`  - Found existing ${path.relative(cwd, utilsPath)}`);
+    console.log(`  [--] Found existing ${path.relative(cwd, utilsPath)}`);
   }
 
   // Also create src/lib/utils.ts if src directory exists
@@ -553,23 +563,26 @@ export default App;
     if (!fs.existsSync(srcUtilsPath) || options.overwrite) {
       ensureDirSync(path.dirname(srcUtilsPath));
       fs.writeFileSync(srcUtilsPath, registry.shared.utils.content, "utf-8");
-      console.log(`  [SUCCESS] Created ${path.relative(cwd, srcUtilsPath)} (cn helper utility)`);
+      console.log(`  [OK] Created ${path.relative(cwd, srcUtilsPath)}  (cn helper utility)`);
     }
   }
 
-  console.log("\n[SUCCESS] JUI initialized successfully!");
-  console.log("Available for Next.js, Vite");
+  console.log("\n  [OK] JUI initialized successfully!\n");
 
-  // Check for missing peer dependencies and print installation instructions
+  // Check for missing peer dependencies
   try {
     if (fs.existsSync(pkgPath)) {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
       const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
-      const missingPeers = ["clsx", "tailwind-merge", "lucide-react", "pixelarticons"].filter((d) => !allDeps[d]);
+      const missingPeers = ["clsx", "tailwind-merge", "lucide-react", "pixelarticons"].filter(
+        (d) => !allDeps[d]
+      );
       if (missingPeers.length > 0) {
         const pm = getPackageManager();
-        console.log("\nMissing peer dependencies detected. Install them using:");
-        console.log(`  $ ${pm === "bun" ? "bun add" : pm === "pnpm" ? "pnpm add" : "npm install"} ${missingPeers.join(" ")}\n`);
+        const installCmd =
+          pm === "bun" ? "bun add" : pm === "pnpm" ? "pnpm add" : "npm install";
+        console.log("  [!!] Missing peer dependencies. Install them with:");
+        console.log(`       $ ${installCmd} ${missingPeers.join(" ")}\n`);
       }
     }
   } catch {}
@@ -578,24 +591,36 @@ export default App;
 }
 
 function listCommand() {
-  console.log("\nAvailable JUI Components (28 Total):\n");
   const compKeys = Object.keys(registry.components).sort();
+  const total = compKeys.length;
 
-  const colWidth = 22;
-  let row = "  ";
-  for (let i = 0; i < compKeys.length; i++) {
-    row += compKeys[i].padEnd(colWidth);
-    if ((i + 1) % 3 === 0 || i === compKeys.length - 1) {
-      console.log(row);
-      row = "  ";
+  console.log("\n+" + "-".repeat(72) + "+");
+  console.log("|  JUI COMPONENT REGISTRY" + " ".repeat(48) + "|");
+  console.log("|  " + `${total} components available`.padEnd(70) + "|");
+  console.log("+" + "-".repeat(72) + "+");
+
+  // 3-column grid, each column 22 chars wide
+  const colW = 22;
+  const cols = 3;
+  for (let i = 0; i < total; i += cols) {
+    let rowStr = "|  ";
+    for (let c = 0; c < cols; c++) {
+      const name = compKeys[i + c] ?? "";
+      const prefix = name ? "[+] " : "    ";
+      rowStr += (prefix + name).padEnd(colW);
     }
+    // close the box at column 73
+    console.log(rowStr.slice(0, 73) + "|");
   }
 
-  console.log("\nFlavors available for each component:");
-  console.log("  • Modern  (SaaS aesthetic, Geist/clean typography)");
-  console.log("  • Pixel   (8-bit/16-bit retro aesthetic, tactile bevels)\n");
-  console.log("Install a component:");
-  console.log("  $ npx jui add <component-name>\n");
+  console.log("+" + "-".repeat(72) + "+");
+  console.log("|  FLAVORS                                                               |");
+  console.log("|    [M] Modern  -- SaaS aesthetic, Geist / clean typography            |");
+  console.log("|    [P] Pixel   -- 8-bit / 16-bit retro aesthetic, tactile bevels      |");
+  console.log("+" + "-".repeat(72) + "+");
+  console.log("|  Add a component:                                                      |");
+  console.log("|    $ npx jui add <component-name>                                      |");
+  console.log("+" + "-".repeat(72) + "+\n");
 }
 
 function addCommand(componentsToInstall, options, cwd) {
@@ -604,18 +629,21 @@ function addCommand(componentsToInstall, options, cwd) {
   }
 
   if (componentsToInstall.length === 0) {
-    console.error("\n[ERROR] Please specify at least one component to add, or use --all.");
-    console.log("Example: $ npx jui add button\n");
+    console.error("\n  [!!] Please specify at least one component to add, or use --all.");
+    console.log("       Example: $ npx jui add button\n");
     process.exit(1);
   }
 
   const validFlavors = ["modern", "pixel", "both"];
   if (!validFlavors.includes(options.flavor)) {
-    console.error(`\n[ERROR] Invalid flavor '${options.flavor}'. Allowed options: 'modern', 'pixel', 'both'.\n`);
+    console.error(`\n  [!!] Invalid flavor '${options.flavor}'. Allowed: modern | pixel | both\n`);
     process.exit(1);
   }
 
-  console.log(`\nAdding ${componentsToInstall.length} component(s) [Flavor: ${options.flavor}]...\n`);
+  const headerLabel = `  Adding ${componentsToInstall.length} component(s)  [flavor: ${options.flavor}]`;
+  console.log(`\n+--[ JUI ADD ]` + "-".repeat(59) + "+");
+  console.log("|" + headerLabel.padEnd(72) + "|");
+  console.log("+" + "-".repeat(72) + "+\n");
 
   // Ensure lib/utils.ts exists
   const hasSrc = fs.existsSync(path.join(cwd, "src"));
@@ -623,18 +651,20 @@ function addCommand(componentsToInstall, options, cwd) {
   if (!fs.existsSync(utilsPath)) {
     ensureDirSync(path.dirname(utilsPath));
     fs.writeFileSync(utilsPath, registry.shared.utils.content, "utf-8");
-    console.log(`  ✓ Scaffolding ${path.relative(cwd, utilsPath)}`);
+    console.log(`  [OK] Scaffolded ${path.relative(cwd, utilsPath)}`);
   }
   if (hasSrc) {
     const srcUtilsPath = path.join(cwd, "src", "lib", "utils.ts");
     if (!fs.existsSync(srcUtilsPath)) {
       ensureDirSync(path.dirname(srcUtilsPath));
       fs.writeFileSync(srcUtilsPath, registry.shared.utils.content, "utf-8");
-      console.log(`  ✓ Scaffolding ${path.relative(cwd, srcUtilsPath)}`);
+      console.log(`  [OK] Scaffolded ${path.relative(cwd, srcUtilsPath)}`);
     }
   }
 
-  const defaultBase = hasSrc ? path.join(cwd, "src", "components") : path.join(cwd, "components");
+  const defaultBase = hasSrc
+    ? path.join(cwd, "src", "components")
+    : path.join(cwd, "components");
   const baseComponentsDir = options.path ? path.resolve(cwd, options.path) : defaultBase;
   const modernDir = path.join(baseComponentsDir, "ui");
   const pixelDir = path.join(baseComponentsDir, "pixel");
@@ -646,42 +676,40 @@ function addCommand(componentsToInstall, options, cwd) {
   for (const compSlug of componentsToInstall) {
     const compData = registry.components[compSlug];
     if (!compData) {
-      console.warn(`  [WARN] Component '${compSlug}' not found in registry. Skipping.`);
+      console.warn(`  [!!] Component '${compSlug}' not found in registry -- skipping.`);
       continue;
     }
 
-    // Accumulate dependencies
     for (const dep of compData.dependencies || []) {
       requiredNpmDeps.add(dep);
     }
 
-    // 1. Install Modern flavor if requested
+    // 1. Modern flavor
     if (options.flavor === "modern" || options.flavor === "both") {
       if (compData.files.modern) {
         const destFile = path.join(modernDir, `${compSlug}.tsx`);
         ensureDirSync(path.dirname(destFile));
 
         if (fs.existsSync(destFile) && !options.overwrite) {
-          console.log(`  - Skipped components/ui/${compSlug}.tsx (already exists, pass -y to overwrite)`);
+          console.log(`  [--] Skipped  components/ui/${compSlug}.tsx  (exists, use -y to overwrite)`);
         } else {
           fs.writeFileSync(destFile, compData.files.modern.content, "utf-8");
-          console.log(`  ✓ Created components/ui/${compSlug}.tsx`);
+          console.log(`  [OK] Created  components/ui/${compSlug}.tsx`);
           installedCount++;
         }
       }
     }
 
-    // 2. Install Pixel flavor if requested
+    // 2. Pixel flavor
     if (options.flavor === "pixel" || options.flavor === "both") {
       if (compData.files.pixel) {
-        // Ensure pixel icons.tsx is copied if needed
         if (compData.registryDependencies?.includes("pixel-icons") && !copiedPixelIcons) {
           const pixelIconsDest = path.join(pixelDir, "icons.tsx");
           if (!fs.existsSync(pixelIconsDest) || options.overwrite) {
             ensureDirSync(path.dirname(pixelIconsDest));
             if (registry.shared["pixel-icons"]?.content) {
               fs.writeFileSync(pixelIconsDest, registry.shared["pixel-icons"].content, "utf-8");
-              console.log(`  ✓ Created components/pixel/icons.tsx (shared pixel icons)`);
+              console.log(`  [OK] Created  components/pixel/icons.tsx  (shared pixel icons)`);
               copiedPixelIcons = true;
             }
           }
@@ -691,20 +719,20 @@ function addCommand(componentsToInstall, options, cwd) {
         ensureDirSync(path.dirname(destFile));
 
         if (fs.existsSync(destFile) && !options.overwrite) {
-          console.log(`  - Skipped components/pixel/${compSlug}.tsx (already exists, pass -y to overwrite)`);
+          console.log(`  [--] Skipped  components/pixel/${compSlug}.tsx  (exists, use -y to overwrite)`);
         } else {
           fs.writeFileSync(destFile, compData.files.pixel.content, "utf-8");
-          console.log(`  ✓ Created components/pixel/${compSlug}.tsx`);
+          console.log(`  [OK] Created  components/pixel/${compSlug}.tsx`);
           installedCount++;
         }
       }
     }
   }
 
-  console.log(`\n[DONE] Processed ${installedCount} file(s).`);
+  console.log(`\n  [**] Done -- ${installedCount} file(s) written.`);
   if (requiredNpmDeps.size > 0) {
-    console.log("\nEnsure required dependencies are installed in your project:");
-    console.log(`   npm install ${Array.from(requiredNpmDeps).join(" ")}\n`);
+    console.log("\n  Ensure required dependencies are installed in your project:");
+    console.log(`    $ npm install ${Array.from(requiredNpmDeps).join(" ")}\n`);
   }
 }
 
@@ -736,7 +764,7 @@ switch (options.command) {
     addCommand(options.components, options, cwd);
     break;
   default:
-    console.error(`\n[ERROR] Unknown command: '${options.command}'`);
+    console.error(`\n  [!!] Unknown command: '${options.command}'`);
     console.log(HELP_TEXT);
     process.exit(1);
 }
