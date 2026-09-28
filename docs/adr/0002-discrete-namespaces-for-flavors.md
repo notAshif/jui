@@ -1,3 +1,9 @@
-# Discrete Namespaces For Component Flavors
+# Dedicated Pixel Namespace and Evolution From Dual Flavors
 
-We decided to structure Modern Components and Pixel Components into distinct directories (`components/ui` and `components/pixel`) while sharing headless primitives and TypeScript prop definitions, rather than a single component with a runtime flavor prop. This keeps application bundles lean by ensuring game dev applications do not bundle unused SaaS CSS and vice-versa, while maintaining a predictable, uniform API contract across both styles.
+## Status
+Superseded
+
+## Context & Decision
+Initially, JUI explored a dual-namespace model (`components/ui` and `components/pixel`) to support both SaaS modern and 2D pixel styles simultaneously. 
+
+To eliminate developer ambiguity and deliver an uncompromising, authentic retro game development experience, we decided to streamline JUI strictly into a single **2D Pixel Game UI** component library. All public game primitives are located under `components/pixel/` with dedicated tactile bevel mechanics, Web Audio sound synthesis, and instant vector SVG avatars. Headless base behavioral primitives remain shared under `components/ui/` for accessible ARIA roles and keyboard interactions.

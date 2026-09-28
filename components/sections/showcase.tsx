@@ -529,7 +529,7 @@ export function Showcase() {
 
           <div className="pt-3 border-t border-dashed border-(--border-strong) flex items-center justify-between text-[10px] text-[#7B5B49]">
             <span>Used In: Dynamic Game Feedback, Adaptive UI, Loot &amp; Combat Events</span>
-            <Link href="/docs/component#jev-decision-layer" className="text-(--caramel) hover:underline font-bold">
+            <Link href="/docs#ai-decision-layer" className="text-(--caramel) hover:underline font-bold">
               View Documentation &gt;
             </Link>
           </div>

@@ -49,6 +49,34 @@ describe("JUI CLI", () => {
     assert.ok(content.includes("export function cn"));
   });
 
+  it("should display Next.js framework guide with init -f next", () => {
+    const output = execSync(`node "${CLI_PATH}" init -f next -y`, { cwd: TEMP_DIR, encoding: "utf-8" });
+    assert.ok(output.includes("Target framework: Next.js"));
+    assert.ok(output.includes("HOW TO USE JUI IN NEXT.JS"));
+    assert.ok(output.includes("app/layout.tsx"));
+  });
+
+  it("should display Vite framework guide with init -f vite", () => {
+    const output = execSync(`node "${CLI_PATH}" init -f vite -y`, { cwd: TEMP_DIR, encoding: "utf-8" });
+    assert.ok(output.includes("Target framework: Vite"));
+    assert.ok(output.includes("HOW TO USE JUI IN VITE"));
+    assert.ok(output.includes("vite.config.ts"));
+  });
+
+  it("should ask for permission and cancel when user answers 'n'", () => {
+    const output = execSync(`node "${CLI_PATH}" init`, { cwd: TEMP_DIR, input: "n\n", encoding: "utf-8" });
+    assert.ok(output.includes("Do you want to initialize JUI in this project? (Y/n):"));
+    assert.ok(output.includes("Initialization cancelled"));
+    assert.strictEqual(fs.existsSync(path.join(TEMP_DIR, "lib", "utils.ts")), false);
+  });
+
+  it("should ask for permission and proceed when user answers 'y'", () => {
+    const output = execSync(`node "${CLI_PATH}" init`, { cwd: TEMP_DIR, input: "y\n", encoding: "utf-8" });
+    assert.ok(output.includes("Do you want to initialize JUI in this project? (Y/n):"));
+    assert.ok(output.includes("JUI initialized successfully"));
+    assert.strictEqual(fs.existsSync(path.join(TEMP_DIR, "lib", "utils.ts")), true);
+  });
+
   it("should add both modern and pixel flavors by default", () => {
     const output = execSync(`node "${CLI_PATH}" add button`, { cwd: TEMP_DIR, encoding: "utf-8" });
     assert.ok(output.includes("Adding 1 component(s) [Flavor: both]"));

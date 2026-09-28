@@ -46,6 +46,7 @@ Commands:
   init                  Initialize JUI configuration and utility helpers
 
 Options for 'init':
+  -f, --framework <name> Target framework: 'next' (or 'nextjs') or 'vite'
   -y, --yes             Skip confirmation prompt and initialize automatically
 
 Options for 'add':
@@ -60,9 +61,11 @@ General Options:
 
 Examples:
   $ npx @1zuku/jui init
+  $ npx @1zuku/jui init -f next
+  $ npx @1zuku/jui init -f vite -y
   $ npx @1zuku/jui add button
-  $ npx @1zuku/jui add button input card --flavor pixel
-  $ npx @1zuku/jui add dialog drawer toast -f pixel -y
+  $ npx @1zuku/jui add button input card
+  $ npx @1zuku/jui add dialog drawer toast -y
   $ npx @1zuku/jui add --all
   $ npx @1zuku/jui list
 `;
@@ -72,6 +75,7 @@ function parseArgs(args) {
     command: null,
     components: [],
     flavor: "both",
+    framework: null,
     overwrite: false,
     yes: false,
     path: null,
@@ -88,8 +92,10 @@ function parseArgs(args) {
       parsed.help = true;
     } else if (arg === "-v" || arg === "--version") {
       parsed.version = true;
-    } else if (arg === "-f" || arg === "--flavor") {
-      parsed.flavor = args[++i]?.toLowerCase() || "both";
+    } else if (arg === "-f" || arg === "--framework" || arg === "--flavor") {
+      const val = args[++i]?.toLowerCase() || "";
+      parsed.framework = val;
+      parsed.flavor = val;
     } else if (arg === "-y" || arg === "--overwrite" || arg === "--yes") {
       parsed.overwrite = true;
       parsed.yes = true;
@@ -112,6 +118,14 @@ function ensureDirSync(dirPath) {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
+}
+
+function normalizeFramework(name) {
+  if (!name) return null;
+  const lower = name.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (lower.includes("next")) return "Next.js";
+  if (lower.includes("vite")) return "Vite";
+  return name;
 }
 
 function detectFramework(cwd) {
@@ -141,18 +155,135 @@ function askConfirm(question) {
   });
 }
 
+function displayFrameworkUsage(framework) {
+  if (framework === "Next.js") {
+    console.log(`
+========================================================================
+HOW TO USE JUI IN NEXT.JS (App Router / Pages):
+========================================================================
+1. Setup Tailwind CSS in app/layout.tsx:
+   import "@/app/globals.css";
+
+2. Import and use 2D Pixel primitives in any Client or Server component:
+   import { PixelButton } from "@/components/pixel/button";
+   import { PixelAvatar } from "@/components/pixel/avatar";
+   import { PixelCard, PixelCardHeader, PixelCardTitle, PixelCardContent } from "@/components/pixel/card";
+
+   export default function GamePage() {
+     return (
+       <PixelCard className="max-w-md m-6">
+         <PixelCardHeader>
+           <PixelCardTitle>HERO ROSTER</PixelCardTitle>
+         </PixelCardHeader>
+         <PixelCardContent className="space-y-4">
+           <PixelAvatar name="ShadowKnight" size="lg" />
+           <PixelButton variant="default">ENTER DUNGEON</PixelButton>
+         </PixelCardContent>
+       </PixelCard>
+     );
+   }
+
+3. Add more components to your project anytime:
+   $ npx @1zuku/jui add button card avatar dialog toast progress-bar
+========================================================================
+`);
+  } else if (framework === "Vite") {
+    console.log(`
+========================================================================
+HOW TO USE JUI IN VITE (React):
+========================================================================
+1. Configure path alias '@' in vite.config.ts:
+   import { defineConfig } from "vite";
+   import react from "@vitejs/plugin-react";
+   import path from "node:path";
+
+   export default defineConfig({
+     plugins: [react()],
+     resolve: {
+       alias: {
+         "@": path.resolve(__dirname, "./src"),
+       },
+     },
+   });
+
+2. Ensure path alias in tsconfig.json:
+   "compilerOptions": {
+     "baseUrl": ".",
+     "paths": {
+       "@/*": ["./src/*"]
+     }
+   }
+
+3. Import and use 2D Pixel primitives in src/App.tsx:
+   import { PixelButton } from "@/components/pixel/button";
+   import { PixelAvatar } from "@/components/pixel/avatar";
+   import { PixelCard, PixelCardHeader, PixelCardTitle, PixelCardContent } from "@/components/pixel/card";
+
+   export function App() {
+     return (
+       <div className="p-6">
+         <PixelCard className="max-w-md">
+           <PixelCardHeader>
+             <PixelCardTitle>HERO ROSTER</PixelCardTitle>
+           </PixelCardHeader>
+           <PixelCardContent className="space-y-4">
+             <PixelAvatar name="ShadowKnight" size="lg" />
+             <PixelButton variant="default">ENTER DUNGEON</PixelButton>
+           </PixelCardContent>
+         </PixelCard>
+       </div>
+     );
+   }
+
+4. Add more components to your project anytime:
+   $ npx @1zuku/jui add button card avatar dialog toast progress-bar
+========================================================================
+`);
+  } else {
+    console.log(`
+========================================================================
+HOW TO USE JUI (Available for Next.js, Vite):
+========================================================================
+Next.js:
+  $ npx @1zuku/jui init -f next
+  Import primitives from "@/components/pixel/*"
+
+Vite:
+  $ npx @1zuku/jui init -f vite
+  Configure '@' alias in vite.config.ts, then import from "@/components/pixel/*"
+
+Add components:
+  $ npx @1zuku/jui add button card avatar dialog toast
+========================================================================
+`);
+  }
+}
+
 async function initCommand(cwd, options = {}) {
   console.log("\nInitializing JUI in your project...");
   console.log("Available for Next.js, Vite\n");
 
-  const framework = detectFramework(cwd);
-  if (framework) {
-    console.log(`  [INFO] Detected project framework: ${framework}`);
+  let framework = null;
+  if (options.framework) {
+    const norm = normalizeFramework(options.framework);
+    if (norm === "Next.js" || norm === "Vite") {
+      framework = norm;
+      console.log(`  [INFO] Target framework: ${framework}`);
+    } else {
+      console.log(`  [WARN] Unknown framework '${options.framework}'. JUI is optimized for Next.js and Vite.`);
+      framework = options.framework;
+    }
+  } else {
+    const detected = detectFramework(cwd);
+    if (detected) {
+      framework = detected;
+      console.log(`  [INFO] Detected project framework: ${framework}`);
+    }
   }
 
-  // Ask for permission before initializing project
-  if (process.stdin.isTTY && !options.overwrite && !options.yes) {
-    const proceed = await askConfirm("Do you want to initialize JUI in this project? (Y/n): ");
+  // Ask for permission before initializing project unless explicitly bypassed with -y / --yes
+  if (!options.overwrite && !options.yes) {
+    const proceed = await askConfirm("? Do you want to initialize JUI in this project? (Y/n): ");
     if (!proceed) {
       console.log("\n[INFO] Initialization cancelled.\n");
       return;
@@ -163,7 +294,7 @@ async function initCommand(cwd, options = {}) {
   if (!fs.existsSync(utilsPath)) {
     ensureDirSync(path.dirname(utilsPath));
     fs.writeFileSync(utilsPath, registry.shared.utils.content, "utf-8");
-    console.log(`  ✓ Created ${path.relative(cwd, utilsPath)} (cn helper utility)`);
+    console.log(`  [SUCCESS] Created ${path.relative(cwd, utilsPath)} (cn helper utility)`);
   } else {
     console.log(`  - Found existing ${path.relative(cwd, utilsPath)}`);
   }
@@ -171,7 +302,9 @@ async function initCommand(cwd, options = {}) {
   console.log("\n[SUCCESS] JUI initialized successfully!");
   console.log("Available for Next.js, Vite");
   console.log("Required dependencies:");
-  console.log("  $ npm install clsx tailwind-merge lucide-react pixelarticons\n");
+  console.log("  $ npm install clsx tailwind-merge lucide-react pixelarticons");
+
+  displayFrameworkUsage(framework);
 }
 
 function listCommand() {

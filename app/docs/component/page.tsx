@@ -35,7 +35,6 @@ import { PixelEmptyState } from "@/components/pixel/empty-state";
 import { PixelCalendar } from "@/components/pixel/calendar";
 import { PixelSkeleton } from "@/components/pixel/skeleton";
 import { PixelSpinner } from "@/components/pixel/spinner";
-import { PixelJevFeedback } from "@/components/pixel/jev-feedback";
 
 import {
   Sword,

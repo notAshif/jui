@@ -209,8 +209,8 @@ export function CombatFeedbackWidget() {
 
 ## 6. Interactive Playground & Telemetry
  
-Run the development server and visit the documentation or landing page:
-**`http://localhost:3000/docs/component#component-ai-decision`**
+Run the development server and visit the documentation:
+**`http://localhost:3000/docs#ai-decision-layer`** or the interactive showcase at **`http://localhost:3000/#showcase`**
 
 Features included in the `PixelJevFeedback` drop-in primitive:
 - **Scenario Triggers**: Minor Loot, Hazard/Poison, Boss Defeat, Ambiguous Whisper.

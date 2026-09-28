@@ -398,8 +398,8 @@ export default function DocsPage() {
                 </h2>
                 <PixelBadge variant="warning">SYSTEM ONE AI</PixelBadge>
               </div>
-              <Link href="/docs/component#jev-decision-layer" className="text-xs text-(--caramel) font-bold hover:underline">
-                Open Playground &gt;
+              <Link href="/#showcase" className="text-xs text-(--caramel) font-bold hover:underline">
+                Open Interactive Demo &gt;
               </Link>
             </div>
 
@@ -503,6 +503,19 @@ export default function DocsPage() {
                 >
                   {copiedKey === "init" ? <Check className="w-3.5 h-3.5 text-(--success)" /> : <Copy className="w-3.5 h-3.5" />}
                 </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                <div className="p-2.5 bg-(--background) pixel-border-bevel space-y-1">
+                  <span className="font-bold text-(--caramel) uppercase block">TARGET NEXT.JS:</span>
+                  <code className="text-[10px] font-mono block text-(--espresso)">npx @1zuku/jui init -f next</code>
+                  <p className="text-[10px] text-[#7B5B49]">Displays Next.js App Router layout setup.</p>
+                </div>
+                <div className="p-2.5 bg-(--background) pixel-border-bevel space-y-1">
+                  <span className="font-bold text-(--caramel) uppercase block">TARGET VITE:</span>
+                  <code className="text-[10px] font-mono block text-(--espresso)">npx @1zuku/jui init -f vite</code>
+                  <p className="text-[10px] text-[#7B5B49]">Displays Vite path alias configuration guide.</p>
+                </div>
               </div>
 
               <div className="pt-2 border-t border-dashed border-(--border-strong) space-y-3">

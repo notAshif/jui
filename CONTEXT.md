@@ -1,63 +1,59 @@
-# JUI Component Library
+# JUI Component Library - Domain Context
 
-A tactile 2D pixel-art game UI component library providing retro arcade and RPG primitives for React 19 and Tailwind CSS.
+A tactile 2D pixel-art game UI component library providing retro arcade and RPG primitives for React 19 and Tailwind CSS. Built for indie games, retro web applications, and gamified digital products across Next.js and Vite.
 
-## Language
+## Language & Terminology
 
-**Modern Component**:
-The clean, minimal, product-oriented visual style of a component designed for SaaS and modern web applications.
-_Avoid_: Normal component, standard component, default component
-
-**Pixel Component**:
-The retro 8-bit/16-bit visual style of a component featuring chunky pixel borders, retro typography, and tactile press feedback for game developers and retro web applications.
-_Avoid_: 2D component, game component
-
-**Flavor**:
-The visual aesthetic category of a component family (`modern` or `pixel`).
-_Avoid_: Theme, mode, variant
+**Pixel Game Primitive**:
+The retro 8-bit/16-bit visual and behavioral component featuring chunky stepped pixel borders, retro typography, and tactile press feedback for game developers and retro web applications.
+_Avoid_: SaaS component, normal component, default component
 
 **Variant**:
-The visual intent and hierarchy of a component within its flavor (e.g. `primary`, `secondary`, `outline`, `ghost`, `destructive`, `link`).
-_Avoid_: Flavor, style
+The visual intent and gameplay role of a primitive (e.g. `default`, `outline`, `ghost`, `secondary`, `destructive`).
+_Avoid_: Flavor, style, theme
+
+**Stepped 3D Pixel Bevel**:
+The tactile multi-layer border model consisting of outer deep espresso (`#4B2E2B`) contour, upper-left highlight, bottom-right depth shadow, and 2-pixel down-and-right physical displacement upon active press.
+_Avoid_: Flat border, generic box-shadow
+
+**Procedural Web Audio SFX**:
+Real-time browser-synthesized audio waveforms (clicks, fanfares, alert tones) generated via square and triangle oscillators with zero external MP3/WAV asset dependencies.
+_Avoid_: Audio file, sound asset, MP3 clip
+
+**AvatarsInPixels Vector Engine**:
+The synchronous SVG rendering system generating instant retro chibi character portraits with deterministic seed hashing and zero background flash on initial paint or page refresh.
+_Avoid_: Bitmap avatar, async profile picture, sprite image
 
 **Headless Primitive**:
 The unstyled, accessible behavioral logic and state layer managing ARIA roles, keyboard interactions, and focus for complex interactive widgets.
 _Avoid_: Base component, core component
 
 **Registry**:
-The component code distribution system that provides direct source code to consuming projects via copy-paste or CLI.
-_Avoid_: NPM package, bundle
+The component code distribution system that provides direct source code to consuming projects via copy-paste or the `@1zuku/jui` interactive CLI with automatic Next.js and Vite support.
+_Avoid_: Monolithic NPM package, black-box bundle
 
 **Earthy Palette**:
-The core warm color scheme anchored around 60% cream background (`#FFF8F0`), caramel accent (`#C08552`), cinnamon shadow/depth (`#8C5A3C`), and deep espresso text/pixel contours (`#4B2E2B`).
-_Avoid_: Brown theme, default palette
-
-**Modern Typography**:
-The sleek variable sans-serif typography used for Modern Components, anchored by `Google Sans Flex` (with modern geometric sans fallbacks).
-_Avoid_: Normal font, default font
+The core warm color scheme anchored around cream background (`#FFF8F0`), caramel accent (`#C08552`), cinnamon shadow/depth (`#8C5A3C`), and deep espresso text/pixel contours (`#4B2E2B`).
+_Avoid_: Brown theme, slate theme, default monochrome
 
 **Pixel Typography**:
-The crisp, grid-aligned pixel typography used for Pixel Components, anchored by `Geist Pixel` (with retro pixelated fallbacks).
-_Avoid_: Game font, 2D font
+The crisp, grid-aligned pixel typography used across all primitives, anchored by `Geist Pixel` with retro monospace fallbacks.
+_Avoid_: Normal font, default font, rounded sans
 
-**Landing Showcase**:
-The interactive demonstration and documentation root page showcasing both component flavors side-by-side.
-_Avoid_: Marketing page, splash page
-
-**Theme Toggler**:
-The interactive header control that metamorphoses the entire website between Modern SaaS aesthetic and 16-bit 2D Pixel aesthetic.
-_Avoid_: Dark mode toggle, style switcher
+**Component Codex**:
+The dedicated interactive documentation and testing page (`/docs/component`) showcasing all 28 game UI primitives organized into 6 RPG categories with live controls.
+_Avoid_: Demo page, playground, kitchen sink
 
 **Jev Decision Layer**:
-The TypeSafe AI System One decision engine (`typesafe/jev-1.13` via OpenRouter Decisions API) that evaluates game event context to select appropriate pixel UI components from fixed choice schemas without free-text generation.
-_Avoid_: AI component generator, LLM classifier, bot
+The TypeSafe AI System One decision engine (`typesafe/jev-1.13` via OpenRouter Decisions API) that evaluates game event context to dynamically select appropriate pixel UI components from fixed choice schemas without free-text generation.
+_Avoid_: AI component generator, LLM chatbot, free-text prompt
 
 **Feedback Picker**:
 The decision boundary evaluating game event urgency, disruption, and acknowledgment requirements to pick between `PixelToast`, `PixelDialog`, and `PixelAlert`.
 _Avoid_: Notification switcher, modal condition
 
 **Confidence Smoothing**:
-The client-side state machine in `decide.ts` that prevents visual component flickering by requiring either >0.85 single-call confidence or two identical consecutive decisions within a sliding window before committing a component swap.
+The client-side state machine in `decide.ts` that prevents visual component flickering by requiring either >=0.85 single-call confidence or two identical consecutive decisions within a sliding window before committing a component swap.
 _Avoid_: Debouncer, rate limiter
 
 **Safe Default Component**:
@@ -66,4 +62,4 @@ _Avoid_: Error component, fallback UI
 
 **Offline Mock Classifier**:
 The deterministic, keyword-based classifier providing the identical TypeScript input/output shape as TypeSafe AI's Jev model for zero-latency local development and automated testing.
-_Avoid_: Fake API, stub
+_Avoid_: Fake API, dummy stub
