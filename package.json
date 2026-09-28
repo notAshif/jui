@@ -1,12 +1,12 @@
 {
   "name": "@1zuku/jui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Tactile 2D Pixel game UI component library and CLI for retro web games and RPG interfaces",
   "publishConfig": {
     "access": "public"
   },
   "bin": {
-    "jui": "./bin/jui.mjs"
+    "jui": "bin/jui.mjs"
   },
   "files": [
     "bin",
