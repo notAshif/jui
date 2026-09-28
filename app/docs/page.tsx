@@ -132,10 +132,10 @@ export default function DocsPage() {
   };
 
   const pkgCommands = {
-    bun: "bunx @1zuku/jui init",
-    pnpm: "pnpm dlx @1zuku/jui init",
-    npm: "npx @1zuku/jui init",
-    yarn: "yarn dlx @1zuku/jui init",
+    bun: "bunx @1zuku/jui@latest init",
+    pnpm: "pnpm dlx @1zuku/jui@latest init",
+    npm: "npx @1zuku/jui@latest init",
+    yarn: "yarn dlx @1zuku/jui@latest init",
   };
 
   const filteredComponents = useMemo(() => {
@@ -508,14 +508,22 @@ export default function DocsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
                 <div className="p-2.5 bg-(--background) pixel-border-bevel space-y-1">
                   <span className="font-bold text-(--caramel) uppercase block">TARGET NEXT.JS:</span>
-                  <code className="text-[10px] font-mono block text-(--espresso)">npx @1zuku/jui init -f next</code>
-                  <p className="text-[10px] text-[#7B5B49]">Displays Next.js App Router layout setup.</p>
+                  <code className="text-[10px] font-mono block text-(--espresso)">npx @1zuku/jui@latest init -f next</code>
+                  <p className="text-[10px] text-[#7B5B49]">Scaffolds or configures Next.js App Router.</p>
                 </div>
                 <div className="p-2.5 bg-(--background) pixel-border-bevel space-y-1">
                   <span className="font-bold text-(--caramel) uppercase block">TARGET VITE:</span>
-                  <code className="text-[10px] font-mono block text-(--espresso)">npx @1zuku/jui init -f vite</code>
-                  <p className="text-[10px] text-[#7B5B49]">Displays Vite path alias configuration guide.</p>
+                  <code className="text-[10px] font-mono block text-(--espresso)">npx @1zuku/jui@latest init -f vite</code>
+                  <p className="text-[10px] text-[#7B5B49]">Scaffolds or configures Vite with Tailwind CSS.</p>
                 </div>
+              </div>
+
+              {/* Troubleshooting / Cache note */}
+              <div className="p-2.5 bg-(--background) pixel-border-bevel text-[10px] text-[#7B5B49] space-y-1">
+                <span className="font-bold text-(--caramel) uppercase block">RUNNER CACHING &amp; TROUBLESHOOTING:</span>
+                <p>
+                  Always include <code className="font-mono text-(--espresso)">@latest</code> when invoking <code className="font-mono text-(--espresso)">bunx</code> or <code className="font-mono text-(--espresso)">npx</code> to bypass local runner cache. If stuck on an older version, clear cache via <code className="font-mono text-(--espresso)">bun pm cache rm</code> or <code className="font-mono text-(--espresso)">npm cache clean --force</code>.
+                </p>
               </div>
 
               <div className="pt-2 border-t border-dashed border-(--border-strong) space-y-3">
@@ -525,11 +533,11 @@ export default function DocsPage() {
 
                 <div className="flex items-center justify-between p-3 bg-(--background) pixel-border-bevel text-xs">
                   <code className="font-mono text-(--espresso) font-bold text-[11px] sm:text-xs">
-                    npx @1zuku/jui add button card dialog avatar toast
+                    npx @1zuku/jui@latest add button card dialog avatar toast
                   </code>
                   <button
                     type="button"
-                    onClick={() => copyToClipboard("npx @1zuku/jui add button card dialog avatar toast", "add-multi")}
+                    onClick={() => copyToClipboard("npx @1zuku/jui@latest add button card dialog avatar toast", "add-multi")}
                     className="p-1.5 pixel-btn-bevel bg-(--surface-card) text-(--espresso) hover:text-(--caramel) cursor-pointer"
                     aria-label="Copy add command"
                   >
@@ -605,19 +613,19 @@ export default function DocsPage() {
 
             <div className="space-y-2 font-mono text-[11px]">
               <div className="p-2.5 bg-(--background) pixel-border-bevel flex items-center justify-between">
-                <span>npx @1zuku/jui list</span>
+                <span>npx @1zuku/jui@latest list</span>
                 <span className="text-[10px] font-sans text-[#7B5B49]">Lists all available primitives</span>
               </div>
               <div className="p-2.5 bg-(--background) pixel-border-bevel flex items-center justify-between">
-                <span>npx @1zuku/jui add &lt;name&gt;</span>
+                <span>npx @1zuku/jui@latest add &lt;name&gt;</span>
                 <span className="text-[10px] font-sans text-[#7B5B49]">Adds specific primitive</span>
               </div>
               <div className="p-2.5 bg-(--background) pixel-border-bevel flex items-center justify-between">
-                <span>npx @1zuku/jui add --all</span>
+                <span>npx @1zuku/jui@latest add --all</span>
                 <span className="text-[10px] font-sans text-[#7B5B49]">Adds complete 28-primitive codex</span>
               </div>
               <div className="p-2.5 bg-(--background) pixel-border-bevel flex items-center justify-between">
-                <span>npx @1zuku/jui add &lt;name&gt; --overwrite</span>
+                <span>npx @1zuku/jui@latest add &lt;name&gt; --overwrite</span>
                 <span className="text-[10px] font-sans text-[#7B5B49]">Overwrites existing component files</span>
               </div>
             </div>
@@ -726,7 +734,7 @@ export default function DocsPage() {
                     </code>
                     <button
                       type="button"
-                      onClick={() => copyToClipboard(`npx @1zuku/jui add ${c.cli}`, c.cli)}
+                      onClick={() => copyToClipboard(`npx @1zuku/jui@latest add ${c.cli}`, c.cli)}
                       className="p-1 pixel-btn-bevel bg-(--surface-card) text-(--espresso) hover:text-(--caramel) cursor-pointer"
                       aria-label={`Copy CLI command for ${c.name}`}
                     >

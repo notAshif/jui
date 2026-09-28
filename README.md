@@ -99,17 +99,32 @@ JUI components are distributed via an interactive CLI registry directly into you
 
 ### 1. Initialize Configuration
 
-Run the `init` command in your project root with optional framework target (`next` or `vite`):
+Run the `init` command in your project root with an optional framework target (`next` or `vite`). Append `@latest` to ensure your runner pulls the newest release rather than a cached local binary:
 
 ```bash
-# Auto-detect framework from package.json
-npx @1zuku/jui init
+# Recommended: always specify @latest to bypass runner cache
+npx @1zuku/jui@latest init
 
-# Explicitly target Next.js (displays Next.js setup guide)
-npx @1zuku/jui init -f next
+# or with bun
+bunx @1zuku/jui@latest init
 
-# Explicitly target Vite (displays Vite setup & alias guide)
-npx @1zuku/jui init -f vite
+# or with pnpm
+pnpm dlx @1zuku/jui@latest init
+
+# or with yarn
+yarn dlx @1zuku/jui@latest init
+```
+
+#### Framework Targeting & Project Scaffolding
+- **Existing project**: The CLI inspects `package.json`, detects Next.js or Vite, prompts for confirmation, and creates `lib/utils.ts`.
+- **Empty directory**: When run in an empty folder, `init -f next` or `init -f vite` scaffolds the entire project in the background, configures Tailwind CSS v4, sets up path aliases (`@/*`), and generates the utility helper.
+
+```bash
+# Target Next.js (scaffolds create-next-app in empty directory or configures existing app)
+npx @1zuku/jui@latest init -f next
+
+# Target Vite (scaffolds create vite in empty directory or configures existing app)
+npx @1zuku/jui@latest init -f vite
 ```
 
 The CLI requests confirmation before creating configuration and helper files:
@@ -121,11 +136,11 @@ Available for Next.js, Vite
 ? Do you want to initialize JUI in this project? (Y/n): 
 ```
 
-To skip the interactive confirmation prompt in CI/CD or automated scripts, use the `-y` or `--yes` flag:
+To skip the interactive confirmation prompt in CI/CD or automated scripts, pass the `-y` or `--yes` flag:
 ```bash
-npx @1zuku/jui init -y
-npx @1zuku/jui init -f next -y
-npx @1zuku/jui init -f vite -y
+npx @1zuku/jui@latest init -y
+npx @1zuku/jui@latest init -f next -y
+npx @1zuku/jui@latest init -f vite -y
 ```
 
 ### 2. Add Component Primitives
@@ -134,22 +149,57 @@ Add individual or multiple components:
 
 ```bash
 # Add a single component
-npx @1zuku/jui add button
+npx @1zuku/jui@latest add button
 
 # Add multiple components at once
-npx @1zuku/jui add button input card dialog toast avatar
+npx @1zuku/jui@latest add button input card dialog toast avatar
 
 # Add all 28 available primitives
-npx @1zuku/jui add --all
+npx @1zuku/jui@latest add --all
 
 # Overwrite existing component files
-npx @1zuku/jui add button --overwrite
+npx @1zuku/jui@latest add button --overwrite
 ```
 
 ### 3. List Available Primitives
 
 ```bash
-npx @1zuku/jui list
+npx @1zuku/jui@latest list
+```
+
+---
+
+### CLI Caching & Troubleshooting
+
+#### 1. Why `bunx` or `npx` Might Run an Older Version
+Both `bunx` and `npx` cache downloaded packages locally on your filesystem. If you run `bunx @1zuku/jui` without `@latest`, Bun re-executes the binary from its local cache directory (`%LOCALAPPDATA%\bun\install\cache` on Windows) without checking the remote registry for updates.
+
+Always append `@latest` when running commands:
+```bash
+bunx @1zuku/jui@latest init -f vite
+```
+
+#### 2. Clearing Local Runner Cache
+If your package runner is stuck on an outdated binary, clear its cache:
+```bash
+# Clear Bun runner cache
+bun pm cache rm
+
+# Clear npx cache
+npx clear-npx-cache
+# or clear npm cache
+npm cache clean --force
+```
+
+#### 3. npm CDN Propagation Delays
+When a new package version is published to npm, it is written immediately to `registry.npmjs.org`, but global edge CDN layers (Cloudflare / Fastly) can take between 1 and 5 minutes to propagate the updated `@latest` dist-tag across all regional servers. If you encounter `ETARGET` or missing versions immediately after a release, wait 2 to 3 minutes or specify the explicit version tag (e.g. `@1zuku/jui@0.1.2`).
+
+#### 4. Testing Local CLI Changes Directly
+During local development, you do not need to publish to npm or wait for CDN propagation to test changes. You can run the CLI script directly from the source repository:
+
+```bash
+# Run local script in any test folder
+node C:\Users\asifs\OneDrive\Desktop\me\project\jui\bin\jui.mjs init -f vite
 ```
 
 ---

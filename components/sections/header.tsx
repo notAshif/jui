@@ -82,7 +82,7 @@ export function Header({
   }, [mobileDrawerOpen]);
 
   const copyInitCommand = () => {
-    navigator.clipboard.writeText("npx @1zuku/jui init");
+    navigator.clipboard.writeText("npx @1zuku/jui@latest init");
     setCopiedCli(true);
     setTimeout(() => setCopiedCli(false), 2000);
   };
@@ -244,7 +244,7 @@ export function Header({
                 >
                   <span className="font-mono text-[11px] truncate flex items-center gap-1.5">
                     <Terminal className="w-3.5 h-3.5 text-(--caramel) shrink-0" />
-                    npx @1zuku/jui init
+                    npx @1zuku/jui@latest init
                   </span>
                   {copiedCli ? (
                     <Check className="w-3.5 h-3.5 text-(--success) shrink-0" />
