@@ -1,4 +1,4 @@
-# JUI - Dual-Aesthetic Component Library
+# JUI - Aesthetic Component Library
 
 A versatile React component library that provides two distinct visual aesthetics: clean modern SaaS primitives and tactile 2D pixel-art game UI primitives. Built with Next.js, React 19, and Tailwind CSS 4.
 
