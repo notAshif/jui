@@ -68,9 +68,9 @@ export const PixelCalendar = ({ selected, onSelect, minDate, maxDate, className 
           onClick={() => handleDateClick(date)}
           disabled={disabled}
           className={cn(
-            "p-2 text-xs transition-colors duration-150",
+            "p-1 sm:p-2 text-[11px] sm:text-xs transition-colors duration-150",
             "focus:outline-none focus:ring-2 focus:ring-(--ring)",
-            "min-w-[32px] min-h-[32px]",
+            "min-w-[28px] sm:min-w-[32px] min-h-[28px] sm:min-h-[32px]",
             "tracking-wider",
             disabled && "opacity-50 cursor-not-allowed",
             !disabled && "cursor-pointer",

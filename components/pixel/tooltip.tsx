@@ -58,7 +58,7 @@ export const PixelTooltip = ({ content, children, side = "top", align = "center"
             "bg-(--espresso) text-(--cream)",
             "pixel-border-bevel",
             "font-pixel tracking-wide",
-            "max-w-xs",
+            "w-max max-w-[240px] sm:max-w-xs whitespace-normal leading-relaxed pointer-events-none shadow-lg",
             alignStyles[align],
             sideStyles[side]
           )}

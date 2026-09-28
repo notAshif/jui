@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import readline from "node:readline";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -32,7 +33,7 @@ const HELP_TEXT = `
   | |_| | |_| || | 
    \\___/ \\___/|___|
 
-JUI CLI - Dual-Aesthetic Component Registry (Modern & 2D Pixel)
+JUI CLI - 2D Pixel Game UI Component Registry (Available for Next.js, Vite)
 v${VERSION}
 
 Usage:
@@ -44,8 +45,11 @@ Commands:
   list                  List all available components in the registry
   init                  Initialize JUI configuration and utility helpers
 
+Options for 'init':
+  -y, --yes             Skip confirmation prompt and initialize automatically
+
 Options for 'add':
-  -f, --flavor <type>   Component flavor: 'modern', 'pixel', or 'both' (default: 'both')
+  -f, --flavor <type>   Component flavor: 'pixel', 'modern', or 'both' (default: 'both')
   -y, --overwrite       Overwrite existing component files without asking
   -p, --path <dir>      Custom base components directory (default: './components')
   --all                 Add all available components to the project
@@ -55,8 +59,9 @@ General Options:
   -h, --help            Show help documentation
 
 Examples:
+  $ npx @1zuku/jui init
   $ npx @1zuku/jui add button
-  $ npx @1zuku/jui add button input card --flavor modern
+  $ npx @1zuku/jui add button input card --flavor pixel
   $ npx @1zuku/jui add dialog drawer toast -f pixel -y
   $ npx @1zuku/jui add --all
   $ npx @1zuku/jui list
@@ -68,6 +73,7 @@ function parseArgs(args) {
     components: [],
     flavor: "both",
     overwrite: false,
+    yes: false,
     path: null,
     all: false,
     help: false,
@@ -84,8 +90,9 @@ function parseArgs(args) {
       parsed.version = true;
     } else if (arg === "-f" || arg === "--flavor") {
       parsed.flavor = args[++i]?.toLowerCase() || "both";
-    } else if (arg === "-y" || arg === "--overwrite") {
+    } else if (arg === "-y" || arg === "--overwrite" || arg === "--yes") {
       parsed.overwrite = true;
+      parsed.yes = true;
     } else if (arg === "-p" || arg === "--path") {
       parsed.path = args[++i];
     } else if (arg === "--all") {
@@ -107,8 +114,50 @@ function ensureDirSync(dirPath) {
   }
 }
 
-function initCommand(cwd) {
-  console.log("\n📦 Initializing JUI in your project...\n");
+function detectFramework(cwd) {
+  try {
+    const pkgPath = path.join(cwd, "package.json");
+    if (fs.existsSync(pkgPath)) {
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+      const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
+      if (allDeps.next) return "Next.js";
+      if (allDeps.vite) return "Vite";
+    }
+  } catch {}
+  return null;
+}
+
+function askConfirm(question) {
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    rl.question(question, (answer) => {
+      rl.close();
+      const trimmed = answer.trim().toLowerCase();
+      resolve(trimmed === "" || trimmed === "y" || trimmed === "yes");
+    });
+  });
+}
+
+async function initCommand(cwd, options = {}) {
+  console.log("\nInitializing JUI in your project...");
+  console.log("Available for Next.js, Vite\n");
+
+  const framework = detectFramework(cwd);
+  if (framework) {
+    console.log(`  [INFO] Detected project framework: ${framework}`);
+  }
+
+  // Ask for permission before initializing project
+  if (process.stdin.isTTY && !options.overwrite && !options.yes) {
+    const proceed = await askConfirm("Do you want to initialize JUI in this project? (Y/n): ");
+    if (!proceed) {
+      console.log("\n[INFO] Initialization cancelled.\n");
+      return;
+    }
+  }
 
   const utilsPath = path.join(cwd, "lib", "utils.ts");
   if (!fs.existsSync(utilsPath)) {
@@ -119,13 +168,14 @@ function initCommand(cwd) {
     console.log(`  - Found existing ${path.relative(cwd, utilsPath)}`);
   }
 
-  console.log("\n✅ JUI initialized successfully!");
+  console.log("\n[SUCCESS] JUI initialized successfully!");
+  console.log("Available for Next.js, Vite");
   console.log("Required dependencies:");
   console.log("  $ npm install clsx tailwind-merge lucide-react pixelarticons\n");
 }
 
 function listCommand() {
-  console.log("\n📋 Available JUI Components (28 Total):\n");
+  console.log("\nAvailable JUI Components (28 Total):\n");
   const compKeys = Object.keys(registry.components).sort();
 
   const colWidth = 22;
@@ -151,18 +201,18 @@ function addCommand(componentsToInstall, options, cwd) {
   }
 
   if (componentsToInstall.length === 0) {
-    console.error("\n❌ Error: Please specify at least one component to add, or use --all.");
+    console.error("\n[ERROR] Please specify at least one component to add, or use --all.");
     console.log("Example: $ npx jui add button\n");
     process.exit(1);
   }
 
   const validFlavors = ["modern", "pixel", "both"];
   if (!validFlavors.includes(options.flavor)) {
-    console.error(`\n❌ Error: Invalid flavor '${options.flavor}'. Allowed options: 'modern', 'pixel', 'both'.\n`);
+    console.error(`\n[ERROR] Invalid flavor '${options.flavor}'. Allowed options: 'modern', 'pixel', 'both'.\n`);
     process.exit(1);
   }
 
-  console.log(`\n🚀 Adding ${componentsToInstall.length} component(s) [Flavor: ${options.flavor}]...\n`);
+  console.log(`\nAdding ${componentsToInstall.length} component(s) [Flavor: ${options.flavor}]...\n`);
 
   // Ensure lib/utils.ts exists
   const utilsPath = path.join(cwd, "lib", "utils.ts");
@@ -183,7 +233,7 @@ function addCommand(componentsToInstall, options, cwd) {
   for (const compSlug of componentsToInstall) {
     const compData = registry.components[compSlug];
     if (!compData) {
-      console.warn(`  ⚠️  Warning: Component '${compSlug}' not found in registry. Skipping.`);
+      console.warn(`  [WARN] Component '${compSlug}' not found in registry. Skipping.`);
       continue;
     }
 
@@ -238,9 +288,9 @@ function addCommand(componentsToInstall, options, cwd) {
     }
   }
 
-  console.log(`\n✨ Done! Processed ${installedCount} file(s).`);
+  console.log(`\n[DONE] Processed ${installedCount} file(s).`);
   if (requiredNpmDeps.size > 0) {
-    console.log("\n📦 Ensure required dependencies are installed in your project:");
+    console.log("\nEnsure required dependencies are installed in your project:");
     console.log(`   npm install ${Array.from(requiredNpmDeps).join(" ")}\n`);
   }
 }
@@ -263,7 +313,7 @@ const cwd = process.cwd();
 
 switch (options.command) {
   case "init":
-    initCommand(cwd);
+    await initCommand(cwd, options);
     break;
   case "list":
   case "ls":
@@ -273,7 +323,7 @@ switch (options.command) {
     addCommand(options.components, options, cwd);
     break;
   default:
-    console.error(`\n❌ Unknown command: '${options.command}'`);
+    console.error(`\n[ERROR] Unknown command: '${options.command}'`);
     console.log(HELP_TEXT);
     process.exit(1);
 }

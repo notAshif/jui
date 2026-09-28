@@ -112,7 +112,7 @@ export default async function Image() {
               marginBottom: "12px",
             }}
           >
-            ⚔️ TACTILE RETRO GAME UI PRIMITIVES
+            TACTILE RETRO GAME UI PRIMITIVES
           </div>
           <div
             style={{

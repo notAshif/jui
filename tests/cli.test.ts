@@ -37,9 +37,10 @@ describe("JUI CLI", () => {
     assert.ok(output.includes("tabs"));
   });
 
-  it("should initialize utils.ts with init command", () => {
-    const output = execSync(`node "${CLI_PATH}" init`, { cwd: TEMP_DIR, encoding: "utf-8" });
+  it("should initialize utils.ts with init command and show framework availability", () => {
+    const output = execSync(`node "${CLI_PATH}" init -y`, { cwd: TEMP_DIR, encoding: "utf-8" });
     assert.ok(output.includes("Initializing JUI in your project"));
+    assert.ok(output.includes("Available for Next.js, Vite"));
     assert.ok(output.includes("Created lib\\utils.ts") || output.includes("Created lib/utils.ts"));
 
     const utilsPath = path.join(TEMP_DIR, "lib", "utils.ts");

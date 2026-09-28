@@ -85,9 +85,6 @@ interface ComponentItem {
 }
 
 const ALL_COMPONENTS: ComponentItem[] = [
-  // AI Decision Primitives
-  { id: "jev-decision-layer", name: "Jev Feedback", category: "AI Decision Primitives", cli: "jev-feedback" },
-
   // Vitality & HUD
   { id: "component-button", name: "Button", category: "Vitality & HUD", cli: "button" },
   { id: "component-badge", name: "Badge", category: "Vitality & HUD", cli: "badge" },
@@ -295,52 +292,6 @@ export default function ComponentDocsPage() {
         </div>
       </div>
 
-      {/* Section: DOCS */}
-      <div className="space-y-2">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-(--caramel) block border-b border-dashed border-(--border-strong) pb-1">
-          DOCS
-        </span>
-        <ul className="space-y-1 text-xs">
-          <li>
-            <a
-              href="#overview"
-              onClick={() => setSidebarOpen(false)}
-              className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
-            >
-              Overview &amp; Philosophy
-            </a>
-          </li>
-          <li>
-            <a
-              href="#jev-decision-layer"
-              onClick={() => setSidebarOpen(false)}
-              className="block px-2.5 py-1.5 text-(--espresso) bg-(--caramel)/10 font-bold hover:bg-(--caramel) hover:text-(--cream) pixel-border-bevel flex items-center justify-between"
-            >
-              <span>Jev AI Decision Layer</span>
-              <span className="text-[9px] px-1 bg-(--espresso) text-(--cream)">NEW</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#cli-install"
-              onClick={() => setSidebarOpen(false)}
-              className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
-            >
-              CLI Installation
-            </a>
-          </li>
-          <li>
-            <a
-              href="#keyboard-nav"
-              onClick={() => setSidebarOpen(false)}
-              className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
-            >
-              Gamepad &amp; Keys
-            </a>
-          </li>
-        </ul>
-      </div>
-
       {/* Section: COMPONENTS (Categorized) */}
       <div className="space-y-4">
         <span className="text-[10px] font-bold uppercase tracking-widest text-(--caramel) block border-b border-dashed border-(--border-strong) pb-1">
@@ -474,15 +425,15 @@ export default function ComponentDocsPage() {
 
         {/* Main Content Area */}
         <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-12">
-          {/* Docs Overview Banner */}
-          <section id="overview" className="p-6 bg-(--surface-card) pixel-border-bevel space-y-4 scroll-mt-20">
+          {/* Component Codex Header */}
+          <div className="p-6 bg-(--surface-card) pixel-border-bevel space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-dashed border-(--border-strong) pb-3">
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-(--espresso) uppercase tracking-wider">
                     JUI COMPONENT CODEX
                   </h1>
-                  <PixelBadge variant="warning">ARCADE READY</PixelBadge>
+                  <PixelBadge variant="warning">28 PRIMITIVES</PixelBadge>
                 </div>
                 <p className="text-xs text-[#7B5B49] mt-1">
                   TACTILE 8-BIT &amp; 16-BIT UI PRIMITIVES GROUNDED IN CONTROLLER-FIRST RPG CONTEXTS.
@@ -490,6 +441,13 @@ export default function ComponentDocsPage() {
               </div>
 
               <div className="flex items-center gap-2">
+                <Link
+                  href="/docs"
+                  className="px-3 py-1.5 text-xs bg-(--caramel) text-(--cream) pixel-border-bevel font-bold hover:bg-(--caramel-hover) transition-colors flex items-center gap-1.5"
+                >
+                  <span>FULL DOCS</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
                 <button
                   type="button"
                   onClick={() => {
@@ -505,132 +463,14 @@ export default function ComponentDocsPage() {
               </div>
             </div>
 
-            <p className="text-xs leading-relaxed text-[#7B5B49] max-w-3xl">
-              Every primitive is built using physical pixel bevel compression, zero layout shifts, full keyboard navigation,
-              and procedural 8-bit sound effects. Use these components for retro indie games, cyberpunk interfaces, or nostalgic web applications.
-            </p>
-          </section>
-
-          {/* Jev System One Decision Layer Section */}
-          <section id="jev-decision-layer" className="p-6 bg-(--surface-card) pixel-border-bevel space-y-4 scroll-mt-20">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-dashed border-(--border-strong) pb-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-(--espresso) uppercase tracking-wider flex items-center gap-2">
-                  <Flame className="w-4 h-4 text-(--caramel)" />
-                  JEV SYSTEM ONE DECISION LAYER
-                </span>
-                <PixelBadge variant="default">AI PICKER</PixelBadge>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase font-bold text-(--caramel)">
-                  MODEL: typesafe/jev-1.13
-                </span>
-              </div>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#7B5B49]">
+              <span className="font-bold text-(--espresso) text-[10px] uppercase">CONTROLLER KEYS:</span>
+              <span className="px-2 py-0.5 bg-(--surface-muted) pixel-border-bevel text-[10px]">[TAB] Navigate</span>
+              <span className="px-2 py-0.5 bg-(--surface-muted) pixel-border-bevel text-[10px]">[ENTER/SPACE] Trigger</span>
+              <span className="px-2 py-0.5 bg-(--surface-muted) pixel-border-bevel text-[10px]">[ESC] Dismiss Modal</span>
+              <span className="px-2 py-0.5 bg-(--surface-muted) pixel-border-bevel text-[10px]">[⌘K] Command Spellbook</span>
             </div>
-
-            <p className="text-xs text-[#7B5B49] leading-relaxed">
-              Instead of writing complex <code className="bg-(--cream-dark) px-1 py-0.5 border border-(--border-strong)">if/switch</code> conditions for game feedback, JUI features native integration with TypeSafe AI&apos;s <strong>Jev System One</strong> model. It evaluates game event signals and picks the ideal pixel primitive in under 350ms.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-              <div className="p-3 bg-(--background) pixel-border-bevel space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-(--espresso)">PixelToast</span>
-                  <span className="text-[9px] px-1 bg-(--cream-dark) border border-(--border-strong)">toast</span>
-                </div>
-                <p className="text-[11px] text-[#7B5B49]">
-                  Ambient non-blocking notifications. Triggered for minor loot, item pickups, XP ticks, and passive stat gains.
-                </p>
-              </div>
-
-              <div className="p-3 bg-(--background) pixel-border-bevel space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-(--espresso)">PixelAlert</span>
-                  <span className="text-[9px] px-1 bg-(--warning)/20 text-(--warning-foreground) border border-(--border-strong)">alert</span>
-                </div>
-                <p className="text-[11px] text-[#7B5B49]">
-                  Persistent inline tactical warnings. Triggered for poison ticks, environmental traps, and broken equipment.
-                </p>
-              </div>
-
-              <div className="p-3 bg-(--background) pixel-border-bevel space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-(--espresso)">PixelDialog</span>
-                  <span className="text-[9px] px-1 bg-(--destructive)/20 text-(--destructive-foreground) border border-(--border-strong)">dialog</span>
-                </div>
-                <p className="text-[11px] text-[#7B5B49]">
-                  Urgent blocking modal dialogues. Triggered for boss defeats, level completions, and climactic story beats.
-                </p>
-              </div>
-            </div>
-
-            {/* Live Interactive Drop-in Primitive */}
-            <div className="pt-2">
-              <PixelJevFeedback />
-            </div>
-
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-dashed border-(--border-strong)">
-              <div className="text-[11px] text-(--foreground/70)">
-                Includes client confidence-smoothing state machine to eliminate UI flicker.
-              </div>
-            </div>
-          </section>
-
-          {/* CLI Installation Section */}
-          <section id="cli-install" className="p-6 bg-(--surface-card) pixel-border-bevel space-y-4 scroll-mt-20">
-            <div className="flex items-center justify-between border-b border-dashed border-(--border-strong) pb-2">
-              <span className="text-sm font-bold text-(--espresso) uppercase tracking-wider flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-(--caramel)" />
-                CLI INSTALLATION &amp; WORKFLOW
-              </span>
-              <PixelBadge variant="secondary">NPX JUI</PixelBadge>
-            </div>
-
-            <p className="text-xs text-[#7B5B49]">
-              Add any pixel component directly to your project codebase. No bulky dependencies required.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-3 bg-(--background) pixel-border-bevel space-y-2">
-                <span className="text-[10px] font-bold text-(--caramel) uppercase block">1. ADD ANY COMPONENT</span>
-                <div
-                  onClick={() => copyCli("button", "cli-hero")}
-                  className="flex items-center justify-between p-2.5 bg-(--surface-card) pixel-border-bevel cursor-pointer text-xs"
-                >
-                  <span className="text-(--espresso)">&gt; npx jui add button</span>
-                  <span className="p-1 bg-(--surface-muted)">
-                    {copiedCliId === "cli-hero" ? <Check className="w-3 h-3 text-(--success)" /> : <Copy className="w-3 h-3" />}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-3 bg-(--background) pixel-border-bevel space-y-2">
-                <span className="text-[10px] font-bold text-(--caramel) uppercase block">2. ADD MULTIPLE PRIMITIVES</span>
-                <div
-                  onClick={() => copyCli("dialog drawer toast", "cli-multi")}
-                  className="flex items-center justify-between p-2.5 bg-(--surface-card) pixel-border-bevel cursor-pointer text-xs"
-                >
-                  <span className="text-(--espresso)">&gt; npx jui add dialog drawer toast</span>
-                  <span className="p-1 bg-(--surface-muted)">
-                    {copiedCliId === "cli-multi" ? <Check className="w-3 h-3 text-(--success)" /> : <Copy className="w-3 h-3" />}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Controller & Keyboard Section */}
-          <section id="keyboard-nav" className="p-4 sm:p-5 bg-(--surface-muted) pixel-border-bevel space-y-2 scroll-mt-20">
-            <span className="text-[10px] font-bold uppercase text-(--caramel) tracking-wider block">
-              GAMEPAD &amp; CONTROLLER SHORTCUTS:
-            </span>
-            <div className="flex flex-wrap gap-2 text-xs">
-              <span className="px-2 py-1 bg-(--surface-card) pixel-border-bevel">[TAB] Navigate Focus</span>
-              <span className="px-2 py-1 bg-(--surface-card) pixel-border-bevel">[ENTER / SPACE] Trigger Action</span>
-              <span className="px-2 py-1 bg-(--surface-card) pixel-border-bevel">[ESC] Dismiss Modal / Drawer</span>
-              <span className="px-2 py-1 bg-(--surface-card) pixel-border-bevel">[⌘K] Open Command Spellbook</span>
-            </div>
-          </section>
+          </div>
 
           {/* ========================================================================= */}
           {/* 1. BUTTON */}
@@ -814,32 +654,34 @@ export default function ComponentDocsPage() {
               </div>
 
               {/* Interactive Seed Tester */}
-              <div className="pt-3 border-t border-dashed border-(--border-strong) flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-3 flex-1 min-w-[220px]">
+              <div className="pt-3 border-t border-dashed border-(--border-strong) flex flex-col sm:flex-row sm:items-center gap-3">
+                <div className="flex items-center gap-3 shrink-0">
                   <PixelAvatar seed={avatarSeed} size="lg" />
-                  <div className="flex-1">
-                    <span className="text-[10px] text-[#7B5B49] block font-bold uppercase tracking-wider mb-1">
-                      LIVE SEED TESTER (INSTANT SVG):
-                    </span>
+                </div>
+                <div className="flex-1 min-w-0 space-y-1.5">
+                  <span className="text-[10px] text-[#7B5B49] block font-bold uppercase tracking-wider">
+                    LIVE SEED TESTER (INSTANT SVG):
+                  </span>
+                  <div className="flex items-center gap-2">
                     <PixelInput
                       value={avatarSeed}
                       onChange={(e) => setAvatarSeed(e.target.value)}
                       placeholder="Type any character name..."
-                      className="text-xs h-8"
+                      className="text-xs h-9 flex-1 min-w-0"
                     />
+                    <PixelButton
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const sampleNames = ["Aria", "Thorin", "Zelda", "Geralt", "Cloud", "Kratos", "Luffy", "Goku", "Shinobi", "Archmage"];
+                        setAvatarSeed(sampleNames[Math.floor(Math.random() * sampleNames.length)]);
+                      }}
+                      className="text-[10px] h-9 shrink-0 cursor-pointer px-3"
+                    >
+                      RANDOMIZE
+                    </PixelButton>
                   </div>
                 </div>
-                <PixelButton
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    const sampleNames = ["Aria", "Thorin", "Zelda", "Geralt", "Cloud", "Kratos", "Luffy", "Goku", "Shinobi", "Archmage"];
-                    setAvatarSeed(sampleNames[Math.floor(Math.random() * sampleNames.length)]);
-                  }}
-                  className="text-[10px] self-end h-8 cursor-pointer"
-                >
-                  RANDOMIZE
-                </PixelButton>
               </div>
             </div>
           </section>

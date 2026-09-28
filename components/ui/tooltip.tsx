@@ -71,7 +71,7 @@ export const Tooltip = ({
             "bg-(--espresso) text-(--cream)",
             "rounded-md shadow-lg pointer-events-none",
             "animate-in fade-in zoom-in-95 duration-150 motion-reduce:animate-none",
-            "max-w-xs whitespace-nowrap",
+            "w-max max-w-[240px] sm:max-w-xs whitespace-normal leading-relaxed",
             alignStyles[align],
             sideStyles[side]
           )}

@@ -33,7 +33,6 @@ const MENU_ITEMS = [
 ];
 
 const COMPONENT_CATEGORIES = [
-  { name: "AI Decision Primitives", href: "/docs/component#jev-decision-layer", count: "1" },
   { name: "Vitality & HUD", href: "/docs/component#component-button", count: "6" },
   { name: "Actions & Inputs", href: "/docs/component#component-input", count: "4" },
   { name: "Inventory & Modals", href: "/docs/component#component-dialog", count: "4" },
@@ -106,58 +105,60 @@ export function Header({
                 <span className="font-bold text-xl tracking-wider text-(--espresso) leading-none">
                   JUI
                 </span>
-                <span className="text-[9px] text-(--caramel) font-bold tracking-widest uppercase">
-                  GAME UI
-                </span>
               </div>
             </Link>
           </div>
 
-          {/* Center: Desktop Navigation */}
+          {/* Center: Desktop Navigation without active state */}
           <nav
-            className="hidden md:flex items-center gap-4 lg:gap-6 absolute left-1/2 -translate-x-1/2"
+            className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2"
             aria-label="Main Navigation"
           >
-            {MENU_ITEMS.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname?.startsWith(item.href);
-
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`px-3 py-1.5 text-xs tracking-wider pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 focus-visible:outline-none uppercase transition-colors ${
-                    isActive
-                      ? "bg-(--caramel) text-(--cream) font-bold"
-                      : "text-(--foreground) hover:text-(--caramel) hover:bg-(--surface-muted)"
-                  }`}
-                >
-                  [{item.label}]
-                </Link>
-              );
-            })}
+            {MENU_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="px-2.5 py-1 text-xs tracking-wider text-(--foreground) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 focus-visible:outline-none uppercase transition-colors"
+              >
+                [{item.label}]
+              </Link>
+            ))}
           </nav>
 
           {/* Right: Actions & Mobile Hamburger */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* GitHub Source Link */}
+            <Link
+              href="https://github.com/notAshif/jui"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View source code on GitHub"
+              className="h-8 w-8 shrink-0 inline-flex items-center justify-center text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer"
+            >
+              <GithubIcon className="w-4 h-4" />
+            </Link>
+
+            {/* Separator between GitHub and Star */}
+            <div className="h-4 w-[2px] bg-(--border-strong) opacity-60 shrink-0" aria-hidden="true" />
+
             {/* GitHub Stars */}
             <Link
               href="https://github.com/notAshif/jui"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Star this repository on GitHub"
-              className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-bold text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel transition-colors cursor-pointer"
+              className="h-8 shrink-0 inline-flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 text-xs font-bold text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer"
             >
-              <GithubIcon className="w-3.5 h-3.5" />
-              <Star className="w-3.5 h-3.5 text-[#D48B38] fill-[#D48B38]" />
-              <span className="tabular-nums hidden sm:inline">
+              <Star className="w-3.5 h-3.5 text-[#D48B38] fill-[#D48B38] shrink-0" />
+              <span className="tabular-nums text-[11px] sm:text-xs">
                 {stars !== null ? stars.toLocaleString() : "0"}
               </span>
             </Link>
 
-            {/* Dark Mode Toggle */}
+            {/* Separator between Star and Theme Toggler */}
+            <div className="h-4 w-[2px] bg-(--border-strong) opacity-60 shrink-0" aria-hidden="true" />
+
+            {/* Dark Mode Toggle (same h-8 w-8 as GitHub) */}
             <button
               type="button"
               onClick={onToggleDarkMode}
@@ -166,7 +167,7 @@ export function Header({
                   ? "Switch to Parchment Light Mode"
                   : "Switch to Campfire Dark Mode"
               }
-              className="inline-flex items-center justify-center p-2 text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer"
+              className="h-8 w-8 shrink-0 inline-flex items-center justify-center text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors cursor-pointer"
             >
               {darkMode ? (
                 <PixelSunIcon size={18} className="text-[#D9965B]" />
@@ -175,14 +176,14 @@ export function Header({
               )}
             </button>
 
-            {/* Mobile / Tablet Menu Button */}
+            {/* Mobile / Tablet Menu Button (matching h-8 w-8) */}
             <button
               type="button"
               onClick={() => setMobileDrawerOpen(true)}
               aria-label="Open navigation menu drawer"
-              className="md:hidden inline-flex items-center justify-center p-2 text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 cursor-pointer ml-1"
+              className="h-8 w-8 shrink-0 md:hidden inline-flex items-center justify-center text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 cursor-pointer ml-0.5"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -261,25 +262,16 @@ export function Header({
                 <div className="space-y-1 pt-1">
                   {MENU_ITEMS.map((item) => {
                     const ItemIcon = item.icon;
-                    const isActive =
-                      item.href === "/"
-                        ? pathname === "/"
-                        : pathname?.startsWith(item.href);
-
                     return (
                       <Link
                         key={item.label}
                         href={item.href}
                         onClick={() => setMobileDrawerOpen(false)}
-                        className={`flex items-center justify-between px-3 py-2.5 text-xs tracking-wider pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors uppercase ${
-                          isActive
-                            ? "bg-(--caramel) text-(--cream) font-bold"
-                            : "text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel)"
-                        }`}
+                        className="flex items-center justify-between px-3 py-2.5 text-xs tracking-wider pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 transition-colors uppercase text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel)"
                       >
                         <span className="flex items-center gap-2">
                           <ItemIcon className="w-3.5 h-3.5" />
-                          <span>{item.label}</span>
+                          <span>[{item.label}]</span>
                         </span>
                         <ChevronRight className="w-3 h-3 opacity-60" />
                       </Link>
@@ -322,8 +314,9 @@ export function Header({
                     <GithubIcon className="w-3.5 h-3.5" />
                     <span>GITHUB REPOSITORY</span>
                   </span>
-                  <span className="text-[10px] font-bold text-[#D48B38]">
-                    ★ {stars !== null ? stars.toLocaleString() : "0"}
+                  <span className="text-[10px] font-bold text-[#D48B38] flex items-center gap-1">
+                    <Star className="w-3 h-3 text-[#D48B38] fill-[#D48B38]" />
+                    <span>{stars !== null ? stars.toLocaleString() : "0"}</span>
                   </span>
                 </Link>
               </div>

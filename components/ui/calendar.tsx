@@ -77,10 +77,10 @@ export const Calendar = ({ selected, onSelect, minDate, maxDate, className }: Ca
           onClick={() => handleDateClick(date)}
           disabled={disabled}
           className={cn(
-            "p-2 rounded-lg text-sm transition-colors duration-150",
+            "p-1 sm:p-2 rounded-lg text-xs sm:text-sm transition-colors duration-150",
             "focus:outline-none focus:ring-2 focus:ring-(--ring)",
-            // Touch target: minimum 32x32px
-            "min-w-[32px] min-h-[32px]",
+            // Touch target: minimum 28x28px on mobile, 32x32px on sm+
+            "min-w-[28px] sm:min-w-[32px] min-h-[28px] sm:min-h-[32px]",
             disabled && "opacity-50 cursor-not-allowed",
             !disabled && "cursor-pointer",
             selected
