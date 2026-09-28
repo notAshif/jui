@@ -534,25 +534,6 @@ export default App;
         console.log("\n[INFO] Initialization cancelled.\n");
         return;
       }
-
-      // Check for missing peer dependencies and prompt
-      try {
-        const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
-        const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
-        const missingPeers = ["clsx", "tailwind-merge", "lucide-react", "pixelarticons"].filter((d) => !allDeps[d]);
-
-        if (missingPeers.length > 0) {
-          const installPeers = await askConfirm(`? Install missing peer dependencies (${missingPeers.join(" ")})? (Y/n): `);
-          if (installPeers) {
-            const pm = getPackageManager();
-            const installCmd = pm === "bun" ? `bun add ${missingPeers.join(" ")}`
-              : pm === "pnpm" ? `pnpm add ${missingPeers.join(" ")}`
-              : `npm install ${missingPeers.join(" ")}`;
-            console.log(`\n$ ${installCmd}\n`);
-            execSync(installCmd, { cwd, stdio: "inherit" });
-          }
-        }
-      } catch {}
     }
   }
 
@@ -578,6 +559,20 @@ export default App;
 
   console.log("\n[SUCCESS] JUI initialized successfully!");
   console.log("Available for Next.js, Vite");
+
+  // Check for missing peer dependencies and print installation instructions
+  try {
+    if (fs.existsSync(pkgPath)) {
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+      const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
+      const missingPeers = ["clsx", "tailwind-merge", "lucide-react", "pixelarticons"].filter((d) => !allDeps[d]);
+      if (missingPeers.length > 0) {
+        const pm = getPackageManager();
+        console.log("\nMissing peer dependencies detected. Install them using:");
+        console.log(`  $ ${pm === "bun" ? "bun add" : pm === "pnpm" ? "pnpm add" : "npm install"} ${missingPeers.join(" ")}\n`);
+      }
+    }
+  } catch {}
 
   displayFrameworkUsage(framework);
 }
