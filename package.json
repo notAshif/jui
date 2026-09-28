@@ -6,7 +6,8 @@
     "access": "public"
   },
   "bin": {
-    "jui": "bin/jui.mjs"
+    "jui": "bin/jui.mjs",
+    "@1zuku/jui": "bin/jui.mjs"
   },
   "files": [
     "bin",
