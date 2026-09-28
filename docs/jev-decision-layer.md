@@ -207,12 +207,12 @@ export function CombatFeedbackWidget() {
 
 ---
 
-## 6. Interactive Demo Playground
+## 6. Interactive Playground & Telemetry
+ 
+Run the development server and visit the documentation or landing page:
+👉 **`http://localhost:3000/docs/component#component-ai-decision`**
 
-Run the development server and visit:
-👉 **`http://localhost:3000/demo/pixel-intent`**
-
-Features:
-- **Scenario Triggers**: Minor Loot, Hazard/Poison, Boss Defeat, Ambiguous Whisper, Rapid Burst Spammer.
-- **Custom Event Simulator**: Test any custom event title, message, and urgency.
-- **Live Telemetry**: Real-time confidence gauge, model latency, consecutive hits counter, and live OpenRouter source badge.
+Features included in the `PixelJevFeedback` drop-in primitive:
+- **Scenario Triggers**: Minor Loot, Hazard/Poison, Boss Defeat, Ambiguous Whisper.
+- **Live Telemetry & Inspector**: Real-time confidence gauge, model latency, live source badge, and model decision rationale.
+- **Adaptive Render**: Dynamically renders `PixelToast`, `PixelAlert`, or `PixelDialog` based on real-time event signals.

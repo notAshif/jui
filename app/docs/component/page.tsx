@@ -533,11 +533,6 @@ export default function ComponentDocsPage() {
               <div className="text-[11px] text-(--foreground/70)">
                 Includes client confidence-smoothing state machine to eliminate UI flicker.
               </div>
-              <Link href="/demo/pixel-intent">
-                <PixelButton variant="primary" size="sm" className="text-xs">
-                  ▶ Launch Interactive Playground
-                </PixelButton>
-              </Link>
             </div>
           </section>
 

@@ -4,7 +4,8 @@
  * Adding a new component: add key to question schema, register adapter here.
  */
 
-import React from "react";
+import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 import { FeedbackChoice, GameEvent } from "@/lib/jev/pixelUIQuestions";
 import { PixelToast } from "@/components/pixel/toast";
 import { PixelDialog, PixelDialogFooter } from "@/components/pixel/dialog";
@@ -61,23 +62,33 @@ export const FeedbackDialogAdapter: React.FC<PixelFeedbackComponentProps> = ({
   onDismiss,
   className,
 }) => {
+  const [fullscreen, setFullscreen] = useState(false);
+
   return (
     <PixelDialog
       open={true}
+      inline={!fullscreen}
       onClose={onDismiss || onConfirm}
       title={title}
       size="sm"
       className={className}
     >
-      <div className="py-2 text-xs text-(--foreground/90) leading-relaxed">
+      <div className="py-1 text-xs text-(--foreground/90) leading-relaxed">
         {message}
       </div>
-      <PixelDialogFooter className="mt-4">
+      <PixelDialogFooter className="mt-3 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => setFullscreen((prev) => !prev)}
+          className="text-[10px] text-(--caramel) hover:text-(--espresso) font-bold uppercase tracking-wider underline cursor-pointer"
+        >
+          {fullscreen ? "[ Exit Fullscreen ]" : "[ ↗ Fullscreen ]"}
+        </button>
         <PixelButton
           variant="primary"
           size="sm"
           onClick={onConfirm || onDismiss}
-          className="w-full text-xs font-pixel"
+          className="text-xs font-pixel"
         >
           [ ENTER ] Continue
         </PixelButton>
@@ -163,9 +174,11 @@ export const DynamicPixelFeedback: React.FC<DynamicPixelFeedbackProps> = ({
 
   return (
     <div
-      className={`relative transition-all duration-200 ${
-        isPending ? "opacity-60 grayscale-[40%] scale-[0.98]" : "opacity-100 scale-100"
-      }`}
+      className={cn(
+        "relative transition-all duration-200 w-full",
+        isPending && "opacity-60 grayscale-[40%] scale-[0.98]",
+        className
+      )}
     >
       {isPending && (
         <div className="absolute -top-3 right-2 z-10 px-2 py-0.5 text-[10px] font-pixel bg-(--caramel) text-(--espresso) border border-(--border-strong) animate-pulse shadow-sm">

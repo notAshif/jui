@@ -66,6 +66,9 @@ function buildRegistry() {
     if (pixelContent && (pixelContent.includes("pixel/icons") || pixelContent.includes("./icons"))) {
       registryDependencies.push("pixel-icons");
     }
+    if (combinedContent.includes("avatar-generator")) {
+      registryDependencies.push("avatar-generator");
+    }
 
     const title = slug
       .split("-")
@@ -109,6 +112,13 @@ function buildRegistry() {
         ? fs.readFileSync(path.join(PIXEL_DIR, "icons.tsx"), "utf-8")
         : null,
       dependencies: ["pixelarticons"],
+    },
+    "avatar-generator": {
+      targetPath: "lib/avatar-generator.ts",
+      content: fs.existsSync(path.join(rootDir, "lib", "avatar-generator.ts"))
+        ? fs.readFileSync(path.join(rootDir, "lib", "avatar-generator.ts"), "utf-8")
+        : null,
+      dependencies: [],
     },
   };
 

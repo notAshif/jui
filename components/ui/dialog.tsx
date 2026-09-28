@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 
@@ -11,6 +12,7 @@ export interface DialogProps {
   size?: "sm" | "md" | "lg" | "xl" | "full";
   showCloseButton?: boolean;
   className?: string;
+  inline?: boolean;
 }
 
 const sizeStyles = {
@@ -31,25 +33,33 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
     size = "md",
     showCloseButton = true,
     className,
+    inline = false,
     ...props
   }, ref) => {
     const dialogRef = useRef<HTMLDivElement>(null);
     const previousActiveElement = useRef<HTMLElement | null>(null);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-      if (open) {
+      setMounted(true);
+    }, []);
+
+    useEffect(() => {
+      if (open && !inline) {
         previousActiveElement.current = document.activeElement as HTMLElement;
         dialogRef.current?.focus({ preventScroll: true });
         document.body.style.overflow = "hidden";
-      } else {
+      } else if (!inline) {
         document.body.style.overflow = "";
         previousActiveElement.current?.focus({ preventScroll: true });
       }
 
       return () => {
-        document.body.style.overflow = "";
+        if (!inline) {
+          document.body.style.overflow = "";
+        }
       };
-    }, [open]);
+    }, [open, inline]);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === "Escape" && onClose) {
@@ -59,9 +69,64 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
 
     if (!open) return null;
 
-    return (
+    if (inline) {
+      return (
+        <div
+          ref={(node) => {
+            dialogRef.current = node;
+            if (typeof ref === "function") ref(node);
+            else if (ref) ref.current = node;
+          }}
+          tabIndex={-1}
+          onKeyDown={handleKeyDown}
+          className={cn(
+            "relative w-full bg-(--surface-card) border border-(--border-strong)",
+            "shadow-xl focus:outline-none rounded-xl overflow-hidden",
+            sizeStyles[size],
+            className
+          )}
+          {...props}
+        >
+          {(title || showCloseButton) && (
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-(--border)">
+              <div className="flex-1">
+                {title && (
+                  <h2
+                    id="dialog-title"
+                    className="text-base font-semibold text-(--foreground)"
+                  >
+                    {title}
+                  </h2>
+                )}
+                {description && (
+                  <p
+                    id="dialog-description"
+                    className="mt-0.5 text-xs text-(--foreground/70)"
+                  >
+                    {description}
+                  </p>
+                )}
+              </div>
+              {showCloseButton && onClose && (
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="ml-3 p-1.5 rounded-lg text-(--foreground/60) hover:text-(--foreground) hover:bg-(--surface-muted) transition-colors cursor-pointer"
+                  aria-label="Close dialog"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          )}
+          <div className="p-4 sm:p-6">{children}</div>
+        </div>
+      );
+    }
+
+    const modalContent = (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "dialog-title" : undefined}
@@ -69,7 +134,7 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
       >
         {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -142,6 +207,9 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
         </div>
       </div>
     );
+
+    if (!mounted) return null;
+    return createPortal(modalContent, document.body);
   }
 );
 

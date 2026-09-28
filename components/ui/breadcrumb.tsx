@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Home } from "lucide-react";
 
@@ -47,8 +48,8 @@ export const Breadcrumb = ({ items, homeIcon = true, className }: BreadcrumbProp
                   {item.label}
                 </span>
               ) : (
-                <a
-                  href={item.href}
+                <Link
+                  href={item.href || "#"}
                   className={cn(
                     "text-(--foreground/60) hover:text-(--foreground)",
                     "transition-colors duration-150",
@@ -58,7 +59,7 @@ export const Breadcrumb = ({ items, homeIcon = true, className }: BreadcrumbProp
                   )}
                 >
                   {item.label}
-                </a>
+                </Link>
               )}
             </li>
           );

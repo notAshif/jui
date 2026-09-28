@@ -87,7 +87,6 @@ JUI features a native **System One decision pipeline** powered by TypeSafe AI's 
 | `dialog` | **`PixelDialog`** | Modal blocking dialogue requiring confirmation | Boss defeats, level completions, story milestones |
 
 - **Confidence Smoothing**: Managed by `useDecisionSmoothing` (`lib/decide.ts`). Commits immediately on $\ge 85\%$ confidence, verifies moderate confidence over a sliding window, and safely falls back on low confidence (< 60%) to prevent screen flicker or accidental focus trapping.
-- **Interactive Playground**: Explore live event classification and telemetry at [`/demo/pixel-intent`](http://localhost:3000/demo/pixel-intent).
 - **Full Architecture & API Reference**: See [`docs/jev-decision-layer.md`](./docs/jev-decision-layer.md).
 
 ## Getting Started
@@ -161,7 +160,6 @@ To publish JUI to the npm registry:
 ```
 jui/
 ├── app/                    # Next.js app directory
-│   ├── components-demo/    # Component demonstrations
 │   └── docs/               # Documentation pages
 ├── components/
 │   ├── base/              # Headless primitives

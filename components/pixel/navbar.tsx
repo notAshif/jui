@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { NavItem, NavbarProps } from "@/components/ui/navbar";
 
@@ -31,15 +32,15 @@ export const PixelNavbar = ({ logo, items, actions, className, variant = "defaul
         {/* Navigation Items */}
         <div className="hidden md:flex items-center space-x-1">
           {items.map((item, index) => (
-            <a
+            <Link
               key={index}
-              href={item.href}
+              href={item.href || "#"}
               className={cn(
                 "px-4 py-2 text-xs font-medium transition-colors duration-150",
                 "focus:outline-none focus:ring-2 focus:ring-(--ring)",
                 "min-h-[44px]",
                 "tracking-wider",
-                item.disabled && "opacity-50 cursor-not-allowed",
+                item.disabled && "opacity-50 cursor-not-allowed pointer-events-none",
                 !item.disabled && "cursor-pointer",
                 item.active
                   ? "bg-(--surface-muted) text-(--foreground)"
@@ -49,7 +50,7 @@ export const PixelNavbar = ({ logo, items, actions, className, variant = "defaul
             >
               {item.icon && <span className="mr-2">{item.icon}</span>}
               {item.label}
-            </a>
+            </Link>
           ))}
         </div>
 

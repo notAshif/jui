@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { SidebarSection, SidebarProps } from "@/components/ui/sidebar";
 import { PixelChevronRightIcon, PixelCloseIcon } from "@/components/pixel/icons";
@@ -94,14 +97,14 @@ export const PixelSidebar = ({ sections, open = true, onClose, title, className,
                 <ul className="mt-2 space-y-1" role="list">
                   {section.items.map((item, itemIndex) => (
                     <li key={itemIndex}>
-                      <a
-                        href={item.href}
+                      <Link
+                        href={item.href || "#"}
                         className={cn(
                           "flex items-center px-3 py-2 text-xs transition-colors duration-150",
                           "focus:outline-none focus:ring-2 focus:ring-(--ring)",
                           "min-h-[44px]",
                           "tracking-wide",
-                          item.disabled && "opacity-50 cursor-not-allowed",
+                          item.disabled && "opacity-50 cursor-not-allowed pointer-events-none",
                           !item.disabled && "cursor-pointer",
                           item.active
                             ? "bg-(--surface-muted) text-(--foreground)"
@@ -111,7 +114,7 @@ export const PixelSidebar = ({ sections, open = true, onClose, title, className,
                       >
                         {item.icon && <span className="mr-3">{item.icon}</span>}
                         {item.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

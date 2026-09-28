@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { BreadcrumbItem, BreadcrumbProps } from "@/components/ui/breadcrumb";
 import { PixelChevronRightIcon } from "@/components/pixel/icons";
@@ -37,8 +38,8 @@ export const PixelBreadcrumb = ({ items, homeIcon = true, className }: Breadcrum
                   {item.label}
                 </span>
               ) : (
-                <a
-                  href={item.href}
+                <Link
+                  href={item.href || "#"}
                   className={cn(
                     "text-(--foreground/60) hover:text-(--foreground)",
                     "transition-colors duration-150",
@@ -48,7 +49,7 @@ export const PixelBreadcrumb = ({ items, homeIcon = true, className }: Breadcrum
                   )}
                 >
                   {item.label}
-                </a>
+                </Link>
               )}
             </li>
           );

@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ChevronRight, X } from "lucide-react";
 
@@ -113,14 +116,14 @@ export const Sidebar = ({ sections, open = true, onClose, title, className, widt
                 <ul className="mt-2 space-y-1" role="list">
                   {section.items.map((item, itemIndex) => (
                     <li key={itemIndex}>
-                      <a
-                        href={item.href}
+                      <Link
+                        href={item.href || "#"}
                         className={cn(
                           "flex items-center px-3 py-2 rounded-lg text-sm transition-colors duration-150",
                           "focus:outline-none focus:ring-2 focus:ring-(--ring)",
                           // Touch target: minimum 44px height
                           "min-h-[44px]",
-                          item.disabled && "opacity-50 cursor-not-allowed",
+                          item.disabled && "opacity-50 cursor-not-allowed pointer-events-none",
                           !item.disabled && "cursor-pointer",
                           item.active
                             ? "bg-(--surface-muted) text-(--foreground)"
@@ -130,7 +133,7 @@ export const Sidebar = ({ sections, open = true, onClose, title, className, widt
                       >
                         {item.icon && <span className="mr-3">{item.icon}</span>}
                         {item.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

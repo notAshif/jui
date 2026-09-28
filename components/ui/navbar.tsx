@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export interface NavItem {
@@ -45,15 +46,15 @@ export const Navbar = ({ logo, items, actions, className, variant = "default" }:
         {/* Navigation Items */}
         <div className="hidden md:flex items-center space-x-1">
           {items.map((item, index) => (
-            <a
+            <Link
               key={index}
-              href={item.href}
+              href={item.href || "#"}
               className={cn(
                 "px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150",
                 "focus:outline-none focus:ring-2 focus:ring-(--ring) focus:ring-offset-2",
                 // Touch target: minimum 44px height
                 "min-h-[44px]",
-                item.disabled && "opacity-50 cursor-not-allowed",
+                item.disabled && "opacity-50 cursor-not-allowed pointer-events-none",
                 !item.disabled && "cursor-pointer",
                 item.active
                   ? "bg-(--surface-muted) text-(--foreground)"
@@ -63,7 +64,7 @@ export const Navbar = ({ logo, items, actions, className, variant = "default" }:
             >
               {item.icon && <span className="mr-2">{item.icon}</span>}
               {item.label}
-            </a>
+            </Link>
           ))}
         </div>
 

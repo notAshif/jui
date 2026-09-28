@@ -5,7 +5,6 @@ import Link from "next/link";
 import { PixelButton } from "@/components/pixel/button";
 import { PixelInput } from "@/components/pixel/input";
 import { PixelBadge } from "@/components/pixel/badge";
-import { PixelSeparator } from "@/components/pixel/separator";
 import { PixelAvatar } from "@/components/pixel/avatar";
 import { PixelProgressBar } from "@/components/pixel/progress-bar";
 import { PixelTabs } from "@/components/pixel/tabs";
@@ -28,13 +27,11 @@ import {
   Heart,
   Zap,
   Sparkles,
-  Layers,
   ChevronDown,
   Info,
   Package,
   Scroll,
   Crosshair,
-  ExternalLink,
   Flame
 } from "lucide-react";
 
@@ -96,29 +93,7 @@ export function Showcase() {
       id="components"
       className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 font-pixel"
     >
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-dashed border-(--border-strong) pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-(--espresso) uppercase tracking-wider">
-              INTERACTIVE COMPONENT PLAYGROUND
-            </h2>
-            <PixelBadge variant="warning" className="text-[10px]">
-              28 PRIMITIVES
-            </PixelBadge>
-          </div>
-          <p className="text-xs text-[#7B5B49] mt-1">
-            TEST LIVE INTERACTIONS WITH TACTILE 8-BIT GAME PRIMITIVES GROUNDED IN AUTHENTIC RPG CONTEXTS.
-          </p>
-        </div>
-
-        <Link href="/docs/component">
-          <PixelButton size="sm" variant="outline" className="text-xs">
-            DOCUMENTATION &amp; CODE
-            <ExternalLink className="w-3.5 h-3.5 ml-1.5 inline" />
-          </PixelButton>
-        </Link>
-      </div>
-
+    
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
         {/* Module 1: Battle Commands & Input */}
         <div className={`${cardClass} min-h-[420px]`}>
@@ -554,8 +529,8 @@ export function Showcase() {
 
           <div className="pt-3 border-t border-dashed border-(--border-strong) flex items-center justify-between text-[10px] text-[#7B5B49]">
             <span>Used In: Dynamic Game Feedback, Adaptive UI, Loot &amp; Combat Events</span>
-            <Link href="/demo/pixel-intent" className="text-(--caramel) hover:underline font-bold">
-              Open Full Workbench Playground &gt;
+            <Link href="/docs/component#component-ai-decision" className="text-(--caramel) hover:underline font-bold">
+              View Documentation &gt;
             </Link>
           </div>
         </div>
