@@ -10,6 +10,29 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const pkgRoot = path.resolve(__dirname, "..");
 
+// CMD / Terminal icons (Strictly ASCII/CP437-compatible cmd glyphs - no emojis)
+const CMD = {
+  tick: "√",      // CMD success tick (classic DOS CP437 251 / U+221A)
+  cross: "×",     // CMD error cross (U+00D7)
+  info: "i",      // Information marker
+  warn: "!",      // Warning marker
+  pointer: "›",   // CMD prompt pointer (U+203A)
+  step: "»",      // CMD multi-step marker (U+00BB)
+  bullet: "•",    // Clean bullet marker (U+2022)
+  dash: "-",      // Skip/dash marker
+  line: "─",      // Single horizontal box-drawing
+  doubleLine: "═",// Double horizontal box-drawing
+};
+
+function getTerminalWidth() {
+  return Math.max(32, process.stdout.columns || 80);
+}
+
+function getDivider(char = CMD.line, maxWidth = 76) {
+  const width = Math.min(getTerminalWidth(), maxWidth);
+  return char.repeat(Math.max(10, width));
+}
+
 // Load registry (fallback to reading from lib/registry.json)
 let registry;
 try {
@@ -17,17 +40,19 @@ try {
   if (fs.existsSync(registryPath)) {
     registry = JSON.parse(fs.readFileSync(registryPath, "utf-8"));
   } else {
-    console.error("Registry not found. Please run 'npm run build:registry' first.");
+    console.error(`  ${CMD.cross} Registry not found. Please run 'npm run build:registry' first.`);
     process.exit(1);
   }
 } catch (err) {
-  console.error("Failed to load registry:", err.message);
+  console.error(`  ${CMD.cross} Failed to load registry:`, err.message);
   process.exit(1);
 }
 
 const VERSION = registry.version || "0.1.0";
 
-const HELP_TEXT = `
+function getHelpText() {
+  const div = getDivider(CMD.line, 76);
+  return `
        _ _   _ ___ 
       | | | | |_ _|
    _  | | | | || | 
@@ -37,6 +62,7 @@ const HELP_TEXT = `
 JUI CLI - 2D Pixel Game UI Component Registry (Available for Next.js, Vite)
 v${VERSION}
 
+${div}
 Usage:
   $ npx @1zuku/jui <command> [options]
   $ npx jui <command> [options]
@@ -69,7 +95,11 @@ Examples:
   $ npx @1zuku/jui add dialog drawer toast -y
   $ npx @1zuku/jui add --all
   $ npx @1zuku/jui list
+${div}
 `;
+}
+
+const HELP_TEXT = getHelpText();
 
 function parseArgs(args) {
   const parsed = {
@@ -183,11 +213,12 @@ function getPackageManager() {
 }
 
 function displayFrameworkUsage(framework) {
+  const div = getDivider(CMD.doubleLine, 72);
   if (framework === "Next.js") {
     console.log(`
-========================================================================
+${div}
 HOW TO USE JUI IN NEXT.JS (App Router / Pages):
-========================================================================
+${div}
 1. Setup Tailwind CSS in app/layout.tsx:
    import "@/app/globals.css";
 
@@ -212,13 +243,13 @@ HOW TO USE JUI IN NEXT.JS (App Router / Pages):
 
 3. Add more components to your project anytime:
    $ npx @1zuku/jui add button card avatar dialog toast progress-bar
-========================================================================
+${div}
 `);
   } else if (framework === "Vite") {
     console.log(`
-========================================================================
+${div}
 HOW TO USE JUI IN VITE (React):
-========================================================================
+${div}
 1. Configure path alias '@' in vite.config.ts:
    import { defineConfig } from "vite";
    import react from "@vitejs/plugin-react";
@@ -264,31 +295,31 @@ HOW TO USE JUI IN VITE (React):
 
 4. Add more components to your project anytime:
    $ npx @1zuku/jui add button card avatar dialog toast progress-bar
-========================================================================
+${div}
 `);
   } else {
     console.log(`
-========================================================================
+${div}
 HOW TO USE JUI (Available for Next.js, Vite):
-========================================================================
+${div}
 Next.js:
-  $ npx @1zuku/jui init -f next
+  › npx @1zuku/jui init -f next
   Import primitives from "@/components/pixel/*"
 
 Vite:
-  $ npx @1zuku/jui init -f vite
+  › npx @1zuku/jui init -f vite
   Configure '@' alias in vite.config.ts, then import from "@/components/pixel/*"
 
 Add components:
-  $ npx @1zuku/jui add button card avatar dialog toast
-========================================================================
+  › npx @1zuku/jui add button card avatar dialog toast
+${div}
 `);
   }
 }
 
 async function initCommand(cwd, options = {}) {
-  console.log("\nInitializing JUI in your project...");
-  console.log("Available for Next.js, Vite\n");
+  console.log(`\n  ${CMD.step} Initializing JUI in your project...`);
+  console.log("  Available for Next.js, Vite\n");
 
   const pkgPath = path.join(cwd, "package.json");
   const hasExistingProject = fs.existsSync(pkgPath);
@@ -298,21 +329,21 @@ async function initCommand(cwd, options = {}) {
     const norm = normalizeFramework(options.framework);
     if (norm === "Next.js" || norm === "Vite") {
       framework = norm;
-      console.log(`  [INFO] Target framework: ${framework}`);
+      console.log(`  ${CMD.info} Target framework: ${framework}`);
     } else {
-      console.log(`  [WARN] Unknown framework '${options.framework}'. Defaulting to Next.js.`);
+      console.log(`  ${CMD.warn} Unknown framework '${options.framework}'. Defaulting to Next.js.`);
       framework = "Next.js";
     }
   } else if (hasExistingProject) {
     framework = detectFramework(cwd);
     if (framework) {
-      console.log(`  [INFO] Detected project framework: ${framework}`);
+      console.log(`  ${CMD.info} Detected project framework: ${framework}`);
     }
   }
 
   // If no project exists in cwd, scaffold the project!
   if (!hasExistingProject) {
-    console.log("  [INFO] No existing package.json found in this directory.");
+    console.log(`  ${CMD.info} No existing package.json found in this directory.`);
 
     if (!framework) {
       if (options.yes) {
@@ -321,20 +352,20 @@ async function initCommand(cwd, options = {}) {
         const choice = await askInput("? Select framework to create:\n  1) Next.js (App Router, Tailwind CSS, TypeScript)\n  2) Vite (React, TypeScript)\nEnter 1 or 2 [default: 1]: ", "1");
         framework = choice === "2" ? "Vite" : "Next.js";
       }
-      console.log(`  [INFO] Selected framework: ${framework}`);
+      console.log(`  ${CMD.info} Selected framework: ${framework}`);
     }
 
     // Ask permission to create project unless bypassed
     if (!options.overwrite && !options.yes) {
       const proceed = await askConfirm(`? Create a new ${framework} project with JUI in this directory? (Y/n): `);
       if (!proceed) {
-        console.log("\n[INFO] Project creation cancelled.\n");
+        console.log(`\n  ${CMD.info} Project creation cancelled.\n`);
         return;
       }
     }
 
     const pm = getPackageManager();
-    console.log(`\n[INFO] Scaffolding new ${framework} project using ${pm}...`);
+    console.log(`\n  ${CMD.step} Scaffolding new ${framework} project using ${pm}...`);
 
     // Temporarily clean any leftover empty lib/utils.ts created earlier so create-app won't conflict
     const existingLib = path.join(cwd, "lib");
@@ -357,7 +388,7 @@ async function initCommand(cwd, options = {}) {
         console.log(`$ ${scaffoldCmd}\n`);
         execSync(scaffoldCmd, { cwd, stdio: "inherit" });
 
-        console.log(`\n[INFO] Installing JUI packages and peer dependencies...`);
+        console.log(`\n  ${CMD.step} Installing JUI packages and peer dependencies...`);
         const addDepCmd = pm === "bun" ? "bun add clsx tailwind-merge lucide-react pixelarticons && bun add -d @1zuku/jui"
           : pm === "pnpm" ? "pnpm add clsx tailwind-merge lucide-react pixelarticons && pnpm add -D @1zuku/jui"
           : "npm install clsx tailwind-merge lucide-react pixelarticons && npm install -D @1zuku/jui";
@@ -367,7 +398,7 @@ async function initCommand(cwd, options = {}) {
         // Add starter pixel components
         addCommand(["button", "card", "avatar"], { flavor: "pixel", overwrite: true }, cwd);
       } catch (err) {
-        console.error(`\n[ERROR] Failed to scaffold Next.js project: ${err.message}`);
+        console.error(`\n  ${CMD.cross} Failed to scaffold Next.js project: ${err.message}`);
         return;
       }
     } else if (framework === "Vite") {
@@ -383,7 +414,7 @@ async function initCommand(cwd, options = {}) {
         console.log(`$ ${scaffoldCmd}\n`);
         execSync(scaffoldCmd, { cwd, stdio: "inherit" });
 
-        console.log(`\n[INFO] Installing dependencies, Tailwind CSS, and JUI packages...`);
+        console.log(`\n  ${CMD.step} Installing dependencies, Tailwind CSS, and JUI packages...`);
         const addDepCmd = pm === "bun" ? "bun install && bun add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && bun add -d @1zuku/jui"
           : pm === "pnpm" ? "pnpm install && pnpm add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && pnpm add -D @1zuku/jui"
           : "npm install && npm install clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && npm install -D @1zuku/jui";
@@ -522,7 +553,7 @@ export default App;
 `;
         fs.writeFileSync(appTsxPath, starterAppTsx, "utf-8");
       } catch (err) {
-        console.error(`\n[ERROR] Failed to scaffold Vite project: ${err.message}`);
+        console.error(`\n  ${CMD.cross} Failed to scaffold Vite project: ${err.message}`);
         return;
       }
     }
@@ -531,7 +562,7 @@ export default App;
     if (!options.overwrite && !options.yes) {
       const proceed = await askConfirm("? Do you want to initialize JUI in this project? (Y/n): ");
       if (!proceed) {
-        console.log("\n[INFO] Initialization cancelled.\n");
+        console.log(`\n  ${CMD.info} Initialization cancelled.\n`);
         return;
       }
     }
@@ -542,9 +573,9 @@ export default App;
   if (!fs.existsSync(utilsPath) || options.overwrite) {
     ensureDirSync(path.dirname(utilsPath));
     fs.writeFileSync(utilsPath, registry.shared.utils.content, "utf-8");
-    console.log(`  [SUCCESS] Created ${path.relative(cwd, utilsPath)} (cn helper utility)`);
+    console.log(`  ${CMD.tick} Created ${path.relative(cwd, utilsPath)} (cn helper utility)`);
   } else {
-    console.log(`  - Found existing ${path.relative(cwd, utilsPath)}`);
+    console.log(`  ${CMD.dash} Found existing ${path.relative(cwd, utilsPath)}`);
   }
 
   // Also create src/lib/utils.ts if src directory exists
@@ -553,11 +584,11 @@ export default App;
     if (!fs.existsSync(srcUtilsPath) || options.overwrite) {
       ensureDirSync(path.dirname(srcUtilsPath));
       fs.writeFileSync(srcUtilsPath, registry.shared.utils.content, "utf-8");
-      console.log(`  [SUCCESS] Created ${path.relative(cwd, srcUtilsPath)} (cn helper utility)`);
+      console.log(`  ${CMD.tick} Created ${path.relative(cwd, srcUtilsPath)} (cn helper utility)`);
     }
   }
 
-  console.log("\n[SUCCESS] JUI initialized successfully!");
+  console.log(`\n  ${CMD.tick} JUI initialized successfully!`);
   console.log("Available for Next.js, Vite");
 
   // Check for missing peer dependencies and print installation instructions
@@ -568,8 +599,11 @@ export default App;
       const missingPeers = ["clsx", "tailwind-merge", "lucide-react", "pixelarticons"].filter((d) => !allDeps[d]);
       if (missingPeers.length > 0) {
         const pm = getPackageManager();
-        console.log("\nMissing peer dependencies detected. Install them using:");
-        console.log(`  $ ${pm === "bun" ? "bun add" : pm === "pnpm" ? "pnpm add" : "npm install"} ${missingPeers.join(" ")}\n`);
+        const div = getDivider(CMD.line, 64);
+        console.log(`\n${div}`);
+        console.log(`  ${CMD.warn} Missing peer dependencies detected. Install them using:`);
+        console.log(`  › ${pm === "bun" ? "bun add" : pm === "pnpm" ? "pnpm add" : "npm install"} ${missingPeers.join(" ")}`);
+        console.log(`${div}\n`);
       }
     }
   } catch {}
@@ -578,24 +612,39 @@ export default App;
 }
 
 function listCommand() {
-  console.log("\nAvailable JUI Components (28 Total):\n");
   const compKeys = Object.keys(registry.components).sort();
+  console.log("\nAvailable JUI Components (28 Total):\n");
 
-  const colWidth = 22;
-  let row = "  ";
-  for (let i = 0; i < compKeys.length; i++) {
-    row += compKeys[i].padEnd(colWidth);
-    if ((i + 1) % 3 === 0 || i === compKeys.length - 1) {
-      console.log(row);
-      row = "  ";
+  // Dynamically compute responsive columns based on terminal width
+  const termWidth = getTerminalWidth();
+  const indent = 2;
+  const longest = Math.max(...compKeys.map((k) => k.length));
+  const minColWidth = longest + 4; // Longest component name + margin
+  const availableWidth = Math.max(minColWidth, termWidth - indent);
+  const numCols = Math.max(1, Math.floor(availableWidth / minColWidth));
+  const colWidth = Math.max(minColWidth, Math.floor(availableWidth / numCols));
+
+  for (let i = 0; i < compKeys.length; i += numCols) {
+    const row = compKeys.slice(i, i + numCols);
+    let line = " ".repeat(indent);
+    for (let j = 0; j < row.length; j++) {
+      if (j === row.length - 1) {
+        line += row[j];
+      } else {
+        line += row[j].padEnd(colWidth);
+      }
     }
+    console.log(line);
   }
 
-  console.log("\nFlavors available for each component:");
-  console.log("  • Modern  (SaaS aesthetic, Geist/clean typography)");
-  console.log("  • Pixel   (8-bit/16-bit retro aesthetic, tactile bevels)\n");
-  console.log("Install a component:");
-  console.log("  $ npx jui add <component-name>\n");
+  const div = getDivider(CMD.line, Math.min(termWidth - 2, 64));
+  console.log(`\n${div}`);
+  console.log("Flavors available for each component:");
+  console.log(`  ${CMD.bullet} Modern  (SaaS aesthetic, Geist/clean typography)`);
+  console.log(`  ${CMD.bullet} Pixel   (8-bit/16-bit retro aesthetic, tactile bevels)`);
+  console.log(`${div}`);
+  console.log("\nInstall a component:");
+  console.log("  › npx jui add <component-name>\n");
 }
 
 function addCommand(componentsToInstall, options, cwd) {
@@ -604,14 +653,14 @@ function addCommand(componentsToInstall, options, cwd) {
   }
 
   if (componentsToInstall.length === 0) {
-    console.error("\n[ERROR] Please specify at least one component to add, or use --all.");
+    console.error(`\n  ${CMD.cross} Please specify at least one component to add, or use --all.`);
     console.log("Example: $ npx jui add button\n");
     process.exit(1);
   }
 
   const validFlavors = ["modern", "pixel", "both"];
   if (!validFlavors.includes(options.flavor)) {
-    console.error(`\n[ERROR] Invalid flavor '${options.flavor}'. Allowed options: 'modern', 'pixel', 'both'.\n`);
+    console.error(`\n  ${CMD.cross} Invalid flavor '${options.flavor}'. Allowed options: 'modern', 'pixel', 'both'.\n`);
     process.exit(1);
   }
 
@@ -623,14 +672,14 @@ function addCommand(componentsToInstall, options, cwd) {
   if (!fs.existsSync(utilsPath)) {
     ensureDirSync(path.dirname(utilsPath));
     fs.writeFileSync(utilsPath, registry.shared.utils.content, "utf-8");
-    console.log(`  ✓ Scaffolding ${path.relative(cwd, utilsPath)}`);
+    console.log(`  ${CMD.tick} Scaffolding ${path.relative(cwd, utilsPath)}`);
   }
   if (hasSrc) {
     const srcUtilsPath = path.join(cwd, "src", "lib", "utils.ts");
     if (!fs.existsSync(srcUtilsPath)) {
       ensureDirSync(path.dirname(srcUtilsPath));
       fs.writeFileSync(srcUtilsPath, registry.shared.utils.content, "utf-8");
-      console.log(`  ✓ Scaffolding ${path.relative(cwd, srcUtilsPath)}`);
+      console.log(`  ${CMD.tick} Scaffolding ${path.relative(cwd, srcUtilsPath)}`);
     }
   }
 
@@ -646,7 +695,7 @@ function addCommand(componentsToInstall, options, cwd) {
   for (const compSlug of componentsToInstall) {
     const compData = registry.components[compSlug];
     if (!compData) {
-      console.warn(`  [WARN] Component '${compSlug}' not found in registry. Skipping.`);
+      console.warn(`  ${CMD.warn} Component '${compSlug}' not found in registry. Skipping.`);
       continue;
     }
 
@@ -662,10 +711,10 @@ function addCommand(componentsToInstall, options, cwd) {
         ensureDirSync(path.dirname(destFile));
 
         if (fs.existsSync(destFile) && !options.overwrite) {
-          console.log(`  - Skipped components/ui/${compSlug}.tsx (already exists, pass -y to overwrite)`);
+          console.log(`  ${CMD.dash} Skipped components/ui/${compSlug}.tsx (already exists, pass -y to overwrite)`);
         } else {
           fs.writeFileSync(destFile, compData.files.modern.content, "utf-8");
-          console.log(`  ✓ Created components/ui/${compSlug}.tsx`);
+          console.log(`  ${CMD.tick} Created components/ui/${compSlug}.tsx`);
           installedCount++;
         }
       }
@@ -681,7 +730,7 @@ function addCommand(componentsToInstall, options, cwd) {
             ensureDirSync(path.dirname(pixelIconsDest));
             if (registry.shared["pixel-icons"]?.content) {
               fs.writeFileSync(pixelIconsDest, registry.shared["pixel-icons"].content, "utf-8");
-              console.log(`  ✓ Created components/pixel/icons.tsx (shared pixel icons)`);
+              console.log(`  ${CMD.tick} Created components/pixel/icons.tsx (shared pixel icons)`);
               copiedPixelIcons = true;
             }
           }
@@ -691,20 +740,24 @@ function addCommand(componentsToInstall, options, cwd) {
         ensureDirSync(path.dirname(destFile));
 
         if (fs.existsSync(destFile) && !options.overwrite) {
-          console.log(`  - Skipped components/pixel/${compSlug}.tsx (already exists, pass -y to overwrite)`);
+          console.log(`  ${CMD.dash} Skipped components/pixel/${compSlug}.tsx (already exists, pass -y to overwrite)`);
         } else {
           fs.writeFileSync(destFile, compData.files.pixel.content, "utf-8");
-          console.log(`  ✓ Created components/pixel/${compSlug}.tsx`);
+          console.log(`  ${CMD.tick} Created components/pixel/${compSlug}.tsx`);
           installedCount++;
         }
       }
     }
   }
 
-  console.log(`\n[DONE] Processed ${installedCount} file(s).`);
+  const termWidth = getTerminalWidth();
+  const div = getDivider(CMD.line, Math.min(termWidth - 2, 54));
+  console.log(`\n  ${CMD.tick} Processed ${installedCount} file(s).`);
   if (requiredNpmDeps.size > 0) {
-    console.log("\nEnsure required dependencies are installed in your project:");
-    console.log(`   npm install ${Array.from(requiredNpmDeps).join(" ")}\n`);
+    console.log(`\n${div}`);
+    console.log("Ensure required dependencies are installed in your project:");
+    console.log(`  › npm install ${Array.from(requiredNpmDeps).join(" ")}`);
+    console.log(`${div}\n`);
   }
 }
 
@@ -713,7 +766,7 @@ const rawArgs = process.argv.slice(2);
 const options = parseArgs(rawArgs);
 
 if (options.help || (rawArgs.length === 0 && !options.command)) {
-  console.log(HELP_TEXT);
+  console.log(getHelpText());
   process.exit(0);
 }
 
@@ -736,7 +789,8 @@ switch (options.command) {
     addCommand(options.components, options, cwd);
     break;
   default:
-    console.error(`\n[ERROR] Unknown command: '${options.command}'`);
-    console.log(HELP_TEXT);
+    console.error(`\n  ${CMD.cross} Unknown command: '${options.command}'`);
+    console.log(getHelpText());
     process.exit(1);
 }
+
