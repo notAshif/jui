@@ -1,13 +1,13 @@
-# JUI - Dual-Aesthetic Component Library
+# JUI - 2D Pixel Game UI Component Library
 
-A versatile React component library that provides two distinct visual aesthetics: clean modern SaaS primitives and tactile 2D pixel-art game UI primitives. Built with Next.js, React 19, and Tailwind CSS 4.
+A tactile 2D pixel-art game UI component library providing retro arcade and RPG primitives for React 19 and Tailwind CSS. Built for indie games, gamified applications, and retro web games.
 
 ## Overview
 
-JUI delivers a unique dual-flavor component system designed for both modern web applications and retro game interfaces. Each component is available in two flavors:
+JUI delivers an authentic 2D pixel-art component system designed for indie web games, retro RPG HUDs, and gamified applications.
 
-- **Modern Components**: Clean, minimal, product-oriented visual style for SaaS and modern web applications
-- **Pixel Components**: Retro 8-bit/16-bit visual style with chunky pixel borders, retro typography, and tactile press feedback for game developers and retro web applications
+- **Pixel Components**: Retro 8-bit/16-bit visual style with chunky pixel borders, retro typography, and tactile press feedback for game developers and retro web applications.
+- **Physical Bevels & SFX**: Tactile 3D beveled buttons and real-time synthesized Web Audio sound effects.
 
 ## Architecture
 

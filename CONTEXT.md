@@ -1,6 +1,6 @@
 # JUI Component Library
 
-A dual-aesthetic component library providing both clean modern SaaS primitives and tactile 2D pixel-art game UI primitives.
+A tactile 2D pixel-art game UI component library providing retro arcade and RPG primitives for React 19 and Tailwind CSS.
 
 ## Language
 

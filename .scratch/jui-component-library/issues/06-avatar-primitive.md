@@ -1,13 +1,16 @@
-# 06: Avatar Primitive (Modern & Pixel Flavors)
+# 06: Avatar Primitive (Game UI)
 
-**What to build:** User avatar component composition (`<Avatar>`, `<AvatarImage>`, `<AvatarFallback>`) in both Modern and Pixel flavors. Handles graceful asynchronous image loading, error fallbacks, initials generation, and rounded circular vs square pixel-art portrait frames.
+**What to build:** User avatar component composition (`<PixelAvatar>` and `<Avatar>`). Handles synchronous vector SVG rendering inspired by AvatarsInPixels, error fallbacks, initials generation, and square pixel-art portrait frames.
 
 **Blocked by:** 01 (Foundation Tokens, Typography & Utilities)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Implement Modern Avatar with circular clipping, smooth borders, and elegant fallback initials.
-- [ ] Implement Pixel Avatar with square stepped pixel-art portrait framing and retro monospace/pixel fallback characters.
-- [ ] Handle image loading lifecycles gracefully (show fallback until image successfully decodes).
-- [ ] Support sm, md, lg size variants across both flavors.
-- [ ] Provide interactive showcase preview for both flavors.
+- [x] Implement Avatar with smooth borders and instant initials.
+- [x] Implement PixelAvatar with AvatarsInPixels chibi character generator.
+- [x] Pure synchronous vector SVG rendering eliminating page reload background flash.
+- [x] Support sm, md, lg, xl size variants.
+- [x] Interactive live seed tester and showcase preview.
+
+## Comments
+Resolved with instant AvatarsInPixels SVG generator.

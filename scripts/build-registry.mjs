@@ -126,7 +126,7 @@ function buildRegistry() {
     $schema: "https://jui.dev/schema/registry.json",
     name: "jui",
     version: "0.1.0",
-    description: "JUI Modern and Pixel component registry",
+    description: "JUI 2D Pixel Game UI component registry",
     totalComponents: Object.keys(components).length,
     components,
     shared,

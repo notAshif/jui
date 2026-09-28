@@ -185,7 +185,7 @@ export function Showcase() {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <PixelAvatar fallback="VH" size="md" />
+                <PixelAvatar seed="Vaelin" fallback="VH" size="md" />
                 <div>
                   <span className="text-xs font-bold text-(--espresso) block">VAELIN IRONHEART</span>
                   <span className="text-[10px] text-(--caramel) font-bold">LVL 42 PALADIN</span>

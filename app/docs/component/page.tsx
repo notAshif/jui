@@ -150,6 +150,7 @@ export default function ComponentDocsPage() {
   const [selectedCalendarDate, setSelectedCalendarDate] = useState<Date | undefined>(new Date());
   const [paginationPage, setPaginationPage] = useState(1);
   const [heroName, setHeroName] = useState("Vaelin Ironheart");
+  const [avatarSeed, setAvatarSeed] = useState("Vaelin");
   const [skeletonActive, setSkeletonActive] = useState(false);
 
   // Toasts
@@ -266,6 +267,126 @@ export default function ComponentDocsPage() {
   const componentCardClass =
     "p-5 sm:p-6 bg-(--surface-card) pixel-border-bevel font-pixel select-none space-y-4 scroll-mt-20";
 
+  const renderSidebarContent = () => (
+    <>
+      {/* Quick Filter Search */}
+      <div className="space-y-1.5">
+        <label className="text-[10px] font-bold text-(--espresso) uppercase tracking-wider block">
+          FILTER PRIMITIVES
+        </label>
+        <div className="relative flex items-center">
+          <PixelSearchIcon className="w-3.5 h-3.5 text-(--espresso) opacity-60 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none select-none z-10" />
+          <PixelInput
+            placeholder="Search 28 components..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="text-xs pl-8 pr-7 py-1.5 h-9"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-(--espresso) opacity-60 hover:opacity-100 p-0.5 cursor-pointer z-10"
+              aria-label="Clear filter"
+            >
+              <PixelCloseIcon className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Section: DOCS */}
+      <div className="space-y-2">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-(--caramel) block border-b border-dashed border-(--border-strong) pb-1">
+          DOCS
+        </span>
+        <ul className="space-y-1 text-xs">
+          <li>
+            <a
+              href="#overview"
+              onClick={() => setSidebarOpen(false)}
+              className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
+            >
+              Overview &amp; Philosophy
+            </a>
+          </li>
+          <li>
+            <a
+              href="#jev-decision-layer"
+              onClick={() => setSidebarOpen(false)}
+              className="block px-2.5 py-1.5 text-(--espresso) bg-(--caramel)/10 font-bold hover:bg-(--caramel) hover:text-(--cream) pixel-border-bevel flex items-center justify-between"
+            >
+              <span>Jev AI Decision Layer</span>
+              <span className="text-[9px] px-1 bg-(--espresso) text-(--cream)">NEW</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#cli-install"
+              onClick={() => setSidebarOpen(false)}
+              className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
+            >
+              CLI Installation
+            </a>
+          </li>
+          <li>
+            <a
+              href="#keyboard-nav"
+              onClick={() => setSidebarOpen(false)}
+              className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
+            >
+              Gamepad &amp; Keys
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      {/* Section: COMPONENTS (Categorized) */}
+      <div className="space-y-4">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-(--caramel) block border-b border-dashed border-(--border-strong) pb-1">
+          COMPONENTS ({filteredComponents.length})
+        </span>
+
+        {categories.map(([catTitle, items]) => (
+          <div key={catTitle} className="space-y-1">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-[#7B5B49] block px-1">
+              {catTitle} ({items.length})
+            </span>
+            <ul className="space-y-0.5 text-xs">
+              {items.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    onClick={() => setSidebarOpen(false)}
+                    className="flex items-center justify-between px-2 py-1 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) transition-colors"
+                  >
+                    <span>{item.name}</span>
+                    <ChevronRight className="w-2.5 h-2.5 opacity-40" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Audio Synthesizer Toggle */}
+      <div className="pt-2 border-t border-dashed border-(--border-strong)">
+        <button
+          type="button"
+          onClick={toggleSfx}
+          className="w-full flex items-center justify-between px-2 py-1.5 bg-(--surface-muted) pixel-border-bevel text-xs text-(--espresso) cursor-pointer"
+        >
+          <span className="text-[10px] font-bold uppercase">SFX AUDIO</span>
+          <span className="flex items-center gap-1 font-bold text-(--caramel)">
+            {sfxEnabled ? <PixelVolume2Icon className="w-3.5 h-3.5 text-(--success)" /> : <PixelVolumeXIcon className="w-3.5 h-3.5 text-(--destructive)" />}
+            {sfxEnabled ? "ON" : "MUTED"}
+          </span>
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen w-full flex flex-col bg-(--background) text-(--foreground) font-pixel selection:bg-(--caramel) selection:text-(--cream)">
       {/* Toast Container rendered at bottom */}
@@ -309,128 +430,47 @@ export default function ComponentDocsPage() {
           </button>
         </div>
 
-        {/* Left Sticky Documentation Sidebar */}
-        <aside
-          className={`w-full lg:w-64 xl:w-72 shrink-0 border-b-4 lg:border-b-0 lg:border-r-4 border-(--espresso) bg-(--surface-card) lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto p-4 space-y-6 ${
-            sidebarOpen ? "block" : "hidden lg:block"
-          }`}
-        >
-          {/* Quick Filter Search */}
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-bold text-(--espresso) uppercase tracking-wider block">
-              FILTER PRIMITIVES
-            </label>
-            <div className="relative flex items-center">
-              <PixelSearchIcon className="w-3.5 h-3.5 text-(--espresso) opacity-60 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none select-none z-10" />
-              <PixelInput
-                placeholder="Search 28 components..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="text-xs pl-8 pr-7 py-1.5 h-9"
-              />
-              {searchQuery && (
+        {/* Left Sticky Documentation Sidebar (Desktop) */}
+        <aside className="hidden lg:block w-64 xl:w-72 shrink-0 border-r-4 border-(--espresso) bg-(--surface-card) lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto p-4 space-y-6">
+          {renderSidebarContent()}
+        </aside>
+
+        {/* Mobile Slide-Over Drawer (Mobile & Tablet) */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-50 lg:hidden overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Component Codex Sidebar"
+          >
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-150"
+              onClick={() => setSidebarOpen(false)}
+              aria-hidden="true"
+            />
+            <aside className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-(--surface-card) border-r-4 border-(--espresso) h-full overflow-y-auto p-4 space-y-6 z-10 shadow-2xl animate-in slide-in-from-left duration-200">
+              <div className="flex items-center justify-between pb-3 border-b-2 border-(--border-strong)">
+                <div>
+                  <span className="font-bold text-sm text-(--espresso) tracking-wider block">
+                    COMPONENT CODEX
+                  </span>
+                  <span className="text-[10px] text-(--caramel) font-bold uppercase tracking-widest block">
+                    28 PRIMITIVES
+                  </span>
+                </div>
                 <button
                   type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-(--espresso) opacity-60 hover:opacity-100 p-0.5 cursor-pointer z-10"
-                  aria-label="Clear filter"
+                  onClick={() => setSidebarOpen(false)}
+                  className="w-8 h-8 flex items-center justify-center p-1 text-(--espresso) hover:text-(--caramel) hover:bg-(--surface-muted) pixel-border-bevel active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
+                  aria-label="Close codex drawer"
                 >
-                  <PixelCloseIcon className="w-3 h-3" />
+                  <X className="w-4 h-4" />
                 </button>
-              )}
-            </div>
-          </div>
-
-          {/* Section: DOCS */}
-          <div className="space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-(--caramel) block border-b border-dashed border-(--border-strong) pb-1">
-              DOCS
-            </span>
-            <ul className="space-y-1 text-xs">
-              <li>
-                <a
-                  href="#overview"
-                  onClick={() => setSidebarOpen(false)}
-                  className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
-                >
-                  Overview &amp; Philosophy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#jev-decision-layer"
-                  onClick={() => setSidebarOpen(false)}
-                  className="block px-2.5 py-1.5 text-(--espresso) bg-(--caramel)/10 font-bold hover:bg-(--caramel) hover:text-(--cream) pixel-border-bevel flex items-center justify-between"
-                >
-                  <span>Jev AI Decision Layer</span>
-                  <span className="text-[9px] px-1 bg-(--espresso) text-(--cream)">NEW</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#cli-install"
-                  onClick={() => setSidebarOpen(false)}
-                  className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
-                >
-                  CLI Installation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#keyboard-nav"
-                  onClick={() => setSidebarOpen(false)}
-                  className="block px-2.5 py-1.5 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) pixel-border-bevel"
-                >
-                  Gamepad &amp; Keys
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Section: COMPONENTS (Categorized) */}
-          <div className="space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-(--caramel) block border-b border-dashed border-(--border-strong) pb-1">
-              COMPONENTS ({filteredComponents.length})
-            </span>
-
-            {categories.map(([catTitle, items]) => (
-              <div key={catTitle} className="space-y-1">
-                <span className="text-[9px] font-bold uppercase tracking-wider text-[#7B5B49] block px-1">
-                  {catTitle} ({items.length})
-                </span>
-                <ul className="space-y-0.5 text-xs">
-                  {items.map((item) => (
-                    <li key={item.id}>
-                      <a
-                        href={`#${item.id}`}
-                        onClick={() => setSidebarOpen(false)}
-                        className="flex items-center justify-between px-2 py-1 text-(--espresso) hover:bg-(--surface-muted) hover:text-(--caramel) transition-colors"
-                      >
-                        <span>{item.name}</span>
-                        <ChevronRight className="w-2.5 h-2.5 opacity-40" />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
               </div>
-            ))}
+              {renderSidebarContent()}
+            </aside>
           </div>
-
-          {/* Audio Synthesizer Toggle */}
-          <div className="pt-2 border-t border-dashed border-(--border-strong)">
-            <button
-              type="button"
-              onClick={toggleSfx}
-              className="w-full flex items-center justify-between px-2 py-1.5 bg-(--surface-muted) pixel-border-bevel text-xs text-(--espresso) cursor-pointer"
-            >
-              <span className="text-[10px] font-bold uppercase">SFX AUDIO</span>
-              <span className="flex items-center gap-1 font-bold text-(--caramel)">
-                {sfxEnabled ? <PixelVolume2Icon className="w-3.5 h-3.5 text-(--success)" /> : <PixelVolumeXIcon className="w-3.5 h-3.5 text-(--destructive)" />}
-                {sfxEnabled ? "ON" : "MUTED"}
-              </span>
-            </button>
-          </div>
-        </aside>
+        )}
 
         {/* Main Content Area */}
         <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-12">
@@ -750,25 +790,56 @@ export default function ComponentDocsPage() {
                 &gt; npx jui add avatar
               </button>
             </div>
-            <p className="text-xs text-[#7B5B49]">
-              Party portraits with fallback initials and pixel-bevel frame border.
+            <p className="text-xs text-[#7B5B49] leading-relaxed">
+              Instant 2D chibi character portraits inspired by <span className="font-bold text-(--caramel)">AvatarsInPixels</span>. Pure synchronous vector SVG rendering eliminates background flashing and hydration flicker on page refresh.
             </p>
-            <div className="flex items-center justify-around p-4 bg-(--background) pixel-border-bevel">
-              <div className="flex flex-col items-center gap-2">
-                <PixelAvatar fallback="VI" size="lg" />
-                <span className="text-[10px] font-bold">Vaelin (LG)</span>
+            <div className="space-y-4 p-4 bg-(--background) pixel-border-bevel">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center justify-items-center">
+                <div className="flex flex-col items-center gap-2">
+                  <PixelAvatar seed="Vaelin" size="lg" />
+                  <span className="text-[10px] font-bold text-(--espresso)">Vaelin (LG)</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <PixelAvatar seed="Phoenix" size="lg" />
+                  <span className="text-[10px] font-bold text-(--espresso)">Phoenix (LG)</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <PixelAvatar seed="Wyrm" size="md" />
+                  <span className="text-[10px] font-bold text-(--espresso)">Wyrm (MD)</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <PixelAvatar seed="Scout" size="sm" />
+                  <span className="text-[10px] font-bold text-(--espresso)">Scout (SM)</span>
+                </div>
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <PixelAvatar fallback="PX" size="lg" />
-                <span className="text-[10px] font-bold">Phoenix (LG)</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <PixelAvatar fallback="WY" size="md" />
-                <span className="text-[10px] font-bold">Wyrm (MD)</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <PixelAvatar fallback="SO" size="sm" />
-                <span className="text-[10px] font-bold">Scout (SM)</span>
+
+              {/* Interactive Seed Tester */}
+              <div className="pt-3 border-t border-dashed border-(--border-strong) flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-[220px]">
+                  <PixelAvatar seed={avatarSeed} size="lg" />
+                  <div className="flex-1">
+                    <span className="text-[10px] text-[#7B5B49] block font-bold uppercase tracking-wider mb-1">
+                      LIVE SEED TESTER (INSTANT SVG):
+                    </span>
+                    <PixelInput
+                      value={avatarSeed}
+                      onChange={(e) => setAvatarSeed(e.target.value)}
+                      placeholder="Type any character name..."
+                      className="text-xs h-8"
+                    />
+                  </div>
+                </div>
+                <PixelButton
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    const sampleNames = ["Aria", "Thorin", "Zelda", "Geralt", "Cloud", "Kratos", "Luffy", "Goku", "Shinobi", "Archmage"];
+                    setAvatarSeed(sampleNames[Math.floor(Math.random() * sampleNames.length)]);
+                  }}
+                  className="text-[10px] self-end h-8 cursor-pointer"
+                >
+                  RANDOMIZE
+                </PixelButton>
               </div>
             </div>
           </section>
