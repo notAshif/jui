@@ -357,12 +357,15 @@ async function initCommand(cwd, options = {}) {
         console.log(`$ ${scaffoldCmd}\n`);
         execSync(scaffoldCmd, { cwd, stdio: "inherit" });
 
-        console.log(`\n[INFO] Installing JUI peer dependencies...`);
-        const addDepCmd = pm === "bun" ? "bun add clsx tailwind-merge lucide-react pixelarticons"
-          : pm === "pnpm" ? "pnpm add clsx tailwind-merge lucide-react pixelarticons"
-          : "npm install clsx tailwind-merge lucide-react pixelarticons";
+        console.log(`\n[INFO] Installing JUI packages and peer dependencies...`);
+        const addDepCmd = pm === "bun" ? "bun add clsx tailwind-merge lucide-react pixelarticons && bun add -d @1zuku/jui"
+          : pm === "pnpm" ? "pnpm add clsx tailwind-merge lucide-react pixelarticons && pnpm add -D @1zuku/jui"
+          : "npm install clsx tailwind-merge lucide-react pixelarticons && npm install -D @1zuku/jui";
         console.log(`$ ${addDepCmd}\n`);
         execSync(addDepCmd, { cwd, stdio: "inherit" });
+
+        // Add starter pixel components
+        addCommand(["button", "card", "avatar"], { flavor: "pixel", overwrite: true }, cwd);
       } catch (err) {
         console.error(`\n[ERROR] Failed to scaffold Next.js project: ${err.message}`);
         return;
@@ -371,19 +374,19 @@ async function initCommand(cwd, options = {}) {
       try {
         let scaffoldCmd;
         if (pm === "bun") {
-          scaffoldCmd = "bun create vite . --template react-ts";
+          scaffoldCmd = "bun create vite . --template react-ts --no-immediate";
         } else if (pm === "pnpm") {
-          scaffoldCmd = "pnpm create vite . --template react-ts";
+          scaffoldCmd = "pnpm create vite . --template react-ts --no-immediate";
         } else {
-          scaffoldCmd = "npm create vite@latest . -- --template react-ts";
+          scaffoldCmd = "npm create vite@latest . -- --template react-ts --no-immediate";
         }
         console.log(`$ ${scaffoldCmd}\n`);
         execSync(scaffoldCmd, { cwd, stdio: "inherit" });
 
-        console.log(`\n[INFO] Installing dependencies, Tailwind CSS, and JUI peers...`);
-        const addDepCmd = pm === "bun" ? "bun install && bun add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss"
-          : pm === "pnpm" ? "pnpm install && pnpm add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss"
-          : "npm install && npm install clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss";
+        console.log(`\n[INFO] Installing dependencies, Tailwind CSS, and JUI packages...`);
+        const addDepCmd = pm === "bun" ? "bun install && bun add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && bun add -d @1zuku/jui"
+          : pm === "pnpm" ? "pnpm install && pnpm add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && pnpm add -D @1zuku/jui"
+          : "npm install && npm install clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss && npm install -D @1zuku/jui";
         console.log(`$ ${addDepCmd}\n`);
         execSync(addDepCmd, { cwd, stdio: "inherit" });
 
@@ -406,14 +409,67 @@ export default defineConfig({
 `;
         fs.writeFileSync(viteConfigPath, viteConfigContent, "utf-8");
 
-        // Ensure @import "tailwindcss"; in src/index.css
+        // Ensure authentic JUI tokens & bevels in src/index.css
         const indexCssPath = path.join(cwd, "src", "index.css");
-        if (fs.existsSync(indexCssPath)) {
-          const cssContent = fs.readFileSync(indexCssPath, "utf-8");
-          if (!cssContent.includes("tailwindcss")) {
-            fs.writeFileSync(indexCssPath, `@import "tailwindcss";\n\n` + cssContent, "utf-8");
-          }
-        }
+        const pixelCss = `@import "tailwindcss";
+
+:root {
+  --cream: #FFF8F0;
+  --cream-light: #FFFCF9;
+  --cream-dark: #F5E8D8;
+  --caramel: #C08552;
+  --caramel-hover: #AF7644;
+  --cinnamon: #8C5A3C;
+  --espresso: #4B2E2B;
+  --espresso-deep: #321C1A;
+
+  --destructive: #B84A39;
+  --destructive-foreground: #FFF8F0;
+  --success: #4F6D48;
+  --success-foreground: #FFF8F0;
+  --warning: #D48B38;
+  --warning-foreground: #321C1A;
+
+  --background: var(--cream);
+  --foreground: var(--espresso);
+  --surface: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --ring: var(--caramel);
+}
+
+.pixel-border-bevel {
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset -2px -2px 0 0 var(--cinnamon),
+    inset 2px 2px 0 0 var(--cream);
+}
+
+.pixel-btn-bevel {
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset -2px -2px 0 0 var(--cinnamon),
+    inset 2px 2px 0 0 var(--cream);
+  transition: transform 0.05s steps(1);
+}
+
+.pixel-btn-bevel:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow:
+    -2px 0 0 0 var(--espresso),
+    2px 0 0 0 var(--espresso),
+    0 -2px 0 0 var(--espresso),
+    0 2px 0 0 var(--espresso),
+    inset 2px 2px 0 0 var(--espresso),
+    inset -2px -2px 0 0 var(--cream);
+}
+`;
+        fs.writeFileSync(indexCssPath, pixelCss, "utf-8");
 
         // Configure tsconfig.app.json or tsconfig.json for @/* path alias
         const tsconfigAppPath = path.join(cwd, "tsconfig.app.json");
@@ -430,6 +486,41 @@ export default defineConfig({
             fs.writeFileSync(targetTsconfig, JSON.stringify(tsJson, null, 2), "utf-8");
           } catch {}
         }
+
+        // Add starter pixel components
+        addCommand(["button", "card", "avatar"], { flavor: "pixel", overwrite: true }, cwd);
+
+        // Replace src/App.tsx with JUI starter showcase
+        const appTsxPath = path.join(cwd, "src", "App.tsx");
+        const starterAppTsx = `import { PixelButton } from "@/components/pixel/button";
+import { PixelCard, PixelCardHeader, PixelCardTitle, PixelCardContent } from "@/components/pixel/card";
+import { PixelAvatar } from "@/components/pixel/avatar";
+
+export function App() {
+  return (
+    <div className="min-h-screen bg-[#FFF8F0] text-[#4B2E2B] flex items-center justify-center p-6">
+      <PixelCard className="max-w-md w-full">
+        <PixelCardHeader>
+          <PixelCardTitle>JUI PIXEL ADVENTURE</PixelCardTitle>
+        </PixelCardHeader>
+        <PixelCardContent className="space-y-4">
+          <div className="flex items-center gap-3">
+            <PixelAvatar name="ShadowKnight" size="lg" />
+            <div>
+              <p className="font-bold text-sm">Shadow Knight</p>
+              <p className="text-xs text-[#8C5A3C]">Level 42 Paladin</p>
+            </div>
+          </div>
+          <PixelButton className="w-full">ENTER DUNGEON</PixelButton>
+        </PixelCardContent>
+      </PixelCard>
+    </div>
+  );
+}
+
+export default App;
+`;
+        fs.writeFileSync(appTsxPath, starterAppTsx, "utf-8");
       } catch (err) {
         console.error(`\n[ERROR] Failed to scaffold Vite project: ${err.message}`);
         return;
@@ -443,6 +534,25 @@ export default defineConfig({
         console.log("\n[INFO] Initialization cancelled.\n");
         return;
       }
+
+      // Check for missing peer dependencies and prompt
+      try {
+        const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+        const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
+        const missingPeers = ["clsx", "tailwind-merge", "lucide-react", "pixelarticons"].filter((d) => !allDeps[d]);
+
+        if (missingPeers.length > 0) {
+          const installPeers = await askConfirm(`? Install missing peer dependencies (${missingPeers.join(" ")})? (Y/n): `);
+          if (installPeers) {
+            const pm = getPackageManager();
+            const installCmd = pm === "bun" ? `bun add ${missingPeers.join(" ")}`
+              : pm === "pnpm" ? `pnpm add ${missingPeers.join(" ")}`
+              : `npm install ${missingPeers.join(" ")}`;
+            console.log(`\n$ ${installCmd}\n`);
+            execSync(installCmd, { cwd, stdio: "inherit" });
+          }
+        }
+      } catch {}
     }
   }
 
@@ -454,6 +564,16 @@ export default defineConfig({
     console.log(`  [SUCCESS] Created ${path.relative(cwd, utilsPath)} (cn helper utility)`);
   } else {
     console.log(`  - Found existing ${path.relative(cwd, utilsPath)}`);
+  }
+
+  // Also create src/lib/utils.ts if src directory exists
+  if (fs.existsSync(path.join(cwd, "src"))) {
+    const srcUtilsPath = path.join(cwd, "src", "lib", "utils.ts");
+    if (!fs.existsSync(srcUtilsPath) || options.overwrite) {
+      ensureDirSync(path.dirname(srcUtilsPath));
+      fs.writeFileSync(srcUtilsPath, registry.shared.utils.content, "utf-8");
+      console.log(`  [SUCCESS] Created ${path.relative(cwd, srcUtilsPath)} (cn helper utility)`);
+    }
   }
 
   console.log("\n[SUCCESS] JUI initialized successfully!");
@@ -503,14 +623,24 @@ function addCommand(componentsToInstall, options, cwd) {
   console.log(`\nAdding ${componentsToInstall.length} component(s) [Flavor: ${options.flavor}]...\n`);
 
   // Ensure lib/utils.ts exists
+  const hasSrc = fs.existsSync(path.join(cwd, "src"));
   const utilsPath = path.join(cwd, "lib", "utils.ts");
   if (!fs.existsSync(utilsPath)) {
     ensureDirSync(path.dirname(utilsPath));
     fs.writeFileSync(utilsPath, registry.shared.utils.content, "utf-8");
     console.log(`  ✓ Scaffolding ${path.relative(cwd, utilsPath)}`);
   }
+  if (hasSrc) {
+    const srcUtilsPath = path.join(cwd, "src", "lib", "utils.ts");
+    if (!fs.existsSync(srcUtilsPath)) {
+      ensureDirSync(path.dirname(srcUtilsPath));
+      fs.writeFileSync(srcUtilsPath, registry.shared.utils.content, "utf-8");
+      console.log(`  ✓ Scaffolding ${path.relative(cwd, srcUtilsPath)}`);
+    }
+  }
 
-  const baseComponentsDir = options.path ? path.resolve(cwd, options.path) : path.join(cwd, "components");
+  const defaultBase = hasSrc ? path.join(cwd, "src", "components") : path.join(cwd, "components");
+  const baseComponentsDir = options.path ? path.resolve(cwd, options.path) : defaultBase;
   const modernDir = path.join(baseComponentsDir, "ui");
   const pixelDir = path.join(baseComponentsDir, "pixel");
 
