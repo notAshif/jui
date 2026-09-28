@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
+import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -155,6 +156,32 @@ function askConfirm(question) {
   });
 }
 
+function askInput(question, defaultValue = "") {
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    rl.question(question, (answer) => {
+      rl.close();
+      const trimmed = answer.trim();
+      resolve(trimmed || defaultValue);
+    });
+  });
+}
+
+function getPackageManager() {
+  const ua = process.env.npm_config_user_agent || "";
+  if (ua.startsWith("bun") || typeof Bun !== "undefined") return "bun";
+  if (ua.startsWith("pnpm")) return "pnpm";
+  if (ua.startsWith("yarn")) return "yarn";
+  try {
+    execSync("bun --version", { stdio: "ignore" });
+    return "bun";
+  } catch {}
+  return "npm";
+}
+
 function displayFrameworkUsage(framework) {
   if (framework === "Next.js") {
     console.log(`
@@ -263,6 +290,9 @@ async function initCommand(cwd, options = {}) {
   console.log("\nInitializing JUI in your project...");
   console.log("Available for Next.js, Vite\n");
 
+  const pkgPath = path.join(cwd, "package.json");
+  const hasExistingProject = fs.existsSync(pkgPath);
+
   let framework = null;
   if (options.framework) {
     const norm = normalizeFramework(options.framework);
@@ -270,28 +300,155 @@ async function initCommand(cwd, options = {}) {
       framework = norm;
       console.log(`  [INFO] Target framework: ${framework}`);
     } else {
-      console.log(`  [WARN] Unknown framework '${options.framework}'. JUI is optimized for Next.js and Vite.`);
-      framework = options.framework;
+      console.log(`  [WARN] Unknown framework '${options.framework}'. Defaulting to Next.js.`);
+      framework = "Next.js";
     }
-  } else {
-    const detected = detectFramework(cwd);
-    if (detected) {
-      framework = detected;
+  } else if (hasExistingProject) {
+    framework = detectFramework(cwd);
+    if (framework) {
       console.log(`  [INFO] Detected project framework: ${framework}`);
     }
   }
 
-  // Ask for permission before initializing project unless explicitly bypassed with -y / --yes
-  if (!options.overwrite && !options.yes) {
-    const proceed = await askConfirm("? Do you want to initialize JUI in this project? (Y/n): ");
-    if (!proceed) {
-      console.log("\n[INFO] Initialization cancelled.\n");
-      return;
+  // If no project exists in cwd, scaffold the project!
+  if (!hasExistingProject) {
+    console.log("  [INFO] No existing package.json found in this directory.");
+
+    if (!framework) {
+      if (options.yes) {
+        framework = "Next.js";
+      } else {
+        const choice = await askInput("? Select framework to create:\n  1) Next.js (App Router, Tailwind CSS, TypeScript)\n  2) Vite (React, TypeScript)\nEnter 1 or 2 [default: 1]: ", "1");
+        framework = choice === "2" ? "Vite" : "Next.js";
+      }
+      console.log(`  [INFO] Selected framework: ${framework}`);
+    }
+
+    // Ask permission to create project unless bypassed
+    if (!options.overwrite && !options.yes) {
+      const proceed = await askConfirm(`? Create a new ${framework} project with JUI in this directory? (Y/n): `);
+      if (!proceed) {
+        console.log("\n[INFO] Project creation cancelled.\n");
+        return;
+      }
+    }
+
+    const pm = getPackageManager();
+    console.log(`\n[INFO] Scaffolding new ${framework} project using ${pm}...`);
+
+    // Temporarily clean any leftover empty lib/utils.ts created earlier so create-app won't conflict
+    const existingLib = path.join(cwd, "lib");
+    if (fs.existsSync(existingLib)) {
+      try {
+        fs.rmSync(existingLib, { recursive: true, force: true });
+      } catch {}
+    }
+
+    if (framework === "Next.js") {
+      try {
+        let scaffoldCmd;
+        if (pm === "bun") {
+          scaffoldCmd = "bun create next-app . --typescript --tailwind --eslint --app --import-alias \"@/*\" --use-bun --yes";
+        } else if (pm === "pnpm") {
+          scaffoldCmd = "pnpm create next-app . --typescript --tailwind --eslint --app --import-alias \"@/*\" --use-pnpm --yes";
+        } else {
+          scaffoldCmd = "npx -y create-next-app@latest . --typescript --tailwind --eslint --app --import-alias \"@/*\" --use-npm --yes";
+        }
+        console.log(`$ ${scaffoldCmd}\n`);
+        execSync(scaffoldCmd, { cwd, stdio: "inherit" });
+
+        console.log(`\n[INFO] Installing JUI peer dependencies...`);
+        const addDepCmd = pm === "bun" ? "bun add clsx tailwind-merge lucide-react pixelarticons"
+          : pm === "pnpm" ? "pnpm add clsx tailwind-merge lucide-react pixelarticons"
+          : "npm install clsx tailwind-merge lucide-react pixelarticons";
+        console.log(`$ ${addDepCmd}\n`);
+        execSync(addDepCmd, { cwd, stdio: "inherit" });
+      } catch (err) {
+        console.error(`\n[ERROR] Failed to scaffold Next.js project: ${err.message}`);
+        return;
+      }
+    } else if (framework === "Vite") {
+      try {
+        let scaffoldCmd;
+        if (pm === "bun") {
+          scaffoldCmd = "bun create vite . --template react-ts";
+        } else if (pm === "pnpm") {
+          scaffoldCmd = "pnpm create vite . --template react-ts";
+        } else {
+          scaffoldCmd = "npm create vite@latest . -- --template react-ts";
+        }
+        console.log(`$ ${scaffoldCmd}\n`);
+        execSync(scaffoldCmd, { cwd, stdio: "inherit" });
+
+        console.log(`\n[INFO] Installing dependencies, Tailwind CSS, and JUI peers...`);
+        const addDepCmd = pm === "bun" ? "bun install && bun add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss"
+          : pm === "pnpm" ? "pnpm install && pnpm add clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss"
+          : "npm install && npm install clsx tailwind-merge lucide-react pixelarticons @tailwindcss/vite tailwindcss";
+        console.log(`$ ${addDepCmd}\n`);
+        execSync(addDepCmd, { cwd, stdio: "inherit" });
+
+        // Configure vite.config.ts with path alias and tailwindcss plugin
+        const viteConfigPath = path.join(cwd, "vite.config.ts");
+        const viteConfigContent = `import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import path from "node:path";
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});
+`;
+        fs.writeFileSync(viteConfigPath, viteConfigContent, "utf-8");
+
+        // Ensure @import "tailwindcss"; in src/index.css
+        const indexCssPath = path.join(cwd, "src", "index.css");
+        if (fs.existsSync(indexCssPath)) {
+          const cssContent = fs.readFileSync(indexCssPath, "utf-8");
+          if (!cssContent.includes("tailwindcss")) {
+            fs.writeFileSync(indexCssPath, `@import "tailwindcss";\n\n` + cssContent, "utf-8");
+          }
+        }
+
+        // Configure tsconfig.app.json or tsconfig.json for @/* path alias
+        const tsconfigAppPath = path.join(cwd, "tsconfig.app.json");
+        const tsconfigPath = path.join(cwd, "tsconfig.json");
+        const targetTsconfig = fs.existsSync(tsconfigAppPath) ? tsconfigAppPath : (fs.existsSync(tsconfigPath) ? tsconfigPath : null);
+        if (targetTsconfig) {
+          try {
+            const rawTs = fs.readFileSync(targetTsconfig, "utf-8");
+            const tsJson = JSON.parse(rawTs);
+            tsJson.compilerOptions = tsJson.compilerOptions || {};
+            tsJson.compilerOptions.baseUrl = ".";
+            tsJson.compilerOptions.paths = tsJson.compilerOptions.paths || {};
+            tsJson.compilerOptions.paths["@/*"] = ["./src/*"];
+            fs.writeFileSync(targetTsconfig, JSON.stringify(tsJson, null, 2), "utf-8");
+          } catch {}
+        }
+      } catch (err) {
+        console.error(`\n[ERROR] Failed to scaffold Vite project: ${err.message}`);
+        return;
+      }
+    }
+  } else {
+    // Existing project
+    if (!options.overwrite && !options.yes) {
+      const proceed = await askConfirm("? Do you want to initialize JUI in this project? (Y/n): ");
+      if (!proceed) {
+        console.log("\n[INFO] Initialization cancelled.\n");
+        return;
+      }
     }
   }
 
+  // Create lib/utils.ts
   const utilsPath = path.join(cwd, "lib", "utils.ts");
-  if (!fs.existsSync(utilsPath)) {
+  if (!fs.existsSync(utilsPath) || options.overwrite) {
     ensureDirSync(path.dirname(utilsPath));
     fs.writeFileSync(utilsPath, registry.shared.utils.content, "utf-8");
     console.log(`  [SUCCESS] Created ${path.relative(cwd, utilsPath)} (cn helper utility)`);
@@ -301,8 +458,6 @@ async function initCommand(cwd, options = {}) {
 
   console.log("\n[SUCCESS] JUI initialized successfully!");
   console.log("Available for Next.js, Vite");
-  console.log("Required dependencies:");
-  console.log("  $ npm install clsx tailwind-merge lucide-react pixelarticons");
 
   displayFrameworkUsage(framework);
 }

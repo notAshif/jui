@@ -13,6 +13,7 @@ describe("JUI CLI", () => {
       fs.rmSync(TEMP_DIR, { recursive: true, force: true });
     }
     fs.mkdirSync(TEMP_DIR, { recursive: true });
+    fs.writeFileSync(path.join(TEMP_DIR, "package.json"), JSON.stringify({ name: "test-app", dependencies: { next: "latest" } }), "utf-8");
   });
 
   afterEach(() => {
